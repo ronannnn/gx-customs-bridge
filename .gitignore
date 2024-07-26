@@ -1,0 +1,20 @@
+# Logs
+log
+logs
+*.log
+
+# Misc
+.DS_Store
+.fleet
+.idea
+# Golang
+config.default.toml
+config.test.*
+config.backup.*
+logs
+*.log
+cmd/wire_gen.go
+wechat-storage.json
+
+# docs
+*.pdf
