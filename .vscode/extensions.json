@@ -1,0 +1,27 @@
+{
+  "recommendations": [
+    "antfu.browse-lite",
+    "antfu.iconify",
+    "antfu.unocss",
+    "antfu.where-am-i",
+    "antfu.open-in-github-button",
+    "lokalise.i18n-ally",
+    // themes & icons
+    "antfu.icons-carbon",
+    "file-icons.file-icons",
+    "antfu.theme-vitesse",
+    "sainnhe.gruvbox-material",
+    // life savers!
+    "dbaeumer.vscode-eslint",
+    "vue.volar",
+    "GitHub.copilot",
+    "usernamehw.errorlens",
+    "streetsidesoftware.code-spell-checker",
+    // others
+    "WakaTime.vscode-wakatime",
+    "naumovs.color-highlight",
+    "WakaTime.vscode-wakatime",
+    "csstools.postcss",
+    "formulahendry.auto-rename-tag"
+  ]
+}
