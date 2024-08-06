@@ -3,26 +3,28 @@ package inv
 import (
 	"encoding/xml"
 	"fmt"
-	"os"
 
 	"github.com/ronannnn/gx-customs-bridge/internal"
 )
 
-type ExportInv101Service interface {
-	GenXml(inv101 Inv101, declareFlag string) error
+type InvService interface {
+	GenXml(inv101 Inv101, declareFlag string) ([]byte, error)
+	ParseInv201Xml([]byte) (Inv201, error)
+	ParseInv202Xml([]byte) (Inv202, error)
+	ParseInv211Xml([]byte) (Inv211, error)
 }
 
-func ProvideExportInv101Service(customsCfg internal.CustomsCfg) ExportInv101Service {
-	return &ExportInv101ServiceImpl{
+func ProvideInvService(customsCfg internal.CustomsCfg) InvService {
+	return &InvServiceImpl{
 		customsCfg: customsCfg,
 	}
 }
 
-type ExportInv101ServiceImpl struct {
+type InvServiceImpl struct {
 	customsCfg internal.CustomsCfg
 }
 
-func (s *ExportInv101ServiceImpl) GenXml(inv101 Inv101, declareFlag string) (err error) {
+func (s *InvServiceImpl) GenXml(inv101 Inv101, declareFlag string) (xmlBytes []byte, err error) {
 	// 校验
 	if declareFlag != "0" && declareFlag != "1" {
 		err = fmt.Errorf("申报标志(declareFlag)必须是0或1")
@@ -39,11 +41,41 @@ func (s *ExportInv101ServiceImpl) GenXml(inv101 Inv101, declareFlag string) (err
 	inv101Xml.Object.Package.DataInfo.BusinessData.InvtMessage.InvtHeadType = inv101.Head
 	inv101Xml.Object.Package.DataInfo.BusinessData.InvtMessage.InvtListType = inv101.List
 	// 保存xml
-	var output []byte
-	if output, err = xml.Marshal(inv101Xml); err != nil {
+	var xmlBodyBytes []byte
+	if xmlBodyBytes, err = xml.Marshal(inv101Xml); err != nil {
 		return
 	}
-	os.Stdout.Write([]byte(xml.Header)) //输出预定义的xml头  <?xml version="1.0" encoding="UTF-8"?>
-	os.Stdout.Write(output)
+	xmlBytes = []byte(xml.Header + string(xmlBodyBytes))
+	return
+}
+
+func (s *InvServiceImpl) ParseInv201Xml(xmlBytes []byte) (inv201 Inv201, err error) {
+	inv201Xml := Inv201Xml{}
+	if err = xml.Unmarshal(xmlBytes, &inv201Xml); err != nil {
+		return
+	}
+
+	inv201.HdeApprResult = inv201Xml.DataInfo.BusinessData.Inv201.HdeApprResult
+	inv201.Head = inv201Xml.DataInfo.BusinessData.Inv201.BondInvtBsc
+	inv201.List = inv201Xml.DataInfo.BusinessData.Inv201.BondInvtDtl
+	return
+}
+
+func (s *InvServiceImpl) ParseInv202Xml(xmlBytes []byte) (inv202 Inv202, err error) {
+	inv202Xml := Inv202Xml{}
+	if err = xml.Unmarshal(xmlBytes, &inv202Xml); err != nil {
+		return
+	}
+	inv202.InvApprResult = inv202Xml.DataInfo.BusinessData.Inv202.InvApprResult
+	return
+}
+
+func (s *InvServiceImpl) ParseInv211Xml(xmlBytes []byte) (inv211 Inv211, err error) {
+	inv211Xml := Inv211Xml{}
+	if err = xml.Unmarshal(xmlBytes, &inv211Xml); err != nil {
+		return
+	}
+	inv211.Head = inv211Xml.DataInfo.BusinessData.Inv211.BondInvtBsc
+	inv211.List = inv211Xml.DataInfo.BusinessData.Inv211.BwsDt
 	return
 }

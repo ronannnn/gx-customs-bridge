@@ -101,9 +101,9 @@ type Sas121Acmp struct {
 }
 
 type Sas121 struct {
-	Head *Sas121Head   `json:"head"`
-	List []*Sas121List `json:"list"`
-	Acmp []*Sas121Acmp `json:"acmp"`
+	Head Sas121Head   `json:"head"`
+	List []Sas121List `json:"list"`
+	Acmp []Sas121Acmp `json:"acmp"`
 }
 
 type Sas121Xml struct {

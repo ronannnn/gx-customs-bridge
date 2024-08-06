@@ -15,6 +15,10 @@ type InvApprResult struct {
 	Reason       *string `json:"reason"`       // 生成失败原因
 }
 
+type Inv202 struct {
+	InvApprResult InvApprResult `json:"invApprResult"`
+}
+
 // Inv202Xml 核注清单自动生成报关单同一编号报文
 type Inv202Xml struct {
 	XMLName     xml.Name `xml:"Package"`

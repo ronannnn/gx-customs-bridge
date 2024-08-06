@@ -99,9 +99,10 @@ type Sas221Acmp struct {
 }
 
 type Sas221 struct {
-	Head *Sas221Head   `json:"head"`
-	List []*Sas221List `json:"list"`
-	Acmp []*Sas221Acmp `json:"acmp"`
+	HdeApprResult common.HdeApprResult `json:"hdeApprResult"`
+	Head          Sas221Head           `json:"head"`
+	List          []Sas221List         `json:"list"`
+	Acmp          []Sas221Acmp         `json:"acmp"`
 }
 
 type Sas221Xml struct {
@@ -112,9 +113,9 @@ type Sas221Xml struct {
 		BusinessData struct {
 			Sas221 struct {
 				HdeApprResult  common.HdeApprResult
-				SasPassportBsc Sas121Head
-				SasPassportDt  []Sas121List
-				SasPassportRlt []Sas121Acmp
+				SasPassportBsc Sas221Head
+				SasPassportDt  []Sas221List
+				SasPassportRlt []Sas221Acmp
 			} `xml:"SAS221"`
 		}
 	}

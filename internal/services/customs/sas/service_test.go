@@ -1,4 +1,4 @@
-package inv_test
+package sas_test
 
 import (
 	"testing"

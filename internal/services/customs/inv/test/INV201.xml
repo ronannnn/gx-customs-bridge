@@ -1,29 +1,37 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <Package xmlns="http://www.w3.org/2000/09/xmldsig#">
   <EnvelopInfo>
     <version>1.0</version>
-    <message_id>CUS0000E0100002024072707203700877649164</message_id>
-    <file_name>CUS0000E0100002024072707203700877649164.INV</file_name>
+    <message_id>CUS0000E0100002024073011480300878902307</message_id>
+    <file_name>CUS0000E0100002024073011480300878902307.INV</file_name>
     <message_type>INV201</message_type>
     <sender_id>CUS0000</sender_id>
     <receiver_id>E010000</receiver_id>
-    <send_time>2024-07-27T07:20:37</send_time>
+    <send_time>2024-07-30T11:48:03</send_time>
   </EnvelopInfo>
   <DataInfo>
     <PocketInfo>
-      <pocket_id>QD311124I000065378-9973377dd2134b409cb97e99095c5875</pocket_id>
+      <pocket_id>QD311124E000098849-e2ad23739ae84590abf11f4b69cfd462</pocket_id>
       <total_pocket_qty>1</total_pocket_qty>
       <cur_pocket_no>1</cur_pocket_no>
       <is_unstructured></is_unstructured>
     </PocketInfo>
     <BussinessData>
       <INV201>
+        <HdeApprResult>
+          <etpsPreentNo>202400000122717119</etpsPreentNo>
+          <businessId>QD311124E000098849</businessId>
+          <tmsCnt>0</tmsCnt>
+          <typecd>1</typecd>
+          <manageResult>4</manageResult>
+          <manageDate>2024-07-30 11:48:02</manageDate>
+          <rmk></rmk>
+        </HdeApprResult>
         <BondInvtBsc>
-          <bondInvtNo>QD311124I000065378</bondInvtNo>
+          <bondInvtNo>QD311124E000098849</bondInvtNo>
           <chgTmsCnt>0</chgTmsCnt>
-          <invtPreentNo>202400000121862378</invtPreentNo>
+          <invtPreentNo>202400000122717119</invtPreentNo>
           <putrecNo>T3111W000076</putrecNo>
-          <etpsInnerInvtNo>亿泰42917281</etpsInnerInvtNo>
+          <etpsInnerInvtNo>COSU6391946850D</etpsInnerInvtNo>
           <bizopEtpsSccd>913302017532977856</bizopEtpsSccd>
           <bizopEtpsno>330261A004</bizopEtpsno>
           <bizopEtpsNm>宁波高新物流有限公司</bizopEtpsNm>
@@ -33,85 +41,44 @@
           <dclEtpsSccd>913302017532977856</dclEtpsSccd>
           <dclEtpsno>330261A004</dclEtpsno>
           <dclEtpsNm>宁波高新物流有限公司</dclEtpsNm>
-          <invtDclTime>2024-07-19 00:00:00</invtDclTime>
-          <entryDclTime>2024-07-24 09:37:22</entryDclTime>
+          <invtDclTime>2024-07-30 00:00:00</invtDclTime>
+          <entryDclTime></entryDclTime>
           <entryNo></entryNo>
           <rltInvtNo></rltInvtNo>
           <rltPutrecNo></rltPutrecNo>
-          <rltEntryNo>311120240619962103</rltEntryNo>
-          <rltEntryBizopEtpsSccd>91330200724091729D</rltEntryBizopEtpsSccd>
-          <rltEntryBizopEtpsno>3302210012</rltEntryBizopEtpsno>
-          <rltEntryBizopEtpsNm>宁波亿泰控股集团股份有限公司</rltEntryBizopEtpsNm>
-          <impexpPortcd>3111</impexpPortcd>
+          <rltEntryNo></rltEntryNo>
+          <rltEntryBizopEtpsSccd></rltEntryBizopEtpsSccd>
+          <rltEntryBizopEtpsno></rltEntryBizopEtpsno>
+          <rltEntryBizopEtpsNm></rltEntryBizopEtpsNm>
+          <impexpPortcd>3116</impexpPortcd>
           <dclPlcCuscd>3111</dclPlcCuscd>
-          <impexpMarkcd>I</impexpMarkcd>
+          <impexpMarkcd>E</impexpMarkcd>
           <mtpckEndprdMarkcd>I</mtpckEndprdMarkcd>
-          <supvModecd>5000</supvModecd>
-          <trspModecd>9</trspModecd>
-          <stshipTrsarvNatcd>142</stshipTrsarvNatcd>
+          <supvModecd>5034</supvModecd>
+          <trspModecd>2</trspModecd>
+          <stshipTrsarvNatcd>601</stshipTrsarvNatcd>
           <applyNo></applyNo>
           <dclcusFlag>1</dclcusFlag>
-          <dclcusTypecd>1</dclcusTypecd>
-          <prevdTime>2024-07-19 12:59:04</prevdTime>
-          <formalVrfdedTime>2024-07-27 07:20:33</formalVrfdedTime>
-          <invtIochkptStucd>3</invtIochkptStucd>
-          <vrfdedMarkcd>2</vrfdedMarkcd>
+          <dclcusTypecd>2</dclcusTypecd>
+          <prevdTime>2024-07-30 11:48:01</prevdTime>
+          <formalVrfdedTime></formalVrfdedTime>
+          <invtIochkptStucd>1</invtIochkptStucd>
+          <vrfdedMarkcd>1</vrfdedMarkcd>
           <invtStucd>0</invtStucd>
-          <vrfdedModecd>D</vrfdedModecd>
-          <duCode>IG</duCode>
+          <vrfdedModecd>E</vrfdedModecd>
+          <duCode>E4</duCode>
           <rmk></rmk>
           <bondInvtTypecd>0</bondInvtTypecd>
-          <entryStucd>1</entryStucd>
-          <passportUsedTypecd>3</passportUsedTypecd>
+          <entryStucd>0</entryStucd>
+          <passportUsedTypecd>1</passportUsedTypecd>
           <param1></param1>
           <param2></param2>
           <param3></param3>
           <param4></param4>
           <needEntryModified></needEntryModified>
-          <levyBlAmt>0</levyBlAmt>
+          <levyBlAmt></levyBlAmt>
           <dclTypecd>1</dclTypecd>
         </BondInvtBsc>
-        <BondInvtDt>
-          <bondInvtNo>QD311124I000065378</bondInvtNo>
-          <chgTmsCnt>0</chgTmsCnt>
-          <gdsSeqno>1</gdsSeqno>
-          <putrecSeqno></putrecSeqno>
-          <gdsMtno>6211339000</gdsMtno>
-          <gdecd>6211339000</gdecd>
-          <gdsNm>男式表演服</gdsNm>
-          <gdsSpcfModelDesc>0|2|机织|表演服|男式|100%涤纶|无品牌|42917281|非套|无组成|无开襟|无拉链|无夹层</gdsSpcfModelDesc>
-          <dclUnitcd>011</dclUnitcd>
-          <lawfUnitcd>011</lawfUnitcd>
-          <secdLawfUnitcd>035</secdLawfUnitcd>
-          <natcd>142</natcd>
-          <dclUprcAmt>2.5</dclUprcAmt>
-          <dclTotalAmt>15660</dclTotalAmt>
-          <usdStatTotalAmt>15660</usdStatTotalAmt>
-          <dclCurrcd>502</dclCurrcd>
-          <lawfQty>6264</lawfQty>
-          <secdLawfQty>1044</secdLawfQty>
-          <wtSfVal></wtSfVal>
-          <fstSfVal></fstSfVal>
-          <secdSfVal></secdSfVal>
-          <dclQty>6264</dclQty>
-          <grossWt></grossWt>
-          <netWt></netWt>
-          <useCd></useCd>
-          <lvyrlfModecd>3</lvyrlfModecd>
-          <ucnsVerno></ucnsVerno>
-          <entryGdsSeqno>1</entryGdsSeqno>
-          <applyTbSeqno></applyTbSeqno>
-          <clyMarkcd>0</clyMarkcd>
-          <rmk></rmk>
-          <actlPassQty>6264</actlPassQty>
-          <passportUsedQty>6264</passportUsedQty>
-          <param1></param1>
-          <param2></param2>
-          <param3></param3>
-          <param4></param4>
-          <destinationNatcd>142</destinationNatcd>
-          <modfMarkcd>3</modfMarkcd>
-        </BondInvtDt>
       </INV201>
     </BussinessData>
   </DataInfo>

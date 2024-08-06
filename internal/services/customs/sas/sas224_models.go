@@ -70,7 +70,8 @@ type Sas224Head struct {
 }
 
 type Sas224 struct {
-	Head *Sas224Head `json:"head"`
+	HdeApprResult common.HdeApprResult `json:"hdeApprResult"`
+	Head          Sas224Head           `json:"head"`
 }
 
 type Sas224Xml struct {
@@ -81,7 +82,7 @@ type Sas224Xml struct {
 		BusinessData struct {
 			Sas224 struct {
 				HdeApprResult  common.HdeApprResult
-				SasPassportBsc Sas121Head
+				SasPassportBsc Sas224Head
 			} `xml:"SAS224"`
 		}
 	}

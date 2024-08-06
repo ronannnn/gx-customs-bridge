@@ -146,8 +146,9 @@ type Inv201List struct {
 }
 
 type Inv201 struct {
-	Head Inv201Head   `json:"head"`
-	List []Inv201List `json:"list"`
+	HdeApprResult common.HdeApprResult `json:"hdeApprResult"`
+	Head          Inv201Head           `json:"head"`
+	List          []Inv201List         `json:"list"`
 }
 
 // Inv201Xml 核注清单审批回执
