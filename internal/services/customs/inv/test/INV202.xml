@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Package xmlns="http://www.w3.org/2000/09/xmldsig#">
+  <EnvelopInfo>
+    <version>1.0</version>
+    <business_id>QD311124E000097307</business_id>
+    <message_id>DXPEDCINVT000001DXPESW20246394022024072616391700500269885</message_id>
+    <file_name>DXPEDCINVT000001DXPESW20246394022024072616391700500269885.INVT</file_name>
+    <message_type>INV202</message_type>
+    <sender_id>DXPEDCINVT000001</sender_id>
+    <receiver_id>DXPESW2024639402</receiver_id>
+    <send_time>2024-07-26T16:39:17</send_time>
+  </EnvelopInfo>
+  <DataInfo>
+    <BussinessData>
+      <INV202>
+        <InvApprResult>
+          <invPreentNo>202400000122534496</invPreentNo>
+          <businessId>QD311124E000097307</businessId>
+          <entrySeqNo>E20240001310220743</entrySeqNo>
+          <manageResult>1</manageResult>
+          <createDate>2024-07-26 16:39:17</createDate>
+          <reason></reason>
+        </InvApprResult>
+      </INV202>
+    </BussinessData>
+  </DataInfo>
+</Package>

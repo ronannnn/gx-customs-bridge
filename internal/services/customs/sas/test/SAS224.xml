@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Package>
+  <EnvelopInfo>
+    <version>1.0</version>
+    <message_id>CUS0000E0100002024080114530300880297637</message_id>
+    <file_name>CUS0000E0100002024080114530300880297637.SAS</file_name>
+    <message_type>SAS224</message_type>
+    <sender_id>CUS0000</sender_id>
+    <receiver_id>E010000</receiver_id>
+    <send_time>2024-08-01T14:53:03</send_time>
+  </EnvelopInfo>
+  <DataInfo>
+    <PocketInfo>
+      <pocket_id>Z3111I240728000000000111-f9e2e92a0e164980b3d8a67d62223d59</pocket_id>
+      <total_pocket_qty>1</total_pocket_qty>
+      <cur_pocket_no>1</cur_pocket_no>
+      <is_unstructured></is_unstructured>
+    </PocketInfo>
+    <BussinessData>
+      <SAS224>
+        <HdeApprResult>
+          <etpsPreentNo>202400000069449716</etpsPreentNo>
+          <businessId>Z3111I240728000000000111</businessId>
+          <tmsCnt>0</tmsCnt>
+          <typecd></typecd>
+          <manageResult>3</manageResult>
+          <manageDate>2024-08-01 14:53:02</manageDate>
+          <rmk></rmk>
+        </HdeApprResult>
+        <SasPassportBsc>
+          <passportNo>Z3111I240728000000000111</passportNo>
+          <chgTmsCnt>0</chgTmsCnt>
+          <passportTypecd>3</passportTypecd>
+          <sasPassportPreentNo>202400000069449716</sasPassportPreentNo>
+          <dclTypecd>1</dclTypecd>
+          <ioTypecd>I</ioTypecd>
+          <bindTypecd>3</bindTypecd>
+          <masterCuscd>3111</masterCuscd>
+          <rltTbTypecd>1</rltTbTypecd>
+          <rltNo>QD311124I000068179</rltNo>
+          <areainEtpsno>330261A004</areainEtpsno>
+          <areainEtpsNm>宁波高新物流有限公司</areainEtpsNm>
+          <areainEtpsSccd>913302017532977856</areainEtpsSccd>
+          <vehicleNo>浙B1Z956</vehicleNo>
+          <vehicleIcNo>浙B1Z956</vehicleIcNo>
+          <containerNo></containerNo>
+          <vehicleWt>13000</vehicleWt>
+          <vehicleFrameNo></vehicleFrameNo>
+          <vehicleFrameWt>1000</vehicleFrameWt>
+          <containerType></containerType>
+          <containerWt></containerWt>
+          <totalWt>16674.08</totalWt>
+          <passCollectWt>0</passCollectWt>
+          <wtError>16674.08</wtError>
+          <totalGrossWt>2674.08</totalGrossWt>
+          <totalNetWt>2674.08</totalNetWt>
+          <dclErConc>贺婷婷</dclErConc>
+          <dclTime>2024-07-28 17:43:24</dclTime>
+          <passID></passID>
+          <secdPassId></secdPassId>
+          <passTime>2024-07-29 09:25:20</passTime>
+          <secdPassTime></secdPassTime>
+          <stucd>2</stucd>
+          <emapvMarkcd>1</emapvMarkcd>
+          <logisticsStucd>1</logisticsStucd>
+          <ownerSystem>1</ownerSystem>
+          <rmk></rmk>
+          <col1></col1>
+        </SasPassportBsc>
+      </SAS224>
+    </BussinessData>
+  </DataInfo>
+</Package>

@@ -18,11 +18,13 @@ import (
 
 var wireSet = wire.NewSet(
 	// configs
+	internal.ProvideCfg,
 	internal.ProvideSysCfg,
 	internal.ProvideLogCfg,
 	internal.ProvideDbCfg,
 	internal.ProvideAuthCfg,
 	internal.ProvideUserCfg,
+	internal.ProvideCustomsCfg,
 	// infra
 	infra.ProvideCasbinEnforcer,
 	db.ProvideService,

@@ -29,3 +29,9 @@ max-idle-conns = 10
 max-open-conns = 50
 conn-max-lifetime = 14400
 enable-log = false
+
+[customs]
+inv101SysId = ''
+sas121DclErConc = ''
+icCardNo = ''
+operCusRegCode = ''

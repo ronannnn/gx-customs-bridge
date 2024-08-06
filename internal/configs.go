@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path"
+	"strings"
 	"time"
 
 	"github.com/ronannnn/infra/cfg"
@@ -22,43 +23,59 @@ const (
 	ConfigReleaseFile = "config.release.toml"
 )
 
+type CustomsCfg struct {
+	Inv101SysId     string `mapstructure:"inv101SysId"`     // inv101中的sysId
+	Sas121DclErConc string `mapstructure:"sas121DclErConc"` // sas121中的申请人，即卡号对应的人
+	IcCardNo        string `mapstructure:"icCardNo"`        // 操作卡号
+	OperCusRegCode  string `mapstructure:"operCusRegCode"`  // 操作卡的海关十位
+}
+
 type Cfg struct {
-	Sys  cfg.Sys  `mapstructure:"sys"`
-	Log  cfg.Log  `mapstructure:"log"`
-	Auth cfg.Auth `mapstructure:"auth"`
-	Db   cfg.Db   `mapstructure:"db"`
-	User cfg.User `mapstructure:"user"`
+	Sys     cfg.Sys    `mapstructure:"sys"`
+	Log     cfg.Log    `mapstructure:"log"`
+	Auth    cfg.Auth   `mapstructure:"auth"`
+	Db      cfg.Db     `mapstructure:"db"`
+	User    cfg.User   `mapstructure:"user"`
+	Customs CustomsCfg `mapstructure:"customs"`
 }
 
-func ProvideLogCfg() *cfg.Log {
-	return &GlCfg.Log
+func ProvideLogCfg(cfg *Cfg) *cfg.Log {
+	return &cfg.Log
 }
 
-func ProvideSysCfg() *cfg.Sys {
-	return &GlCfg.Sys
+func ProvideSysCfg(cfg *Cfg) *cfg.Sys {
+	return &cfg.Sys
 }
 
-func ProvideDbCfg() *cfg.Db {
-	return &GlCfg.Db
+func ProvideDbCfg(cfg *Cfg) *cfg.Db {
+	return &cfg.Db
 }
 
-func ProvideAuthCfg() *cfg.Auth {
-	return &GlCfg.Auth
+func ProvideAuthCfg(cfg *Cfg) *cfg.Auth {
+	return &cfg.Auth
 }
 
-func ProvideUserCfg() *cfg.User {
-	return &GlCfg.User
+func ProvideUserCfg(cfg *Cfg) *cfg.User {
+	return &cfg.User
 }
 
-var GlCfg = func() *Cfg {
-	cfg, err := NewCfg(provideConfigFilepath())
-	if err != nil {
-		panic(err)
-	}
-	return cfg
-}()
+func ProvideCustomsCfg(cfg *Cfg) *CustomsCfg {
+	return &cfg.Customs
+}
+
+func ProvideCfg() (*Cfg, error) {
+	return NewCfg(provideConfigFilepath())
+}
 
 func provideConfigFilepath() string {
+	env := os.Environ()
+	for _, e := range env {
+		pair := strings.Split(e, "=")
+		key := pair[0]
+		value := pair[1]
+		fmt.Printf("key: %s, value: %s\n", key, value)
+	}
+
 	var configFilepath string
 	if configEnv := os.Getenv(ConfigEnvKey); configEnv == "" { // env not found
 		configFilepath = path.Join(ConfigDir, ConfigDefaultFile)
