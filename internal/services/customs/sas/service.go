@@ -52,6 +52,7 @@ func (s *SasServiceImpl) ParseSas221Xml(xmlBytes []byte) (sas221 Sas221, err err
 	if err = xml.Unmarshal(xmlBytes, &sas221Xml); err != nil {
 		return
 	}
+	sas221.HdeApprResult = sas221Xml.DataInfo.BusinessData.Sas221.HdeApprResult
 	sas221.Head = sas221Xml.DataInfo.BusinessData.Sas221.SasPassportBsc
 	sas221.List = sas221Xml.DataInfo.BusinessData.Sas221.SasPassportDt
 	sas221.Acmp = sas221Xml.DataInfo.BusinessData.Sas221.SasPassportRlt
@@ -63,6 +64,7 @@ func (s *SasServiceImpl) ParseSas223Xml(xmlBytes []byte) (sas223 Sas223, err err
 	if err = xml.Unmarshal(xmlBytes, &sas223Xml); err != nil {
 		return
 	}
+	sas223.HdeApprResult = sas223Xml.DataInfo.BusinessData.Sas223.HdeApprResult
 	sas223.Head = sas223Xml.DataInfo.BusinessData.Sas223.SasPassportBsc
 	return
 }
@@ -72,6 +74,7 @@ func (s *SasServiceImpl) ParseSas224Xml(xmlBytes []byte) (sas224 Sas224, err err
 	if err = xml.Unmarshal(xmlBytes, &sas224Xml); err != nil {
 		return
 	}
+	sas224.HdeApprResult = sas224Xml.DataInfo.BusinessData.Sas224.HdeApprResult
 	sas224.Head = sas224Xml.DataInfo.BusinessData.Sas224.SasPassportBsc
 	return
 }

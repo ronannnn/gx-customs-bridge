@@ -3,6 +3,7 @@ package inv
 import (
 	"encoding/xml"
 	"fmt"
+	"os"
 
 	"github.com/ronannnn/gx-customs-bridge/internal"
 )
@@ -31,7 +32,7 @@ func (s *InvServiceImpl) GenXml(inv101 Inv101, declareFlag string) (xmlBytes []b
 		return
 	}
 	// 替换部分数据
-	inv101.Head.IcCardNo = &(s.customsCfg.IcCardNo)
+	inv101.Head.IcCardNo = s.customsCfg.IcCardNo
 	// 生成inv101Xml
 	inv101Xml := Inv101Xml{}
 	inv101Xml.Object.Package.EnvelopInfo.MessageType = "INV101"
@@ -46,6 +47,7 @@ func (s *InvServiceImpl) GenXml(inv101 Inv101, declareFlag string) (xmlBytes []b
 		return
 	}
 	xmlBytes = []byte(xml.Header + string(xmlBodyBytes))
+	os.Stdout.Write(xmlBytes)
 	return
 }
 
