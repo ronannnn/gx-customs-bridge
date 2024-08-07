@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"path"
-	"strings"
 	"time"
 
 	"github.com/ronannnn/infra/cfg"
@@ -69,14 +68,6 @@ func ProvideCfg() (*Cfg, error) {
 }
 
 func provideConfigFilepath() string {
-	env := os.Environ()
-	for _, e := range env {
-		pair := strings.Split(e, "=")
-		key := pair[0]
-		value := pair[1]
-		fmt.Printf("key: %s, value: %s\n", key, value)
-	}
-
 	var configFilepath string
 	if configEnv := os.Getenv(ConfigEnvKey); configEnv == "" { // env not found
 		configFilepath = path.Join(ConfigDir, ConfigDefaultFile)
