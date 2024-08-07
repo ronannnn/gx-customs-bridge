@@ -31,7 +31,8 @@ conn-max-lifetime = 14400
 enable-log = false
 
 [customs]
-inv101SysId = ''
-sas121DclErConc = ''
-icCardNo = ''
-operCusRegCode = ''
+imp-path = ''
+inv101-sys-id = ''
+sas121-dcl-er-conc = ''
+ic-card-no = ''
+oper-cus-reg-code = ''
