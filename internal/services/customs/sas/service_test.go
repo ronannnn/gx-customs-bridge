@@ -12,14 +12,14 @@ import (
 )
 
 func TestGenXml(t *testing.T) {
-	service := inv.ProvideInvService(internal.CustomsCfg{
+	service := inv.ProvideInvXmlService(&internal.CustomsCfg{
 		Inv101SysId:     "Z7",
 		OperCusRegCode:  "1234567890",
 		IcCardNo:        "11111111111111111111",
 		Sas121DclErConc: "Nobody",
 	})
 	impexpMarkcd := "I"
-	service.GenXml(inv.Inv101{
+	service.GenInv101Xml(inv.Inv101{
 		Head: inv.Inv101Head{
 			ImpexpMarkcd: impexpMarkcd,
 		},
@@ -27,7 +27,7 @@ func TestGenXml(t *testing.T) {
 }
 
 func TestParseInv221(t *testing.T) {
-	service := sas.ProvideSasService(internal.CustomsCfg{
+	service := sas.ProvideSasXmlService(&internal.CustomsCfg{
 		Inv101SysId:     "Z7",
 		OperCusRegCode:  "1234567890",
 		IcCardNo:        "11111111111111111111",
@@ -57,7 +57,7 @@ func TestParseInv221(t *testing.T) {
 }
 
 func TestParseInv223(t *testing.T) {
-	service := sas.ProvideSasService(internal.CustomsCfg{
+	service := sas.ProvideSasXmlService(&internal.CustomsCfg{
 		Inv101SysId:     "Z7",
 		OperCusRegCode:  "1234567890",
 		IcCardNo:        "11111111111111111111",
@@ -85,7 +85,7 @@ func TestParseInv223(t *testing.T) {
 }
 
 func TestParseInv224(t *testing.T) {
-	service := sas.ProvideSasService(internal.CustomsCfg{
+	service := sas.ProvideSasXmlService(&internal.CustomsCfg{
 		Inv101SysId:     "Z7",
 		OperCusRegCode:  "1234567890",
 		IcCardNo:        "11111111111111111111",

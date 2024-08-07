@@ -7,24 +7,24 @@ import (
 	"github.com/ronannnn/gx-customs-bridge/internal"
 )
 
-type SasService interface {
-	GenXml(sas121 Sas121, declareFlag string) ([]byte, error)
+type SasXmlService interface {
+	GenSas121Xml(sas121 Sas121, declareFlag string) ([]byte, error)
 	ParseSas221Xml([]byte) (Sas221, error)
 	ParseSas223Xml([]byte) (Sas223, error)
 	ParseSas224Xml([]byte) (Sas224, error)
 }
 
-func ProvideSasService(customsCfg internal.CustomsCfg) SasService {
-	return &SasServiceImpl{
+func ProvideSasXmlService(customsCfg *internal.CustomsCfg) SasXmlService {
+	return &SasXmlServiceImpl{
 		customsCfg: customsCfg,
 	}
 }
 
-type SasServiceImpl struct {
-	customsCfg internal.CustomsCfg
+type SasXmlServiceImpl struct {
+	customsCfg *internal.CustomsCfg
 }
 
-func (s *SasServiceImpl) GenXml(sas121 Sas121, declareFlag string) (xmlBytes []byte, err error) {
+func (s *SasXmlServiceImpl) GenSas121Xml(sas121 Sas121, declareFlag string) (xmlBytes []byte, err error) {
 	// 校验
 	if declareFlag != "0" && declareFlag != "1" {
 		err = fmt.Errorf("申报标志(declareFlag)必须是0或1")
@@ -47,7 +47,7 @@ func (s *SasServiceImpl) GenXml(sas121 Sas121, declareFlag string) (xmlBytes []b
 	return
 }
 
-func (s *SasServiceImpl) ParseSas221Xml(xmlBytes []byte) (sas221 Sas221, err error) {
+func (s *SasXmlServiceImpl) ParseSas221Xml(xmlBytes []byte) (sas221 Sas221, err error) {
 	sas221Xml := Sas221Xml{}
 	if err = xml.Unmarshal(xmlBytes, &sas221Xml); err != nil {
 		return
@@ -59,7 +59,7 @@ func (s *SasServiceImpl) ParseSas221Xml(xmlBytes []byte) (sas221 Sas221, err err
 	return
 }
 
-func (s *SasServiceImpl) ParseSas223Xml(xmlBytes []byte) (sas223 Sas223, err error) {
+func (s *SasXmlServiceImpl) ParseSas223Xml(xmlBytes []byte) (sas223 Sas223, err error) {
 	sas223Xml := Sas223Xml{}
 	if err = xml.Unmarshal(xmlBytes, &sas223Xml); err != nil {
 		return
@@ -69,7 +69,7 @@ func (s *SasServiceImpl) ParseSas223Xml(xmlBytes []byte) (sas223 Sas223, err err
 	return
 }
 
-func (s *SasServiceImpl) ParseSas224Xml(xmlBytes []byte) (sas224 Sas224, err error) {
+func (s *SasXmlServiceImpl) ParseSas224Xml(xmlBytes []byte) (sas224 Sas224, err error) {
 	sas224Xml := Sas224Xml{}
 	if err = xml.Unmarshal(xmlBytes, &sas224Xml); err != nil {
 		return

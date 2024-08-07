@@ -8,24 +8,24 @@ import (
 	"github.com/ronannnn/gx-customs-bridge/internal"
 )
 
-type InvService interface {
-	GenXml(inv101 Inv101, declareFlag string) ([]byte, error)
+type InvXmlService interface {
+	GenInv101Xml(inv101 Inv101, declareFlag string) ([]byte, error)
 	ParseInv201Xml([]byte) (Inv201, error)
 	ParseInv202Xml([]byte) (Inv202, error)
 	ParseInv211Xml([]byte) (Inv211, error)
 }
 
-func ProvideInvService(customsCfg internal.CustomsCfg) InvService {
-	return &InvServiceImpl{
+func ProvideInvXmlService(customsCfg *internal.CustomsCfg) InvXmlService {
+	return &InvXmlServiceImpl{
 		customsCfg: customsCfg,
 	}
 }
 
-type InvServiceImpl struct {
-	customsCfg internal.CustomsCfg
+type InvXmlServiceImpl struct {
+	customsCfg *internal.CustomsCfg
 }
 
-func (s *InvServiceImpl) GenXml(inv101 Inv101, declareFlag string) (xmlBytes []byte, err error) {
+func (s *InvXmlServiceImpl) GenInv101Xml(inv101 Inv101, declareFlag string) (xmlBytes []byte, err error) {
 	// 校验
 	if declareFlag != "0" && declareFlag != "1" {
 		err = fmt.Errorf("申报标志(declareFlag)必须是0或1")
@@ -51,7 +51,7 @@ func (s *InvServiceImpl) GenXml(inv101 Inv101, declareFlag string) (xmlBytes []b
 	return
 }
 
-func (s *InvServiceImpl) ParseInv201Xml(xmlBytes []byte) (inv201 Inv201, err error) {
+func (s *InvXmlServiceImpl) ParseInv201Xml(xmlBytes []byte) (inv201 Inv201, err error) {
 	inv201Xml := Inv201Xml{}
 	if err = xml.Unmarshal(xmlBytes, &inv201Xml); err != nil {
 		return
@@ -63,7 +63,7 @@ func (s *InvServiceImpl) ParseInv201Xml(xmlBytes []byte) (inv201 Inv201, err err
 	return
 }
 
-func (s *InvServiceImpl) ParseInv202Xml(xmlBytes []byte) (inv202 Inv202, err error) {
+func (s *InvXmlServiceImpl) ParseInv202Xml(xmlBytes []byte) (inv202 Inv202, err error) {
 	inv202Xml := Inv202Xml{}
 	if err = xml.Unmarshal(xmlBytes, &inv202Xml); err != nil {
 		return
@@ -72,7 +72,7 @@ func (s *InvServiceImpl) ParseInv202Xml(xmlBytes []byte) (inv202 Inv202, err err
 	return
 }
 
-func (s *InvServiceImpl) ParseInv211Xml(xmlBytes []byte) (inv211 Inv211, err error) {
+func (s *InvXmlServiceImpl) ParseInv211Xml(xmlBytes []byte) (inv211 Inv211, err error) {
 	inv211Xml := Inv211Xml{}
 	if err = xml.Unmarshal(xmlBytes, &inv211Xml); err != nil {
 		return

@@ -1,6 +1,7 @@
 package apis
 
 import (
+	"github.com/ronannnn/gx-customs-bridge/internal/services/customs"
 	"github.com/ronannnn/infra"
 	"github.com/ronannnn/infra/cfg"
 	"github.com/ronannnn/infra/services/jwt"
@@ -20,6 +21,7 @@ type HttpServer struct {
 	accessTokenService accesstoken.Service
 	jwtService         jwt.Service
 	userService        user.Service
+	customsService     customs.CustomsService
 }
 
 func NewHttpServer(
@@ -32,6 +34,7 @@ func NewHttpServer(
 	accessTokenService accesstoken.Service,
 	jwtService jwt.Service,
 	userService user.Service,
+	customsService customs.CustomsService,
 ) *HttpServer {
 	hs := &HttpServer{
 		BaseHttpServer: infra.BaseHttpServer{
@@ -45,8 +48,10 @@ func NewHttpServer(
 		accessTokenService: accessTokenService,
 		jwtService:         jwtService,
 		userService:        userService,
+		customsService:     customsService,
 	}
 	// golang abstract class reference: https://adrianwit.medium.com/abstract-class-reinvented-with-go-4a7326525034
 	hs.BaseHttpServer.HttpServerRunner.HttpServerBaseRunner = hs
+	customsService.ListenImpPath()
 	return hs
 }
