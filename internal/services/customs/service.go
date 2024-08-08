@@ -25,13 +25,11 @@ func ProvideCustomsService(
 	customsCfg *internal.CustomsCfg,
 	sasService *SasService,
 ) CustomsService {
-	srv := &CustomsServiceImpl{
+	return &CustomsServiceImpl{
 		log:        log,
 		customsCfg: customsCfg,
 		sasService: sasService,
 	}
-	srv.ListenImpPath()
-	return srv
 }
 
 type CustomsServiceImpl struct {
