@@ -30,13 +30,19 @@ type CustomsCfg struct {
 	OperCusRegCode  string `mapstructure:"oper-cus-reg-code"`  // 操作卡的海关十位
 }
 
+type RabbitMqCfg struct {
+	Addr      string `mapstructure:"addr"`
+	QueueName string `mapstructure:"queue-name"`
+}
+
 type Cfg struct {
-	Sys     cfg.Sys    `mapstructure:"sys"`
-	Log     cfg.Log    `mapstructure:"log"`
-	Auth    cfg.Auth   `mapstructure:"auth"`
-	Db      cfg.Db     `mapstructure:"db"`
-	User    cfg.User   `mapstructure:"user"`
-	Customs CustomsCfg `mapstructure:"customs"`
+	Sys      cfg.Sys     `mapstructure:"sys"`
+	Log      cfg.Log     `mapstructure:"log"`
+	Auth     cfg.Auth    `mapstructure:"auth"`
+	Db       cfg.Db      `mapstructure:"db"`
+	User     cfg.User    `mapstructure:"user"`
+	Customs  CustomsCfg  `mapstructure:"customs"`
+	RabbitMq RabbitMqCfg `mapstructure:"rabbitmq"`
 }
 
 func ProvideLogCfg(cfg *Cfg) *cfg.Log {
@@ -61,6 +67,10 @@ func ProvideUserCfg(cfg *Cfg) *cfg.User {
 
 func ProvideCustomsCfg(cfg *Cfg) *CustomsCfg {
 	return &cfg.Customs
+}
+
+func ProvideRabbitMqCfg(cfg *Cfg) *RabbitMqCfg {
+	return &cfg.RabbitMq
 }
 
 func ProvideCfg() (*Cfg, error) {

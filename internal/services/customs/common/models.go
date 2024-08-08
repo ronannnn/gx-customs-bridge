@@ -38,11 +38,8 @@ type HdeApprResult struct {
 	Rmk          string `json:"rmk" xml:"rmk"`                   // 备注
 }
 
-type UploadMessageHeader struct {
-	XMLName xml.Name `xml:"Signature"`
-	Object  struct {
-		Package struct {
-			EnvelopInfo EnvelopInfo
-		}
-	}
+// 回执共有的头部，主要用于获取EnvelopeInfo中的MessageType
+type ReceiptMessageHeader struct {
+	XMLName     xml.Name `xml:"Package"`
+	EnvelopInfo EnvelopInfo
 }

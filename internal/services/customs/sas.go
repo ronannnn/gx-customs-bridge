@@ -1,14 +1,17 @@
 package customs
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/google/uuid"
 	"github.com/ronannnn/gx-customs-bridge/internal"
 	"github.com/ronannnn/gx-customs-bridge/internal/services/customs/common"
 	"github.com/ronannnn/gx-customs-bridge/internal/services/customs/sas"
+	"github.com/ronannnn/gx-customs-bridge/internal/services/rmq"
 	"go.uber.org/zap"
 )
 
@@ -33,20 +36,26 @@ const (
 
 type SasService struct {
 	CustomsMessage
-	log           *zap.SugaredLogger
-	customsCfg    *internal.CustomsCfg
-	sasXmlService sas.SasXmlService
+	customsCfg              *internal.CustomsCfg
+	log                     *zap.SugaredLogger
+	rmqClient               *rmq.Client
+	customsCommonXmlService common.CustomsCommonXmlService
+	sasXmlService           sas.SasXmlService
 }
 
 func ProvideSasService(
-	log *zap.SugaredLogger,
 	customsCfg *internal.CustomsCfg,
+	log *zap.SugaredLogger,
+	rmqClient *rmq.Client,
+	customsCommonXmlService common.CustomsCommonXmlService,
 	sasXmlService sas.SasXmlService,
 ) *SasService {
 	srv := &SasService{
-		log:           log,
-		customsCfg:    customsCfg,
-		sasXmlService: sasXmlService,
+		customsCfg:              customsCfg,
+		log:                     log,
+		rmqClient:               rmqClient,
+		customsCommonXmlService: customsCommonXmlService,
+		sasXmlService:           sasXmlService,
 	}
 	srv.CustomsMessage.CustomsMessageHandler = srv
 	return srv
@@ -58,8 +67,8 @@ func (srv *SasService) DirName() string {
 
 func (srv *SasService) GenOutBoxFile(model any, uploadType string, declareFlag string) (id string, err error) {
 	id = uuid.New().String()
-	switch uploadType {
-	case string(SasInv101):
+	switch SasUploadType(uploadType) {
+	case SasInv101:
 		// cast model to sas.Inv101
 		inv101, ok := model.(sas.Inv101)
 		if !ok {
@@ -76,7 +85,7 @@ func (srv *SasService) GenOutBoxFile(model any, uploadType string, declareFlag s
 		if err = os.WriteFile(filePath, xmlBytes, 0644); err != nil {
 			return
 		}
-	case string(SasSas121):
+	case SasSas121:
 		// cast model to sas.Sas121
 		sas121, ok := model.(sas.Sas121)
 		if !ok {
@@ -99,17 +108,111 @@ func (srv *SasService) GenOutBoxFile(model any, uploadType string, declareFlag s
 	return
 }
 
-func (srv *SasService) ParseSentBoxFile(filename string) (err error) {
+func (srv *SasService) HandleSentBoxFile(filename string) (err error) {
 	srv.log.Infof("SasService HandleSentBoxFile, %s", filename)
 	return
 }
 
-func (srv *SasService) ParseFailBoxFile(filename string) (err error) {
+func (srv *SasService) HandleFailBoxFile(filename string) (err error) {
 	srv.log.Infof("SasService HandleFailBoxFile, %s", filename)
 	return
 }
 
-func (srv *SasService) ParseInBoxFile(filename string) (err error) {
+func (srv *SasService) HandleInBoxFile(filename string) (err error) {
 	srv.log.Infof("SasService HandleInBoxFile, %s", filename)
+	if strings.HasPrefix(filename, "Successed_") || strings.HasPrefix(filename, "Failed_") {
+		err = srv.tryToHandleInBoxMessageResponseFile(filename)
+		return
+	}
+
+	// get xml bytes
+	var xmlBytes []byte
+	if xmlBytes, err = os.ReadFile(filename); err != nil {
+		return
+	}
+
+	// 解析MessageType
+	var rmh common.ReceiptMessageHeader
+	if rmh, err = srv.customsCommonXmlService.ParseReceiptMessageHeader(xmlBytes); err != nil {
+		return
+	} else if rmh.EnvelopInfo.MessageType == "" {
+		err = fmt.Errorf("该报文没有MessageType: %s", filename)
+		return
+	}
+
+	var data any
+	switch SasReceiptType(rmh.EnvelopInfo.MessageType) {
+	case SasInv201:
+		data, err = srv.sasXmlService.ParseInv201Xml(xmlBytes)
+	case SasInv202:
+		data, err = srv.sasXmlService.ParseInv202Xml(xmlBytes)
+	case SasInv211:
+		data, err = srv.sasXmlService.ParseInv211Xml(xmlBytes)
+	case SasSas221:
+		data, err = srv.sasXmlService.ParseSas221Xml(xmlBytes)
+	case SasSas223:
+		data, err = srv.sasXmlService.ParseSas223Xml(xmlBytes)
+	case SasSas224:
+		data, err = srv.sasXmlService.ParseSas224Xml(xmlBytes)
+	default:
+		err = fmt.Errorf("unsupported receipt type: %s", rmh.EnvelopInfo.MessageType)
+	}
+	if err != nil {
+		return
+	}
+
+	// convert data to json bytes
+	var jsonbytes []byte
+	if jsonbytes, err = json.Marshal(common.ReceiptResult{
+		ReceiptType: string(rmh.EnvelopInfo.MessageType),
+		Data:        data,
+	}); err != nil {
+		return
+	}
+
+	fmt.Printf("jsonbytes: %s\n", string(jsonbytes))
+
+	// publish message to rmq
+	// if err = srv.rmqClient.Push(jsonbytes); err != nil {
+	// 	return
+	// }
+
+	return
+}
+
+// 解析InBox里面Successed_或Failed_开头的文件
+func (srv *SasService) tryToHandleInBoxMessageResponseFile(filename string) (err error) {
+	// get id from filename
+	filenamePrefix := internal.GetFilenamePrefix(filename)
+	id := strings.Split(filenamePrefix, "_")[1]
+
+	// get xml bytes
+	filePath := filepath.Join(srv.customsCfg.ImpPath, srv.DirName(), filename)
+	var xmlBytes []byte
+	if xmlBytes, err = os.ReadFile(filePath); err != nil {
+		return
+	}
+
+	// parse xml bytes
+	var crm common.CommonResponeMessage
+	if crm, err = srv.customsCommonXmlService.ParseCommonResponseMessageXml(xmlBytes); err != nil {
+		return
+	}
+
+	// convert rmq message to json bytes
+	mrr := common.MessageResponseResult{
+		Id:                   id,
+		CommonResponeMessage: crm,
+	}
+	var mrrJsonBytes []byte
+	if mrrJsonBytes, err = json.Marshal(mrr); err != nil {
+		return
+	}
+
+	// publish message to rmq
+	if err = srv.rmqClient.Push(mrrJsonBytes); err != nil {
+		return
+	}
+
 	return
 }

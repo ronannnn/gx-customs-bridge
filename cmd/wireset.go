@@ -4,8 +4,10 @@ import (
 	"github.com/ronannnn/gx-customs-bridge/internal"
 	"github.com/ronannnn/gx-customs-bridge/internal/apis"
 	"github.com/ronannnn/gx-customs-bridge/internal/services/customs"
+	"github.com/ronannnn/gx-customs-bridge/internal/services/customs/common"
 	"github.com/ronannnn/gx-customs-bridge/internal/services/customs/sas"
 	"github.com/ronannnn/gx-customs-bridge/internal/services/db"
+	"github.com/ronannnn/gx-customs-bridge/internal/services/rmq"
 
 	"github.com/google/wire"
 	"github.com/ronannnn/infra"
@@ -27,10 +29,12 @@ var wireSet = wire.NewSet(
 	internal.ProvideAuthCfg,
 	internal.ProvideUserCfg,
 	internal.ProvideCustomsCfg,
+	internal.ProvideRabbitMqCfg,
 	// infra
 	infra.ProvideCasbinEnforcer,
 	db.ProvideService,
 	internal.ProvideLog,
+	rmq.ProvideService,
 	// middleware
 	infra.ProvideMiddleware,
 	// services
@@ -45,6 +49,7 @@ var wireSet = wire.NewSet(
 	sas.ProvideSasXmlService,
 	customs.ProvideSasService,
 	customs.ProvideCustomsService,
+	common.ProvideCustomsCommonXmlService,
 	// stores
 	refreshtoken.ProvideStore,
 	user.ProvideStore,

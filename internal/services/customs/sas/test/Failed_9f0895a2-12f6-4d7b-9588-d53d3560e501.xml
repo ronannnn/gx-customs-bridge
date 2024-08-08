@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<CommonResponeMessage>
+  <EtpsPreentNo>浙B2M765</EtpsPreentNo>
+  <CheckInfo>报文类型为SAS121,
+    导入报文中预录入统一编号为空，并且企业内部编号浙B2M765、区内企业编码330261A004与系统已有记录【202300000059988116】的对应字段重复，请修改后重新导入。</CheckInfo>
+  <DealFlag>-1</DealFlag>
+</CommonResponeMessage>

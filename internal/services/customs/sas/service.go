@@ -20,7 +20,9 @@ type SasXmlService interface {
 	ParseSas224Xml([]byte) (Sas224, error)
 }
 
-func ProvideSasXmlService(customsCfg *internal.CustomsCfg) SasXmlService {
+func ProvideSasXmlService(
+	customsCfg *internal.CustomsCfg,
+) SasXmlService {
 	return &SasXmlServiceImpl{
 		customsCfg: customsCfg,
 	}

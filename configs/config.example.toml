@@ -36,3 +36,7 @@ inv101-sys-id = ''
 sas121-dcl-er-conc = ''
 ic-card-no = ''
 oper-cus-reg-code = ''
+
+[rabbitmq]
+addr = ""
+queue-name = ""

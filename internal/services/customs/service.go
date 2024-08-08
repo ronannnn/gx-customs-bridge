@@ -44,9 +44,9 @@ type CustomsMessageHandler interface {
 		uploadType string, // 报文类型，比如INV101, SAS121
 		declareFlag string, // 是否申报
 	) (string, error)
-	ParseSentBoxFile(filename string) error
-	ParseFailBoxFile(filename string) error
-	ParseInBoxFile(filename string) error
+	HandleSentBoxFile(filename string) error
+	HandleFailBoxFile(filename string) error
+	HandleInBoxFile(filename string) error
 	// dir handler
 	HandleBoxes(log *zap.SugaredLogger, impPath string)
 	HandleSentBox(log *zap.SugaredLogger, impPath string) error
@@ -66,15 +66,15 @@ func (cm CustomsMessage) HandleBoxes(log *zap.SugaredLogger, impPath string) {
 }
 
 func (cm CustomsMessage) HandleSentBox(log *zap.SugaredLogger, impPath string) (err error) {
-	return handleBox(log, impPath, cm.DirName(), "SentBox", cm.ParseSentBoxFile)
+	return handleBox(log, impPath, cm.DirName(), "SentBox", cm.HandleSentBoxFile)
 }
 
 func (cm CustomsMessage) HandleFailBox(log *zap.SugaredLogger, impPath string) (err error) {
-	return handleBox(log, impPath, cm.DirName(), "FailBox", cm.ParseFailBoxFile)
+	return handleBox(log, impPath, cm.DirName(), "FailBox", cm.HandleFailBoxFile)
 }
 
 func (cm CustomsMessage) HandleInBox(log *zap.SugaredLogger, impPath string) (err error) {
-	return handleBox(log, impPath, cm.DirName(), "InBox", cm.ParseInBoxFile)
+	return handleBox(log, impPath, cm.DirName(), "InBox", cm.HandleInBoxFile)
 }
 
 func handleBox(
