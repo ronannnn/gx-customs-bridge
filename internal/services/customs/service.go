@@ -25,11 +25,13 @@ func ProvideCustomsService(
 	customsCfg *internal.CustomsCfg,
 	sasService *SasService,
 ) CustomsService {
-	return &CustomsServiceImpl{
+	srv := &CustomsServiceImpl{
 		log:        log,
 		customsCfg: customsCfg,
 		sasService: sasService,
 	}
+	srv.ListenImpPath()
+	return srv
 }
 
 type CustomsServiceImpl struct {
@@ -68,8 +70,6 @@ type CustomsMessage struct {
 
 // TODO: 添加重试机制
 func (cm CustomsMessage) HandleBoxes(log *zap.SugaredLogger, impPath string) {
-	go cm.HandleSentBox(log, impPath)
-	go cm.HandleFailBox(log, impPath)
 	go cm.HandleInBox(log, impPath)
 }
 

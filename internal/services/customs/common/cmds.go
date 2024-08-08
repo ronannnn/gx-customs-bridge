@@ -1,5 +1,11 @@
 package common
 
+type MessageRequestPayload struct {
+	Data        any    `json:"data"`
+	UploadType  string `json:"uploadType"`
+	DeclareFlag string `json:"declareFlag"`
+}
+
 type MessageResponseResult struct {
 	Id                   string               `json:"id"`
 	CommonResponeMessage CommonResponeMessage `json:"commonResponeMessage"`

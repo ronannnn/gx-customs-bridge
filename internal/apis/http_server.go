@@ -21,7 +21,7 @@ type HttpServer struct {
 	accessTokenService accesstoken.Service
 	jwtService         jwt.Service
 	userService        user.Service
-	customsService     customs.CustomsService
+	customsSasService  *customs.SasService
 }
 
 func NewHttpServer(
@@ -34,7 +34,7 @@ func NewHttpServer(
 	accessTokenService accesstoken.Service,
 	jwtService jwt.Service,
 	userService user.Service,
-	customsService customs.CustomsService,
+	customsSasService *customs.SasService,
 ) *HttpServer {
 	hs := &HttpServer{
 		BaseHttpServer: infra.BaseHttpServer{
@@ -48,10 +48,9 @@ func NewHttpServer(
 		accessTokenService: accessTokenService,
 		jwtService:         jwtService,
 		userService:        userService,
-		customsService:     customsService,
+		customsSasService:  customsSasService,
 	}
 	// golang abstract class reference: https://adrianwit.medium.com/abstract-class-reinvented-with-go-4a7326525034
 	hs.BaseHttpServer.HttpServerRunner.HttpServerBaseRunner = hs
-	customsService.ListenImpPath()
 	return hs
 }
