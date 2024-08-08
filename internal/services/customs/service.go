@@ -39,13 +39,16 @@ type CustomsMessageHandler interface {
 	// meta
 	DirName() string
 	// file handler
-	HandleOutBoxFile(filename string) error
-	HandleSentBoxFile(filename string) error
-	HandleFailBoxFile(filename string) error
-	HandleInBoxFile(filename string) error
+	GenOutBoxFile(
+		model any, // 传入的model
+		uploadType string, // 报文类型，比如INV101, SAS121
+		declareFlag string, // 是否申报
+	) (string, error)
+	ParseSentBoxFile(filename string) error
+	ParseFailBoxFile(filename string) error
+	ParseInBoxFile(filename string) error
 	// dir handler
 	HandleBoxes(log *zap.SugaredLogger, impPath string)
-	HandleOutBox(log *zap.SugaredLogger, impPath string) error
 	HandleSentBox(log *zap.SugaredLogger, impPath string) error
 	HandleFailBox(log *zap.SugaredLogger, impPath string) error
 	HandleInBox(log *zap.SugaredLogger, impPath string) error
@@ -57,26 +60,21 @@ type CustomsMessage struct {
 
 // TODO: 添加重试机制
 func (cm CustomsMessage) HandleBoxes(log *zap.SugaredLogger, impPath string) {
-	go cm.HandleOutBox(log, impPath)
 	go cm.HandleSentBox(log, impPath)
 	go cm.HandleFailBox(log, impPath)
 	go cm.HandleInBox(log, impPath)
 }
 
-func (cm CustomsMessage) HandleOutBox(log *zap.SugaredLogger, impPath string) (err error) {
-	return handleBox(log, impPath, cm.DirName(), "OutBox", cm.HandleOutBoxFile)
-}
-
 func (cm CustomsMessage) HandleSentBox(log *zap.SugaredLogger, impPath string) (err error) {
-	return handleBox(log, impPath, cm.DirName(), "SentBox", cm.HandleSentBoxFile)
+	return handleBox(log, impPath, cm.DirName(), "SentBox", cm.ParseSentBoxFile)
 }
 
 func (cm CustomsMessage) HandleFailBox(log *zap.SugaredLogger, impPath string) (err error) {
-	return handleBox(log, impPath, cm.DirName(), "FailBox", cm.HandleFailBoxFile)
+	return handleBox(log, impPath, cm.DirName(), "FailBox", cm.ParseFailBoxFile)
 }
 
 func (cm CustomsMessage) HandleInBox(log *zap.SugaredLogger, impPath string) (err error) {
-	return handleBox(log, impPath, cm.DirName(), "InBox", cm.HandleInBoxFile)
+	return handleBox(log, impPath, cm.DirName(), "InBox", cm.ParseInBoxFile)
 }
 
 func handleBox(

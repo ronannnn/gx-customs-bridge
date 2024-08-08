@@ -1,5 +1,7 @@
 package common
 
+import "encoding/xml"
+
 type CommonResponeMessage struct {
 	SeqNo        string `json:"seqNo"`        // 预录入统一编号
 	EtpsPreentNo string `json:"etpsPreentNo"` // 企业内部编号
@@ -34,4 +36,13 @@ type HdeApprResult struct {
 	ManageResult string `json:"manageResult" xml:"manageResult"` // 处理结果
 	ManageDate   string `json:"manageDate" xml:"manageDate"`     // 处理日期
 	Rmk          string `json:"rmk" xml:"rmk"`                   // 备注
+}
+
+type UploadMessageHeader struct {
+	XMLName xml.Name `xml:"Signature"`
+	Object  struct {
+		Package struct {
+			EnvelopInfo EnvelopInfo
+		}
+	}
 }

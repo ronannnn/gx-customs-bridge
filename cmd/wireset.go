@@ -4,6 +4,7 @@ import (
 	"github.com/ronannnn/gx-customs-bridge/internal"
 	"github.com/ronannnn/gx-customs-bridge/internal/apis"
 	"github.com/ronannnn/gx-customs-bridge/internal/services/customs"
+	"github.com/ronannnn/gx-customs-bridge/internal/services/customs/sas"
 	"github.com/ronannnn/gx-customs-bridge/internal/services/db"
 
 	"github.com/google/wire"
@@ -41,6 +42,7 @@ var wireSet = wire.NewSet(
 	user.ProvideService,
 	apirecord.ProvideService,
 	apirecord.ProvideStore,
+	sas.ProvideSasXmlService,
 	customs.ProvideSasService,
 	customs.ProvideCustomsService,
 	// stores
