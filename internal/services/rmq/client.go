@@ -69,7 +69,7 @@ func NewRabbitMq(
 		queueName: rmqCfg.QueueName,
 		done:      make(chan bool),
 	}
-	// go client.handleReconnect(rmqCfg.Addr)
+	go client.handleReconnect(rmqCfg.Addr)
 	return &client
 }
 
