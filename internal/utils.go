@@ -9,3 +9,7 @@ func GetFilenamePrefix(filename string) string {
 func GetFilenameSuffix(filename string) string {
 	return filename[strings.LastIndex(filename, ".")+1:]
 }
+
+func GetFilenameFromPath(filePath string) string {
+	return filePath[strings.LastIndex(filePath, "/")+1:]
+}

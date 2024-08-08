@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"path/filepath"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -29,4 +30,18 @@ func TestGetFilenameWithoutDot(t *testing.T) {
 	wantSuffix := "test"
 	gotSuffix := GetFilenameSuffix(filename)
 	require.Equal(t, wantSuffix, gotSuffix)
+}
+
+func TestGetFilenameFromPath(t *testing.T) {
+	filePath := filepath.Join("ok", "test", "test.txt")
+	want := "test.txt"
+	got := GetFilenameFromPath(filePath)
+	require.Equal(t, want, got)
+}
+
+func TestGetFilenameFromPathWithoutSlash(t *testing.T) {
+	filePath := "test.txt"
+	want := "test.txt"
+	got := GetFilenameFromPath(filePath)
+	require.Equal(t, want, got)
 }

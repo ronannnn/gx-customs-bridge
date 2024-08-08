@@ -1,12 +1,20 @@
 package customs
 
 import (
+	"io/fs"
 	"path/filepath"
 
 	"github.com/fsnotify/fsnotify"
 	"github.com/ronannnn/gx-customs-bridge/internal"
+	"github.com/ronannnn/infra/utils"
 	"go.uber.org/zap"
 )
+
+const HandledFilesDirName = "Gx"
+const OutBoxDirName = "OutBox"
+const SentBoxDirName = "SentBox"
+const FailBoxDirName = "FailBox"
+const InBoxDirName = "InBox"
 
 type CustomsService interface {
 	ListenImpPath()
@@ -66,15 +74,15 @@ func (cm CustomsMessage) HandleBoxes(log *zap.SugaredLogger, impPath string) {
 }
 
 func (cm CustomsMessage) HandleSentBox(log *zap.SugaredLogger, impPath string) (err error) {
-	return handleBox(log, impPath, cm.DirName(), "SentBox", cm.HandleSentBoxFile)
+	return handleBox(log, impPath, cm.DirName(), SentBoxDirName, cm.HandleSentBoxFile)
 }
 
 func (cm CustomsMessage) HandleFailBox(log *zap.SugaredLogger, impPath string) (err error) {
-	return handleBox(log, impPath, cm.DirName(), "FailBox", cm.HandleFailBoxFile)
+	return handleBox(log, impPath, cm.DirName(), FailBoxDirName, cm.HandleFailBoxFile)
 }
 
 func (cm CustomsMessage) HandleInBox(log *zap.SugaredLogger, impPath string) (err error) {
-	return handleBox(log, impPath, cm.DirName(), "InBox", cm.HandleInBoxFile)
+	return handleBox(log, impPath, cm.DirName(), InBoxDirName, cm.HandleInBoxFile)
 }
 
 func handleBox(
@@ -84,6 +92,31 @@ func handleBox(
 	boxName string,
 	handleBoxFileFn func(filename string) error,
 ) (err error) {
+	path := filepath.Join(impPath, dirName, boxName)
+	// out box的额外逻辑
+	if boxName == InBoxDirName {
+		// 创建存放处理后文件的文件夹
+		handledFilesPath := filepath.Join(impPath, dirName, HandledFilesDirName, boxName)
+		if err = utils.CreateDirsIfNotExist(handledFilesPath); err != nil {
+			return
+		}
+		// 处理当前OutBox文件夹下面所有的文件(fsnotify代码块的逻辑不会处理之前已经存在的文件)
+		if err = filepath.WalkDir(path, func(filename string, d fs.DirEntry, err error) error {
+			if err != nil {
+				return err
+			}
+			if d.IsDir() {
+				return nil
+			}
+			if err = handleBoxFileFn(filename); err != nil {
+				log.Errorf("handle outbox file error: %+v", err)
+			}
+			return nil
+		}); err != nil {
+			return
+		}
+	}
+
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
 		return
@@ -94,6 +127,7 @@ func handleBox(
 	go func() {
 		defer close(done)
 
+		// 监听文件变化
 		for {
 			select {
 			case event, ok := <-watcher.Events:
@@ -114,7 +148,6 @@ func handleBox(
 		}
 	}()
 
-	path := filepath.Join(impPath, dirName, boxName)
 	if err = watcher.Add(path); err != nil {
 		return
 	}

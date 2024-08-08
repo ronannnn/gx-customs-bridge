@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/ronannnn/gx-customs-bridge/internal"
@@ -125,9 +126,17 @@ func (srv *SasService) HandleInBoxFile(filename string) (err error) {
 		return
 	}
 
+	filenameWithoutParentDir := internal.GetFilenameFromPath(filename)
+
 	// get xml bytes
+	filePath := filepath.Join(
+		srv.customsCfg.ImpPath,
+		srv.DirName(),
+		InBoxDirName,
+		filenameWithoutParentDir,
+	)
 	var xmlBytes []byte
-	if xmlBytes, err = os.ReadFile(filename); err != nil {
+	if xmlBytes, err = os.ReadFile(filePath); err != nil {
 		return
 	}
 
@@ -170,12 +179,22 @@ func (srv *SasService) HandleInBoxFile(filename string) (err error) {
 		return
 	}
 
-	fmt.Printf("jsonbytes: %s\n", string(jsonbytes))
-
 	// publish message to rmq
-	// if err = srv.rmqClient.Push(jsonbytes); err != nil {
-	// 	return
-	// }
+	if err = srv.rmqClient.Push(jsonbytes); err != nil {
+		return
+	}
+
+	// 把这个文件移动到HandledFilesDirName下
+	handledFilesPath := filepath.Join(
+		srv.customsCfg.ImpPath,
+		srv.DirName(),
+		HandledFilesDirName,
+		InBoxDirName,
+		fmt.Sprintf("handled_%s_%s", time.Now().Format("2006-01-02-15:04:05"), filenameWithoutParentDir),
+	)
+	if err = os.Rename(filePath, handledFilesPath); err != nil {
+		return
+	}
 
 	return
 }
