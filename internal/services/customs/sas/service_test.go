@@ -20,7 +20,7 @@ func TestGenInv101Xml(t *testing.T) {
 	impexpMarkcd := "I"
 	service.GenInv101Xml(sas.Inv101{
 		Head: sas.Inv101Head{
-			ImpexpMarkcd: impexpMarkcd,
+			ImpexpMarkcd: &impexpMarkcd,
 		},
 	}, "1")
 }
@@ -35,7 +35,7 @@ func TestGenSas121Xml(t *testing.T) {
 	impexpMarkcd := "I"
 	service.GenInv101Xml(sas.Inv101{
 		Head: sas.Inv101Head{
-			ImpexpMarkcd: impexpMarkcd,
+			ImpexpMarkcd: &impexpMarkcd,
 		},
 	}, "1")
 }

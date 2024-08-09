@@ -39,7 +39,7 @@ func (s *SasXmlServiceImpl) GenInv101Xml(inv101 Inv101, declareFlag string) (xml
 		return
 	}
 	// 替换部分数据
-	inv101.Head.IcCardNo = s.customsCfg.IcCardNo
+	inv101.Head.IcCardNo = &s.customsCfg.IcCardNo
 	// 生成inv101Xml
 	inv101Xml := Inv101Xml{}
 	inv101Xml.Object.Package.EnvelopInfo.MessageType = "INV101"
