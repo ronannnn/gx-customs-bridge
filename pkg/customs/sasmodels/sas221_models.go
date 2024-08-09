@@ -1,9 +1,9 @@
-package sas
+package sasmodels
 
 import (
 	"encoding/xml"
 
-	"github.com/ronannnn/gx-customs-bridge/internal/services/customs/common"
+	"github.com/ronannnn/gx-customs-bridge/pkg/customs/commonmodels"
 )
 
 type Sas221Head struct {
@@ -99,20 +99,20 @@ type Sas221Acmp struct {
 }
 
 type Sas221 struct {
-	HdeApprResult common.HdeApprResult `json:"hdeApprResult"`
-	Head          Sas221Head           `json:"head"`
-	List          []Sas221List         `json:"list"`
-	Acmp          []Sas221Acmp         `json:"acmp"`
+	HdeApprResult commonmodels.HdeApprResult `json:"hdeApprResult"`
+	Head          Sas221Head                 `json:"head"`
+	List          []Sas221List               `json:"list"`
+	Acmp          []Sas221Acmp               `json:"acmp"`
 }
 
 type Sas221Xml struct {
 	XMLName     xml.Name `xml:"Package"`
-	EnvelopInfo common.EnvelopInfo
+	EnvelopInfo commonmodels.EnvelopInfo
 	DataInfo    struct {
-		PocketInfo   common.PocketInfo
+		PocketInfo   commonmodels.PocketInfo
 		BusinessData struct {
 			Sas221 struct {
-				HdeApprResult  common.HdeApprResult
+				HdeApprResult  commonmodels.HdeApprResult
 				SasPassportBsc Sas221Head
 				SasPassportDt  []Sas221List
 				SasPassportRlt []Sas221Acmp

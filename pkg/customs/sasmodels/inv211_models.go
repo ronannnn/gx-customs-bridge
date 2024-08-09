@@ -1,9 +1,9 @@
-package sas
+package sasmodels
 
 import (
 	"encoding/xml"
 
-	"github.com/ronannnn/gx-customs-bridge/internal/services/customs/common"
+	"github.com/ronannnn/gx-customs-bridge/pkg/customs/commonmodels"
 )
 
 // Inv211Head 核注清单表头
@@ -139,9 +139,9 @@ type Inv211 struct {
 // Inv211Xml 核注清单记账回执
 type Inv211Xml struct {
 	XMLName     xml.Name `xml:"Package"`
-	EnvelopInfo common.EnvelopInfo
+	EnvelopInfo commonmodels.EnvelopInfo
 	DataInfo    struct {
-		PocketInfo   common.PocketInfo
+		PocketInfo   commonmodels.PocketInfo
 		BusinessData struct {
 			Inv211 struct {
 				BondInvtBsc Inv211Head

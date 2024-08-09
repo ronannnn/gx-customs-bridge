@@ -7,6 +7,7 @@ import (
 
 	"github.com/ronannnn/gx-customs-bridge/internal"
 	"github.com/ronannnn/gx-customs-bridge/internal/services/customs/sas"
+	"github.com/ronannnn/gx-customs-bridge/pkg/customs/sasmodels"
 	"github.com/stretchr/testify/require"
 )
 
@@ -18,8 +19,8 @@ func TestGenInv101Xml(t *testing.T) {
 		Sas121DclErConc: "Nobody",
 	})
 	impexpMarkcd := "I"
-	service.GenInv101Xml(sas.Inv101{
-		Head: sas.Inv101Head{
+	service.GenInv101Xml(sasmodels.Inv101{
+		Head: sasmodels.Inv101Head{
 			ImpexpMarkcd: &impexpMarkcd,
 		},
 	}, "1")
@@ -33,8 +34,8 @@ func TestGenSas121Xml(t *testing.T) {
 		Sas121DclErConc: "Nobody",
 	})
 	impexpMarkcd := "I"
-	service.GenInv101Xml(sas.Inv101{
-		Head: sas.Inv101Head{
+	service.GenInv101Xml(sasmodels.Inv101{
+		Head: sasmodels.Inv101Head{
 			ImpexpMarkcd: &impexpMarkcd,
 		},
 	}, "1")
@@ -59,7 +60,7 @@ func TestParseInv201(t *testing.T) {
 	require.NoError(t, err)
 
 	// parse to inv201
-	var inv201 sas.Inv201
+	var inv201 sasmodels.Inv201
 	inv201, err = service.ParseInv201Xml(xmlBytes)
 	require.NoError(t, err)
 
@@ -87,7 +88,7 @@ func TestParseInv202(t *testing.T) {
 	require.NoError(t, err)
 
 	// parse to inv202
-	var inv202 sas.Inv202
+	var inv202 sasmodels.Inv202
 	inv202, err = service.ParseInv202Xml(xmlBytes)
 	require.NoError(t, err)
 
@@ -115,7 +116,7 @@ func TestParseInv211(t *testing.T) {
 	require.NoError(t, err)
 
 	// parse to inv211
-	var inv211 sas.Inv211
+	var inv211 sasmodels.Inv211
 	inv211, err = service.ParseInv211Xml(xmlBytes)
 	require.NoError(t, err)
 
@@ -144,7 +145,7 @@ func TestParseInv221(t *testing.T) {
 	require.NoError(t, err)
 
 	// parse to sas221
-	var sas221 sas.Sas221
+	var sas221 sasmodels.Sas221
 	sas221, err = service.ParseSas221Xml(xmlBytes)
 	require.NoError(t, err)
 
@@ -174,7 +175,7 @@ func TestParseInv223(t *testing.T) {
 	require.NoError(t, err)
 
 	// parse to sas223
-	var sas223 sas.Sas223
+	var sas223 sasmodels.Sas223
 	sas223, err = service.ParseSas223Xml(xmlBytes)
 	require.NoError(t, err)
 
@@ -202,7 +203,7 @@ func TestParseInv224(t *testing.T) {
 	require.NoError(t, err)
 
 	// parse to sas224
-	var sas224 sas.Sas224
+	var sas224 sasmodels.Sas224
 	sas224, err = service.ParseSas224Xml(xmlBytes)
 	require.NoError(t, err)
 

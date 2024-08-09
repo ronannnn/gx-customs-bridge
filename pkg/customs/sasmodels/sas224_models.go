@@ -1,25 +1,25 @@
-package sas
+package sasmodels
 
 import (
 	"encoding/xml"
 
-	"github.com/ronannnn/gx-customs-bridge/internal/services/customs/common"
+	"github.com/ronannnn/gx-customs-bridge/pkg/customs/commonmodels"
 )
 
 type Sas224 struct {
-	HdeApprResult common.HdeApprResult `json:"hdeApprResult"`
+	HdeApprResult commonmodels.HdeApprResult `json:"hdeApprResult"`
 	// 和SAS221共用Head
 	Head Sas221Head `json:"head"`
 }
 
 type Sas224Xml struct {
 	XMLName     xml.Name `xml:"Package"`
-	EnvelopInfo common.EnvelopInfo
+	EnvelopInfo commonmodels.EnvelopInfo
 	DataInfo    struct {
-		PocketInfo   common.PocketInfo
+		PocketInfo   commonmodels.PocketInfo
 		BusinessData struct {
 			Sas224 struct {
-				HdeApprResult  common.HdeApprResult
+				HdeApprResult  commonmodels.HdeApprResult
 				SasPassportBsc Sas221Head
 			} `xml:"SAS224"`
 		} `xml:"BussinessData"`

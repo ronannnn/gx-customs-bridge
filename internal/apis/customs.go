@@ -4,13 +4,13 @@ import (
 	"net/http"
 
 	"github.com/go-chi/render"
-	"github.com/ronannnn/gx-customs-bridge/internal/services/customs/common"
+	"github.com/ronannnn/gx-customs-bridge/pkg/customs/commonmodels"
 	"github.com/ronannnn/infra/models/response"
 )
 
 func (hs *HttpServer) GenSasXml(w http.ResponseWriter, r *http.Request) {
 	var err error
-	var payload common.MessageRequestPayload
+	var payload commonmodels.MessageRequestPayload
 	if err = render.DefaultDecoder(r, &payload); err != nil {
 		response.FailWithErr(w, r, err)
 		return

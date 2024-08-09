@@ -12,6 +12,8 @@ import (
 	"github.com/ronannnn/gx-customs-bridge/internal"
 	"github.com/ronannnn/gx-customs-bridge/internal/services/customs/common"
 	"github.com/ronannnn/gx-customs-bridge/internal/services/customs/sas"
+	"github.com/ronannnn/gx-customs-bridge/pkg/customs/commonmodels"
+	"github.com/ronannnn/gx-customs-bridge/pkg/customs/sasmodels"
 	"github.com/ronannnn/infra"
 	"go.uber.org/zap"
 )
@@ -71,9 +73,9 @@ func (srv *SasService) GenOutBoxFile(model any, uploadType string, declareFlag s
 	switch SasUploadType(uploadType) {
 	case SasInv101:
 		// cast model to sas.Inv101
-		inv101, ok := model.(sas.Inv101)
+		inv101, ok := model.(sasmodels.Inv101)
 		if !ok {
-			err = common.ErrParseInv101
+			err = commonmodels.ErrParseInv101
 			return
 		}
 		// generate xml bytes
@@ -88,9 +90,9 @@ func (srv *SasService) GenOutBoxFile(model any, uploadType string, declareFlag s
 		}
 	case SasSas121:
 		// cast model to sas.Sas121
-		sas121, ok := model.(sas.Sas121)
+		sas121, ok := model.(sasmodels.Sas121)
 		if !ok {
-			err = common.ErrParseSas121
+			err = commonmodels.ErrParseSas121
 			return
 		}
 		// generate xml bytes
@@ -141,7 +143,7 @@ func (srv *SasService) HandleInBoxFile(filename string) (err error) {
 	}
 
 	// 解析MessageType
-	var rmh common.ReceiptMessageHeader
+	var rmh commonmodels.ReceiptMessageHeader
 	if rmh, err = srv.customsCommonXmlService.ParseReceiptMessageHeader(xmlBytes); err != nil {
 		return
 	} else if rmh.EnvelopInfo.MessageType == "" {
@@ -172,7 +174,7 @@ func (srv *SasService) HandleInBoxFile(filename string) (err error) {
 
 	// convert data to json bytes
 	var jsonbytes []byte
-	if jsonbytes, err = json.Marshal(common.ReceiptResult{
+	if jsonbytes, err = json.Marshal(commonmodels.ReceiptResult{
 		ReceiptType: string(rmh.EnvelopInfo.MessageType),
 		Data:        data,
 	}); err != nil {
@@ -215,13 +217,13 @@ func (srv *SasService) tryToHandleInBoxMessageResponseFile(filename string) (err
 	}
 
 	// parse xml bytes
-	var crm common.CommonResponeMessage
+	var crm commonmodels.CommonResponeMessage
 	if crm, err = srv.customsCommonXmlService.ParseCommonResponseMessageXml(xmlBytes); err != nil {
 		return
 	}
 
 	// convert rmq message to json bytes
-	mrr := common.MessageResponseResult{
+	mrr := commonmodels.MessageResponseResult{
 		Id:                   id,
 		UploadType:           uploadType,
 		CommonResponeMessage: crm,

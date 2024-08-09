@@ -1,4 +1,4 @@
-package common
+package commonmodels
 
 type MessageRequestPayload struct {
 	Data        any    `json:"data"`

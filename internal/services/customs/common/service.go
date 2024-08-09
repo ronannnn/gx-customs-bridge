@@ -4,11 +4,12 @@ import (
 	"encoding/xml"
 
 	"github.com/ronannnn/gx-customs-bridge/internal"
+	"github.com/ronannnn/gx-customs-bridge/pkg/customs/commonmodels"
 )
 
 type CustomsCommonXmlService interface {
-	ParseCommonResponseMessageXml([]byte) (CommonResponeMessage, error)
-	ParseReceiptMessageHeader([]byte) (ReceiptMessageHeader, error)
+	ParseCommonResponseMessageXml([]byte) (commonmodels.CommonResponeMessage, error)
+	ParseReceiptMessageHeader([]byte) (commonmodels.ReceiptMessageHeader, error)
 }
 
 func ProvideCustomsCommonXmlService(
@@ -23,12 +24,12 @@ type CustomsCommonXmlServiceImpl struct {
 	customsCfg *internal.CustomsCfg
 }
 
-func (s *CustomsCommonXmlServiceImpl) ParseCommonResponseMessageXml(xmlBytes []byte) (crm CommonResponeMessage, err error) {
+func (s *CustomsCommonXmlServiceImpl) ParseCommonResponseMessageXml(xmlBytes []byte) (crm commonmodels.CommonResponeMessage, err error) {
 	err = xml.Unmarshal(xmlBytes, &crm)
 	return
 }
 
-func (s *CustomsCommonXmlServiceImpl) ParseReceiptMessageHeader(xmlBytes []byte) (rmh ReceiptMessageHeader, err error) {
+func (s *CustomsCommonXmlServiceImpl) ParseReceiptMessageHeader(xmlBytes []byte) (rmh commonmodels.ReceiptMessageHeader, err error) {
 	err = xml.Unmarshal(xmlBytes, &rmh)
 	return
 }

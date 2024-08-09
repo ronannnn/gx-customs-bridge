@@ -1,9 +1,9 @@
-package sas
+package sasmodels
 
 import (
 	"encoding/xml"
 
-	"github.com/ronannnn/gx-customs-bridge/internal/services/customs/common"
+	"github.com/ronannnn/gx-customs-bridge/pkg/customs/commonmodels"
 )
 
 // Inv201Head 核注清单表头
@@ -143,20 +143,20 @@ type Inv201List struct {
 }
 
 type Inv201 struct {
-	HdeApprResult common.HdeApprResult `json:"hdeApprResult"`
-	Head          Inv201Head           `json:"head"`
-	List          []Inv201List         `json:"list"`
+	HdeApprResult commonmodels.HdeApprResult `json:"hdeApprResult"`
+	Head          Inv201Head                 `json:"head"`
+	List          []Inv201List               `json:"list"`
 }
 
 // Inv201Xml 核注清单审批回执
 type Inv201Xml struct {
 	XMLName     xml.Name `xml:"Package"`
-	EnvelopInfo common.EnvelopInfo
+	EnvelopInfo commonmodels.EnvelopInfo
 	DataInfo    struct {
-		PocketInfo   common.PocketInfo
+		PocketInfo   commonmodels.PocketInfo
 		BusinessData struct {
 			Inv201 struct {
-				HdeApprResult common.HdeApprResult
+				HdeApprResult commonmodels.HdeApprResult
 				BondInvtBsc   Inv201Head
 				BondInvtDtl   []Inv201List
 			} `xml:"INV201"`

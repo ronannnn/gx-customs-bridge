@@ -6,18 +6,19 @@ import (
 	"os"
 
 	"github.com/ronannnn/gx-customs-bridge/internal"
+	"github.com/ronannnn/gx-customs-bridge/pkg/customs/sasmodels"
 )
 
 type SasXmlService interface {
-	GenInv101Xml(inv101 Inv101, declareFlag string) ([]byte, error)
-	GenSas121Xml(sas121 Sas121, declareFlag string) ([]byte, error)
+	GenInv101Xml(inv101 sasmodels.Inv101, declareFlag string) ([]byte, error)
+	GenSas121Xml(sas121 sasmodels.Sas121, declareFlag string) ([]byte, error)
 
-	ParseInv201Xml([]byte) (Inv201, error)
-	ParseInv202Xml([]byte) (Inv202, error)
-	ParseInv211Xml([]byte) (Inv211, error)
-	ParseSas221Xml([]byte) (Sas221, error)
-	ParseSas223Xml([]byte) (Sas223, error)
-	ParseSas224Xml([]byte) (Sas224, error)
+	ParseInv201Xml([]byte) (sasmodels.Inv201, error)
+	ParseInv202Xml([]byte) (sasmodels.Inv202, error)
+	ParseInv211Xml([]byte) (sasmodels.Inv211, error)
+	ParseSas221Xml([]byte) (sasmodels.Sas221, error)
+	ParseSas223Xml([]byte) (sasmodels.Sas223, error)
+	ParseSas224Xml([]byte) (sasmodels.Sas224, error)
 }
 
 func ProvideSasXmlService(
@@ -32,7 +33,7 @@ type SasXmlServiceImpl struct {
 	customsCfg *internal.CustomsCfg
 }
 
-func (s *SasXmlServiceImpl) GenInv101Xml(inv101 Inv101, declareFlag string) (xmlBytes []byte, err error) {
+func (s *SasXmlServiceImpl) GenInv101Xml(inv101 sasmodels.Inv101, declareFlag string) (xmlBytes []byte, err error) {
 	// 校验
 	if declareFlag != "0" && declareFlag != "1" {
 		err = fmt.Errorf("申报标志(declareFlag)必须是0或1")
@@ -41,7 +42,7 @@ func (s *SasXmlServiceImpl) GenInv101Xml(inv101 Inv101, declareFlag string) (xml
 	// 替换部分数据
 	inv101.Head.IcCardNo = &s.customsCfg.IcCardNo
 	// 生成inv101Xml
-	inv101Xml := Inv101Xml{}
+	inv101Xml := sasmodels.Inv101Xml{}
 	inv101Xml.Object.Package.EnvelopInfo.MessageType = "INV101"
 	inv101Xml.Object.Package.DataInfo.BusinessData.DeclareFlag = declareFlag
 	inv101Xml.Object.Package.DataInfo.BusinessData.InvtMessage.SysId = s.customsCfg.Inv101SysId
@@ -58,14 +59,14 @@ func (s *SasXmlServiceImpl) GenInv101Xml(inv101 Inv101, declareFlag string) (xml
 	return
 }
 
-func (s *SasXmlServiceImpl) GenSas121Xml(sas121 Sas121, declareFlag string) (xmlBytes []byte, err error) {
+func (s *SasXmlServiceImpl) GenSas121Xml(sas121 sasmodels.Sas121, declareFlag string) (xmlBytes []byte, err error) {
 	// 校验
 	if declareFlag != "0" && declareFlag != "1" {
 		err = fmt.Errorf("申报标志(declareFlag)必须是0或1")
 		return
 	}
 	// 生成sas121Xml
-	sas121Xml := Sas121Xml{}
+	sas121Xml := sasmodels.Sas121Xml{}
 	sas121Xml.Object.Package.EnvelopInfo.MessageType = "SAS121"
 	sas121Xml.Object.Package.DataInfo.BusinessData.DeclareFlag = declareFlag
 	sas121Xml.Object.Package.DataInfo.BusinessData.PassPortMessage.OperCusRegCode = s.customsCfg.OperCusRegCode
@@ -81,8 +82,8 @@ func (s *SasXmlServiceImpl) GenSas121Xml(sas121 Sas121, declareFlag string) (xml
 	return
 }
 
-func (s *SasXmlServiceImpl) ParseInv201Xml(xmlBytes []byte) (inv201 Inv201, err error) {
-	inv201Xml := Inv201Xml{}
+func (s *SasXmlServiceImpl) ParseInv201Xml(xmlBytes []byte) (inv201 sasmodels.Inv201, err error) {
+	inv201Xml := sasmodels.Inv201Xml{}
 	if err = xml.Unmarshal(xmlBytes, &inv201Xml); err != nil {
 		return
 	}
@@ -93,8 +94,8 @@ func (s *SasXmlServiceImpl) ParseInv201Xml(xmlBytes []byte) (inv201 Inv201, err 
 	return
 }
 
-func (s *SasXmlServiceImpl) ParseInv202Xml(xmlBytes []byte) (inv202 Inv202, err error) {
-	inv202Xml := Inv202Xml{}
+func (s *SasXmlServiceImpl) ParseInv202Xml(xmlBytes []byte) (inv202 sasmodels.Inv202, err error) {
+	inv202Xml := sasmodels.Inv202Xml{}
 	if err = xml.Unmarshal(xmlBytes, &inv202Xml); err != nil {
 		return
 	}
@@ -102,8 +103,8 @@ func (s *SasXmlServiceImpl) ParseInv202Xml(xmlBytes []byte) (inv202 Inv202, err 
 	return
 }
 
-func (s *SasXmlServiceImpl) ParseInv211Xml(xmlBytes []byte) (inv211 Inv211, err error) {
-	inv211Xml := Inv211Xml{}
+func (s *SasXmlServiceImpl) ParseInv211Xml(xmlBytes []byte) (inv211 sasmodels.Inv211, err error) {
+	inv211Xml := sasmodels.Inv211Xml{}
 	if err = xml.Unmarshal(xmlBytes, &inv211Xml); err != nil {
 		return
 	}
@@ -112,8 +113,8 @@ func (s *SasXmlServiceImpl) ParseInv211Xml(xmlBytes []byte) (inv211 Inv211, err 
 	return
 }
 
-func (s *SasXmlServiceImpl) ParseSas221Xml(xmlBytes []byte) (sas221 Sas221, err error) {
-	sas221Xml := Sas221Xml{}
+func (s *SasXmlServiceImpl) ParseSas221Xml(xmlBytes []byte) (sas221 sasmodels.Sas221, err error) {
+	sas221Xml := sasmodels.Sas221Xml{}
 	if err = xml.Unmarshal(xmlBytes, &sas221Xml); err != nil {
 		return
 	}
@@ -124,8 +125,8 @@ func (s *SasXmlServiceImpl) ParseSas221Xml(xmlBytes []byte) (sas221 Sas221, err 
 	return
 }
 
-func (s *SasXmlServiceImpl) ParseSas223Xml(xmlBytes []byte) (sas223 Sas223, err error) {
-	sas223Xml := Sas223Xml{}
+func (s *SasXmlServiceImpl) ParseSas223Xml(xmlBytes []byte) (sas223 sasmodels.Sas223, err error) {
+	sas223Xml := sasmodels.Sas223Xml{}
 	if err = xml.Unmarshal(xmlBytes, &sas223Xml); err != nil {
 		return
 	}
@@ -134,8 +135,8 @@ func (s *SasXmlServiceImpl) ParseSas223Xml(xmlBytes []byte) (sas223 Sas223, err 
 	return
 }
 
-func (s *SasXmlServiceImpl) ParseSas224Xml(xmlBytes []byte) (sas224 Sas224, err error) {
-	sas224Xml := Sas224Xml{}
+func (s *SasXmlServiceImpl) ParseSas224Xml(xmlBytes []byte) (sas224 sasmodels.Sas224, err error) {
+	sas224Xml := sasmodels.Sas224Xml{}
 	if err = xml.Unmarshal(xmlBytes, &sas224Xml); err != nil {
 		return
 	}

@@ -1,9 +1,9 @@
-package sas
+package sasmodels
 
 import (
 	"encoding/xml"
 
-	"github.com/ronannnn/gx-customs-bridge/internal/services/customs/common"
+	"github.com/ronannnn/gx-customs-bridge/pkg/customs/commonmodels"
 	"github.com/shopspring/decimal"
 )
 
@@ -110,7 +110,7 @@ type Sas121Xml struct {
 	XMLName xml.Name `xml:"Signature"`
 	Object  struct {
 		Package struct {
-			EnvelopInfo common.EnvelopInfo
+			EnvelopInfo commonmodels.EnvelopInfo
 			DataInfo    struct {
 				BusinessData struct {
 					DeclareFlag     string `xml:"DelcareFlag"` // 这里xml的key和struct的key不一致，海关那个应该是拼写错误

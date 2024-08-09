@@ -1,9 +1,9 @@
-package sas
+package sasmodels
 
 import (
 	"encoding/xml"
 
-	"github.com/ronannnn/gx-customs-bridge/internal/services/customs/common"
+	"github.com/ronannnn/gx-customs-bridge/pkg/customs/commonmodels"
 )
 
 type InvApprResult struct {
@@ -22,7 +22,7 @@ type Inv202 struct {
 // Inv202Xml 核注清单自动生成报关单同一编号报文
 type Inv202Xml struct {
 	XMLName     xml.Name `xml:"Package"`
-	EnvelopInfo common.EnvelopInfo
+	EnvelopInfo commonmodels.EnvelopInfo
 	DataInfo    struct {
 		BusinessData struct {
 			Inv202 struct {
