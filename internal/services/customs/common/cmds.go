@@ -8,6 +8,7 @@ type MessageRequestPayload struct {
 
 type MessageResponseResult struct {
 	Id                   string               `json:"id"`
+	UploadType           string               `json:"uploadType"`
 	CommonResponeMessage CommonResponeMessage `json:"commonResponeMessage"`
 }
 

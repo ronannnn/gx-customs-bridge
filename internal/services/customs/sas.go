@@ -203,7 +203,9 @@ func (srv *SasService) HandleInBoxFile(filename string) (err error) {
 func (srv *SasService) tryToHandleInBoxMessageResponseFile(filename string) (err error) {
 	// get id from filename
 	filenamePrefix := internal.GetFilenamePrefix(filename)
-	id := strings.Split(filenamePrefix, "_")[1]
+	splitFilenamePrefixStrList := strings.Split(filenamePrefix, "_")
+	uploadType := splitFilenamePrefixStrList[1]
+	id := splitFilenamePrefixStrList[2]
 
 	// get xml bytes
 	filePath := filepath.Join(srv.customsCfg.ImpPath, srv.DirName(), filename)
@@ -221,6 +223,7 @@ func (srv *SasService) tryToHandleInBoxMessageResponseFile(filename string) (err
 	// convert rmq message to json bytes
 	mrr := common.MessageResponseResult{
 		Id:                   id,
+		UploadType:           uploadType,
 		CommonResponeMessage: crm,
 	}
 	var mrrJsonBytes []byte
