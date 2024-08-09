@@ -12,7 +12,7 @@ import (
 	"github.com/ronannnn/gx-customs-bridge/internal"
 	"github.com/ronannnn/gx-customs-bridge/internal/services/customs/common"
 	"github.com/ronannnn/gx-customs-bridge/internal/services/customs/sas"
-	"github.com/ronannnn/gx-customs-bridge/internal/services/rmq"
+	"github.com/ronannnn/infra"
 	"go.uber.org/zap"
 )
 
@@ -39,7 +39,7 @@ type SasService struct {
 	CustomsMessage
 	customsCfg              *internal.CustomsCfg
 	log                     *zap.SugaredLogger
-	rmqClient               *rmq.Client
+	rmqClient               *infra.RabbitmqClient
 	customsCommonXmlService common.CustomsCommonXmlService
 	sasXmlService           sas.SasXmlService
 }
@@ -47,7 +47,7 @@ type SasService struct {
 func ProvideSasService(
 	customsCfg *internal.CustomsCfg,
 	log *zap.SugaredLogger,
-	rmqClient *rmq.Client,
+	rmqClient *infra.RabbitmqClient,
 	customsCommonXmlService common.CustomsCommonXmlService,
 	sasXmlService sas.SasXmlService,
 ) *SasService {
