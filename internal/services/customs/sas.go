@@ -72,9 +72,17 @@ func (srv *SasService) GenOutBoxFile(model any, uploadType string, declareFlag s
 	id = uuid.New().String()
 	switch SasUploadType(uploadType) {
 	case SasInv101:
-		// cast model to sas.Inv101
-		inv101, ok := model.(sasmodels.Inv101)
-		if !ok {
+		var inv101 sasmodels.Inv101
+		if modelMap, ok := model.(map[string]any); ok {
+			// 先转成json，再转成struct
+			var tmpBytes []byte
+			if tmpBytes, err = json.Marshal(modelMap); err != nil {
+				return
+			}
+			if err = json.Unmarshal(tmpBytes, &inv101); err != nil {
+				return
+			}
+		} else if inv101, ok = model.(sasmodels.Inv101); !ok {
 			err = commonmodels.ErrParseInv101
 			return
 		}
@@ -84,15 +92,23 @@ func (srv *SasService) GenOutBoxFile(model any, uploadType string, declareFlag s
 			return
 		}
 		// write xml bytes to file
-		filePath := filepath.Join(srv.customsCfg.ImpPath, srv.DirName(), fmt.Sprintf("INV101_%s.xml", id))
+		filePath := filepath.Join(srv.customsCfg.ImpPath, srv.DirName(), OutBoxDirName, fmt.Sprintf("INV101_%s.xml", id))
 		if err = os.WriteFile(filePath, xmlBytes, 0644); err != nil {
 			return
 		}
 	case SasSas121:
-		// cast model to sas.Sas121
-		sas121, ok := model.(sasmodels.Sas121)
-		if !ok {
-			err = commonmodels.ErrParseSas121
+		var sas121 sasmodels.Sas121
+		if modelMap, ok := model.(map[string]any); ok {
+			// 先转成json，再转成struct
+			var tmpBytes []byte
+			if tmpBytes, err = json.Marshal(modelMap); err != nil {
+				return
+			}
+			if err = json.Unmarshal(tmpBytes, &sas121); err != nil {
+				return
+			}
+		} else if sas121, ok = model.(sasmodels.Sas121); !ok {
+			err = commonmodels.ErrParseInv101
 			return
 		}
 		// generate xml bytes
@@ -101,7 +117,7 @@ func (srv *SasService) GenOutBoxFile(model any, uploadType string, declareFlag s
 			return
 		}
 		// write xml bytes to file
-		filePath := filepath.Join(srv.customsCfg.ImpPath, srv.DirName(), fmt.Sprintf("SAS121_%s.xml", id))
+		filePath := filepath.Join(srv.customsCfg.ImpPath, srv.DirName(), OutBoxDirName, fmt.Sprintf("SAS121_%s.xml", id))
 		if err = os.WriteFile(filePath, xmlBytes, 0644); err != nil {
 			return
 		}
