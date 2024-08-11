@@ -95,7 +95,7 @@ type Sas121List struct {
 
 type Sas121Acmp struct {
 	SeqNo         string `json:"seqNo"`         // 表头的核放单预录入编号
-	PassPortNo    string `json:"passportNo"`    // 表头的核放单编号(备案时为空，变更时填写)
+	PassPortNo    string `json:"passPortNo"`    // 表头的核放单编号(备案时为空，变更时填写)
 	RtlBillTypecd string `json:"rtlBillTypecd"` // 关联单证类型代码(应该和表头的RltTbTypecd一致)
 	RtlBillNo     string `json:"rtlBillNo"`     // 关联单证编号
 }
