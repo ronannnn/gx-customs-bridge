@@ -3,7 +3,6 @@ package sas
 import (
 	"encoding/xml"
 	"fmt"
-	"os"
 
 	"github.com/ronannnn/gx-customs-bridge/internal"
 	"github.com/ronannnn/gx-customs-bridge/pkg/customs/sasmodels"
@@ -55,7 +54,6 @@ func (s *SasXmlServiceImpl) GenInv101Xml(inv101 sasmodels.Inv101, declareFlag st
 		return
 	}
 	xmlBytes = []byte(xml.Header + string(xmlBodyBytes))
-	os.Stdout.Write(xmlBytes)
 	return
 }
 
