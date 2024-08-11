@@ -191,7 +191,7 @@ func (srv *SasService) HandleInBoxFile(filename string) (err error) {
 	// convert data to json bytes
 	var jsonbytes []byte
 	if jsonbytes, err = json.Marshal(commonmodels.ReceiptResult{
-		ReceiptType: string(rmh.EnvelopInfo.MessageType),
+		ReceiptType: rmh.EnvelopInfo.MessageType,
 		Data:        data,
 	}); err != nil {
 		return
@@ -238,19 +238,23 @@ func (srv *SasService) tryToHandleInBoxMessageResponseFile(filename string) (err
 		return
 	}
 
-	// convert rmq message to json bytes
+	// convert data to json bytes
 	mrr := commonmodels.MessageResponseResult{
 		Id:                   id,
 		UploadType:           uploadType,
 		CommonResponeMessage: crm,
 	}
-	var mrrJsonBytes []byte
-	if mrrJsonBytes, err = json.Marshal(mrr); err != nil {
+	// convert data to json bytes
+	var jsonbytes []byte
+	if jsonbytes, err = json.Marshal(commonmodels.ReceiptResult{
+		ReceiptType: uploadType,
+		Data:        mrr,
+	}); err != nil {
 		return
 	}
 
 	// publish message to rmq
-	if err = srv.rmqClient.Push(mrrJsonBytes); err != nil {
+	if err = srv.rmqClient.Push(jsonbytes); err != nil {
 		return
 	}
 
