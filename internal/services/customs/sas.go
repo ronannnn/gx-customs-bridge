@@ -92,7 +92,7 @@ func (srv *SasService) GenOutBoxFile(model any, uploadType string, declareFlag s
 			return
 		}
 		// write xml bytes to file
-		filePath := filepath.Join(srv.customsCfg.ImpPath, srv.DirName(), OutBoxDirName, fmt.Sprintf("INV101_%s.xml", id))
+		filePath := filepath.Join(srv.customsCfg.ImpPath, srv.DirName(), OutBoxDirName, fmt.Sprintf("INV101_%s_%s.xml", *inv101.Head.ImpexpMarkcd, id))
 		if err = os.WriteFile(filePath, xmlBytes, 0644); err != nil {
 			return
 		}
@@ -117,7 +117,7 @@ func (srv *SasService) GenOutBoxFile(model any, uploadType string, declareFlag s
 			return
 		}
 		// write xml bytes to file
-		filePath := filepath.Join(srv.customsCfg.ImpPath, srv.DirName(), OutBoxDirName, fmt.Sprintf("SAS121_%s.xml", id))
+		filePath := filepath.Join(srv.customsCfg.ImpPath, srv.DirName(), OutBoxDirName, fmt.Sprintf("SAS121_%s_%s.xml", *sas121.Head.IoTypecd, id))
 		if err = os.WriteFile(filePath, xmlBytes, 0644); err != nil {
 			return
 		}
@@ -223,7 +223,8 @@ func (srv *SasService) tryToHandleInBoxMessageResponseFile(filename string) (err
 	filenamePrefix := internal.GetFilenamePrefix(filename)
 	splitFilenamePrefixStrList := strings.Split(filenamePrefix, "_")
 	uploadType := splitFilenamePrefixStrList[1]
-	id := splitFilenamePrefixStrList[2]
+	impexpMarkcd := splitFilenamePrefixStrList[2]
+	id := splitFilenamePrefixStrList[3]
 
 	// get xml bytes
 	filePath := filepath.Join(srv.customsCfg.ImpPath, srv.DirName(), InBoxDirName, filename)
@@ -241,6 +242,7 @@ func (srv *SasService) tryToHandleInBoxMessageResponseFile(filename string) (err
 	// convert data to json bytes
 	mrr := commonmodels.MessageResponseResult{
 		Id:                   id,
+		ImpexpMarkcd:         impexpMarkcd,
 		UploadType:           uploadType,
 		CommonResponeMessage: crm,
 	}
