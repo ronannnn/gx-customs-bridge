@@ -3,10 +3,11 @@ package commonmodels
 import "encoding/xml"
 
 type CommonResponeMessage struct {
-	SeqNo        string `json:"seqNo"`        // 预录入统一编号
-	EtpsPreentNo string `json:"etpsPreentNo"` // 企业内部编号
-	CheckInfo    string `json:"checkInfo"`    // 响应信息
-	DealFlag     string `json:"dealFlag"`     // 响应代码(0-导入成功 其他值-导入失败)
+	XMLName      xml.Name `xml:"CommonResponeMessage"`
+	SeqNo        string   `json:"seqNo"`        // 预录入统一编号
+	EtpsPreentNo string   `json:"etpsPreentNo"` // 企业内部编号
+	CheckInfo    string   `json:"checkInfo"`    // 响应信息
+	DealFlag     string   `json:"dealFlag"`     // 响应代码(0-导入成功 其他值-导入失败)
 }
 
 // 信封内容

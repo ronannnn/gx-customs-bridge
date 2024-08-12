@@ -139,67 +139,67 @@ func (srv *SasService) HandleFailBoxFile(filename string) (err error) {
 
 func (srv *SasService) HandleInBoxFile(filename string) (err error) {
 	srv.log.Infof("SasService HandleInBoxFile, %s", filename)
-	if strings.HasPrefix(filename, "Successed_") || strings.HasPrefix(filename, "Failed_") {
-		err = srv.tryToHandleInBoxMessageResponseFile(filename)
-		return
-	}
-
 	filenameWithoutParentDir := internal.GetFilenameFromPath(filename)
-
-	// get xml bytes
 	filePath := filepath.Join(
 		srv.customsCfg.ImpPath,
 		srv.DirName(),
 		InBoxDirName,
 		filenameWithoutParentDir,
 	)
-	var xmlBytes []byte
-	if xmlBytes, err = os.ReadFile(filePath); err != nil {
-		return
-	}
+	if strings.HasPrefix(filenameWithoutParentDir, "Successed_") || strings.HasPrefix(filenameWithoutParentDir, "Failed_") {
+		if err = srv.tryToHandleInBoxMessageResponseFile(filenameWithoutParentDir); err != nil {
+			return
+		}
+	} else {
+		// get xml bytes
+		var xmlBytes []byte
+		if xmlBytes, err = os.ReadFile(filePath); err != nil {
+			return
+		}
 
-	// 解析MessageType
-	var rmh commonmodels.ReceiptMessageHeader
-	if rmh, err = srv.customsCommonXmlService.ParseReceiptMessageHeader(xmlBytes); err != nil {
-		return
-	} else if rmh.EnvelopInfo.MessageType == "" {
-		err = fmt.Errorf("该报文没有MessageType: %s", filename)
-		return
-	}
+		// 解析MessageType
+		var rmh commonmodels.ReceiptMessageHeader
+		if rmh, err = srv.customsCommonXmlService.ParseReceiptMessageHeader(xmlBytes); err != nil {
+			return
+		} else if rmh.EnvelopInfo.MessageType == "" {
+			err = fmt.Errorf("该报文没有MessageType: %s", filename)
+			return
+		}
 
-	var data any
-	switch SasReceiptType(rmh.EnvelopInfo.MessageType) {
-	case SasInv201:
-		data, err = srv.sasXmlService.ParseInv201Xml(xmlBytes)
-	case SasInv202:
-		data, err = srv.sasXmlService.ParseInv202Xml(xmlBytes)
-	case SasInv211:
-		data, err = srv.sasXmlService.ParseInv211Xml(xmlBytes)
-	case SasSas221:
-		data, err = srv.sasXmlService.ParseSas221Xml(xmlBytes)
-	case SasSas223:
-		data, err = srv.sasXmlService.ParseSas223Xml(xmlBytes)
-	case SasSas224:
-		data, err = srv.sasXmlService.ParseSas224Xml(xmlBytes)
-	default:
-		err = fmt.Errorf("unsupported receipt type: %s", rmh.EnvelopInfo.MessageType)
-	}
-	if err != nil {
-		return
-	}
+		var data any
+		switch SasReceiptType(rmh.EnvelopInfo.MessageType) {
+		case SasInv201:
+			data, err = srv.sasXmlService.ParseInv201Xml(xmlBytes)
+		case SasInv202:
+			data, err = srv.sasXmlService.ParseInv202Xml(xmlBytes)
+		case SasInv211:
+			data, err = srv.sasXmlService.ParseInv211Xml(xmlBytes)
+		case SasSas221:
+			data, err = srv.sasXmlService.ParseSas221Xml(xmlBytes)
+		case SasSas223:
+			data, err = srv.sasXmlService.ParseSas223Xml(xmlBytes)
+		case SasSas224:
+			data, err = srv.sasXmlService.ParseSas224Xml(xmlBytes)
+		default:
+			err = fmt.Errorf("unsupported receipt type: %s", rmh.EnvelopInfo.MessageType)
+		}
+		if err != nil {
+			return
+		}
 
-	// convert data to json bytes
-	var jsonbytes []byte
-	if jsonbytes, err = json.Marshal(commonmodels.ReceiptResult{
-		ReceiptType: rmh.EnvelopInfo.MessageType,
-		Data:        data,
-	}); err != nil {
-		return
-	}
+		// convert data to json bytes
+		var jsonbytes []byte
+		if jsonbytes, err = json.Marshal(commonmodels.ReceiptResult{
+			ReceiptType: rmh.EnvelopInfo.MessageType,
+			Data:        data,
+		}); err != nil {
+			return
+		}
 
-	// publish message to rmq
-	if err = srv.rmqClient.Push(jsonbytes); err != nil {
-		return
+		// publish message to rmq
+		if err = srv.rmqClient.Push(jsonbytes); err != nil {
+			return
+		}
 	}
 
 	// 把这个文件移动到HandledFilesDirName下
@@ -226,7 +226,7 @@ func (srv *SasService) tryToHandleInBoxMessageResponseFile(filename string) (err
 	id := splitFilenamePrefixStrList[2]
 
 	// get xml bytes
-	filePath := filepath.Join(srv.customsCfg.ImpPath, srv.DirName(), filename)
+	filePath := filepath.Join(srv.customsCfg.ImpPath, srv.DirName(), InBoxDirName, filename)
 	var xmlBytes []byte
 	if xmlBytes, err = os.ReadFile(filePath); err != nil {
 		return
