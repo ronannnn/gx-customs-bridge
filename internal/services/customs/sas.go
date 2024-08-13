@@ -222,6 +222,10 @@ func (srv *SasService) tryToHandleInBoxMessageResponseFile(filename string) (err
 	// get id from filename
 	filenamePrefix := internal.GetFilenamePrefix(filename)
 	splitFilenamePrefixStrList := strings.Split(filenamePrefix, "_")
+	if len(splitFilenamePrefixStrList) != 4 {
+		err = fmt.Errorf("filename prefix is invalid: %s", filenamePrefix)
+		return
+	}
 	uploadType := splitFilenamePrefixStrList[1]
 	impexpMarkcd := splitFilenamePrefixStrList[2]
 	id := splitFilenamePrefixStrList[3]
