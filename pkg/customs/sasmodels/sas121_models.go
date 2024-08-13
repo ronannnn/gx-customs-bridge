@@ -58,6 +58,7 @@ type Sas121Head struct {
 
 	// 申报信息
 	DclErConc *string `json:"dclErConc"` // 申请人及联系方式
+	DclTime   *string `json:"dclTime"`   // 申报日期
 
 	// 其他
 	Rmk  *string `json:"rmk"`  // 备注
