@@ -134,7 +134,7 @@ func handleBox(
 				}
 				if event.Op&fsnotify.Create == fsnotify.Create {
 					if err = handleBoxFileFn(event.Name); err != nil {
-						log.Errorf("handle outbox file error: %+v", err)
+						log.Errorf("handle file error: %+v", err)
 					}
 				}
 			case err, ok := <-watcher.Errors:
