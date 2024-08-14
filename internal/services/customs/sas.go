@@ -149,6 +149,10 @@ func (srv *SasService) HandleFailBoxFile(filename string) (err error) {
 
 func (srv *SasService) HandleInBoxFile(filename string) (err error) {
 	srv.log.Infof("SasService HandleInBoxFile, %s", filename)
+	if strings.HasSuffix(filename, ".tmp") {
+		srv.log.Infof("skip tmp file")
+		return
+	}
 	filenameWithoutParentDir := internal.GetFilenameFromPath(filename)
 	filePath := filepath.Join(
 		srv.customsCfg.ImpPath,
@@ -232,7 +236,12 @@ func (srv *SasService) tryToHandleInBoxMessageResponseFile(filename string) (err
 	// get id from filename
 	filenamePrefix := internal.GetFilenamePrefix(filename)
 	splitFilenamePrefixStrList := strings.Split(filenamePrefix, "_")
-	if len(splitFilenamePrefixStrList) != 4 {
+	// 1. Successed/Failed
+	// 2. INV101/SAS121
+	// 3. impexpMarkcd
+	// 4. id
+	// 5. 海关客户端打上的时间戳
+	if len(splitFilenamePrefixStrList) != 5 {
 		err = fmt.Errorf("filename prefix is invalid: %s", filenamePrefix)
 		return
 	}
