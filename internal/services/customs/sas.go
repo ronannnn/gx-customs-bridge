@@ -92,8 +92,13 @@ func (srv *SasService) GenOutBoxFile(model any, uploadType string, declareFlag s
 			return
 		}
 		// write xml bytes to file
-		filePath := filepath.Join(srv.customsCfg.ImpPath, srv.DirName(), OutBoxDirName, fmt.Sprintf("INV101_%s_%s.xml", *inv101.Head.ImpexpMarkcd, id))
-		if err = os.WriteFile(filePath, xmlBytes, 0644); err != nil {
+		filename := fmt.Sprintf("INV101_%s_%s.xml", *inv101.Head.ImpexpMarkcd, id)
+		zipFlePath := filepath.Join(srv.customsCfg.ImpPath, srv.DirName(), OutBoxDirName, fmt.Sprintf("INV101_%s_%s.zip", *inv101.Head.ImpexpMarkcd, id))
+		var zipFileBytes []byte
+		if zipFileBytes, err = internal.ZipFile(filename, xmlBytes); err != nil {
+			return
+		}
+		if err = os.WriteFile(zipFlePath, zipFileBytes, 0644); err != nil {
 			return
 		}
 	case SasSas121:
@@ -117,8 +122,13 @@ func (srv *SasService) GenOutBoxFile(model any, uploadType string, declareFlag s
 			return
 		}
 		// write xml bytes to file
-		filePath := filepath.Join(srv.customsCfg.ImpPath, srv.DirName(), OutBoxDirName, fmt.Sprintf("SAS121_%s_%s.xml", *sas121.Head.IoTypecd, id))
-		if err = os.WriteFile(filePath, xmlBytes, 0644); err != nil {
+		filename := fmt.Sprintf("SAS121_%s_%s.xml", *sas121.Head.IoTypecd, id)
+		zipFlePath := filepath.Join(srv.customsCfg.ImpPath, srv.DirName(), OutBoxDirName, fmt.Sprintf("SAS121_%s_%s.zip", *sas121.Head.IoTypecd, id))
+		var zipFileBytes []byte
+		if zipFileBytes, err = internal.ZipFile(filename, xmlBytes); err != nil {
+			return
+		}
+		if err = os.WriteFile(zipFlePath, zipFileBytes, 0644); err != nil {
 			return
 		}
 	default:
