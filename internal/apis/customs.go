@@ -15,10 +15,9 @@ func (hs *HttpServer) GenSasXml(w http.ResponseWriter, r *http.Request) {
 		response.FailWithErr(w, r, err)
 		return
 	}
-	var id string
-	if id, err = hs.customsSasService.GenOutBoxFile(payload.Data, payload.UploadType, payload.DeclareFlag); err != nil {
+	if err = hs.customsSasService.GenOutBoxFile(payload.Data, payload.UploadType, payload.DeclareFlag); err != nil {
 		response.FailWithErr(w, r, err)
 		return
 	}
-	response.OkWithData(w, r, id)
+	response.Ok(w, r)
 }

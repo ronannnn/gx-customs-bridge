@@ -51,7 +51,7 @@ type CustomsMessageHandler interface {
 		model any, // 传入的model
 		uploadType string, // 报文类型，比如INV101, SAS121
 		declareFlag string, // 是否申报
-	) (string, error)
+	) error
 	HandleSentBoxFile(filename string) error
 	HandleFailBoxFile(filename string) error
 	HandleInBoxFile(filename string) error

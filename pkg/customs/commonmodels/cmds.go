@@ -7,7 +7,6 @@ type MessageRequestPayload struct {
 }
 
 type MessageResponseResult struct {
-	Id                   string               `json:"id"`
 	ImpexpMarkcd         string               `json:"impexpMarkcd"`
 	UploadType           string               `json:"uploadType"`
 	CommonResponeMessage CommonResponeMessage `json:"commonResponeMessage"`

@@ -8,7 +8,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/google/uuid"
 	"github.com/ronannnn/gx-customs-bridge/internal"
 	"github.com/ronannnn/gx-customs-bridge/internal/services/customs/common"
 	"github.com/ronannnn/gx-customs-bridge/internal/services/customs/sas"
@@ -68,8 +67,7 @@ func (srv *SasService) DirName() string {
 	return "sas"
 }
 
-func (srv *SasService) GenOutBoxFile(model any, uploadType string, declareFlag string) (id string, err error) {
-	id = uuid.New().String()
+func (srv *SasService) GenOutBoxFile(model any, uploadType string, declareFlag string) (err error) {
 	switch SasUploadType(uploadType) {
 	case SasInv101:
 		var inv101 sasmodels.Inv101
@@ -92,8 +90,8 @@ func (srv *SasService) GenOutBoxFile(model any, uploadType string, declareFlag s
 			return
 		}
 		// write xml bytes to file
-		filename := fmt.Sprintf("INV101_%s_%s.xml", *inv101.Head.ImpexpMarkcd, id)
-		zipFlePath := filepath.Join(srv.customsCfg.ImpPath, srv.DirName(), OutBoxDirName, fmt.Sprintf("INV101_%s_%s.zip", *inv101.Head.ImpexpMarkcd, id))
+		filename := fmt.Sprintf("INV101_%s.xml", *inv101.Head.ImpexpMarkcd)
+		zipFlePath := filepath.Join(srv.customsCfg.ImpPath, srv.DirName(), OutBoxDirName, fmt.Sprintf("INV101_%s.zip", *inv101.Head.ImpexpMarkcd))
 		var zipFileBytes []byte
 		if zipFileBytes, err = internal.ZipFile(filename, xmlBytes); err != nil {
 			return
@@ -122,8 +120,8 @@ func (srv *SasService) GenOutBoxFile(model any, uploadType string, declareFlag s
 			return
 		}
 		// write xml bytes to file
-		filename := fmt.Sprintf("SAS121_%s_%s.xml", *sas121.Head.IoTypecd, id)
-		zipFlePath := filepath.Join(srv.customsCfg.ImpPath, srv.DirName(), OutBoxDirName, fmt.Sprintf("SAS121_%s_%s.zip", *sas121.Head.IoTypecd, id))
+		filename := fmt.Sprintf("SAS121_%s.xml", *sas121.Head.IoTypecd)
+		zipFlePath := filepath.Join(srv.customsCfg.ImpPath, srv.DirName(), OutBoxDirName, fmt.Sprintf("SAS121_%s.zip", *sas121.Head.IoTypecd))
 		var zipFileBytes []byte
 		if zipFileBytes, err = internal.ZipFile(filename, xmlBytes); err != nil {
 			return
@@ -241,13 +239,12 @@ func (srv *SasService) tryToHandleInBoxMessageResponseFile(filename string) (err
 	// 3. impexpMarkcd
 	// 4. id
 	// 5. 海关客户端打上的时间戳
-	if len(splitFilenamePrefixStrList) != 5 {
+	if len(splitFilenamePrefixStrList) != 4 {
 		err = fmt.Errorf("filename prefix is invalid: %s", filenamePrefix)
 		return
 	}
 	uploadType := splitFilenamePrefixStrList[1]
 	impexpMarkcd := splitFilenamePrefixStrList[2]
-	id := splitFilenamePrefixStrList[3]
 
 	// get xml bytes
 	filePath := filepath.Join(srv.customsCfg.ImpPath, srv.DirName(), InBoxDirName, filename)
@@ -264,7 +261,6 @@ func (srv *SasService) tryToHandleInBoxMessageResponseFile(filename string) (err
 
 	// convert data to json bytes
 	mrr := commonmodels.MessageResponseResult{
-		Id:                   id,
 		ImpexpMarkcd:         impexpMarkcd,
 		UploadType:           uploadType,
 		CommonResponeMessage: crm,
