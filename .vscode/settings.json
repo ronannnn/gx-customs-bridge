@@ -52,7 +52,8 @@
     "Unitcd",
     "Uprc",
     "Verno",
-    "Vrfded"
+    "Vrfded",
+    "Warnf"
   ],
   // ========== Visuals ==========
   "editor.cursorSmoothCaretAnimation": "on",

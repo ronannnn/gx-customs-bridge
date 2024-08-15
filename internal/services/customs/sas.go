@@ -292,6 +292,26 @@ func (srv *SasService) tryToHandleInBoxMessageResponseFile(filename string) (err
 	// parse xml bytes
 	var crm commonmodels.CommonResponeMessage
 	if crm, err = srv.customsCommonXmlService.ParseCommonResponseMessageXml(xmlBytes); err != nil {
+		var renameErr error
+		// 如果解析失败，就把文件移动到FailedFilesDirName下
+		failedFilesParentDirPath := filepath.Join(
+			srv.customsCfg.ImpPath,
+			srv.DirName(),
+			HandledFilesDirName,
+			FilesCannotParseDirName,
+			time.Now().Format("2006-01-02"),
+		)
+		if renameErr = utils.CreateDirsIfNotExist(failedFilesParentDirPath); renameErr != nil {
+			return renameErr
+		}
+		failedFilesPath := filepath.Join(
+			failedFilesParentDirPath,
+			fmt.Sprintf("cannot_parse_%s", filename),
+		)
+		if renameErr = os.Rename(filePath, failedFilesPath); renameErr != nil {
+			return renameErr
+		}
+		srv.log.Warnf("parse common response message xml failed, move %s to %s", filename, failedFilesParentDirPath)
 		return
 	}
 

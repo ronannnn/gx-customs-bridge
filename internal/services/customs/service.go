@@ -11,6 +11,7 @@ import (
 )
 
 const HandledFilesDirName = "Gx"
+const FilesCannotParseDirName = "FilesCannotParse"
 const OutBoxDirName = "OutBox"
 const SentBoxDirName = "SentBox"
 const FailBoxDirName = "FailBox"
@@ -91,14 +92,14 @@ func handleBox(
 	handleBoxFileFn func(filename string) error,
 ) (err error) {
 	path := filepath.Join(impPath, dirName, boxName)
-	// out box的额外逻辑
+	// in box的额外逻辑
 	if boxName == InBoxDirName {
 		// 创建存放处理后文件的文件夹
 		handledFilesPath := filepath.Join(impPath, dirName, HandledFilesDirName, boxName)
 		if err = utils.CreateDirsIfNotExist(handledFilesPath); err != nil {
 			return
 		}
-		// 处理当前OutBox文件夹下面所有的文件(fsnotify代码块的逻辑不会处理之前已经存在的文件)
+		// 处理当前InBox文件夹下面所有的文件(fsnotify代码块的逻辑不会处理之前已经存在的文件)
 		if err = filepath.WalkDir(path, func(filename string, d fs.DirEntry, err error) error {
 			if err != nil {
 				return err
@@ -107,7 +108,7 @@ func handleBox(
 				return nil
 			}
 			if err = handleBoxFileFn(filename); err != nil {
-				log.Errorf("handle outbox file error: %+v", err)
+				log.Errorf("handle in box file error: %+v", err)
 			}
 			return nil
 		}); err != nil {
