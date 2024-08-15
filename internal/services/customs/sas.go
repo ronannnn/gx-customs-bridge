@@ -85,14 +85,28 @@ func (srv *SasService) GenOutBoxFile(model any, uploadType string, declareFlag s
 			err = commonmodels.ErrParseInv101
 			return
 		}
+		// validate
+		if inv101.Head.ImpexpMarkcd == nil {
+			err = fmt.Errorf("ImpexpMarkcd is required")
+			return
+		}
+		if inv101.Head.EtpsInnerInvtNo == nil {
+			err = fmt.Errorf("EtpsInnerInvtNo is required")
+			return
+		}
 		// generate xml bytes
 		var xmlBytes []byte
 		if xmlBytes, err = srv.sasXmlService.GenInv101Xml(inv101, declareFlag); err != nil {
 			return
 		}
 		// write xml bytes to file
-		filename := fmt.Sprintf("INV101_%s.xml", *inv101.Head.ImpexpMarkcd)
-		zipFlePath := filepath.Join(srv.customsCfg.ImpPath, srv.DirName(), OutBoxDirName, fmt.Sprintf("INV101_%s.zip", *inv101.Head.ImpexpMarkcd))
+		filename := fmt.Sprintf("INV101_%s_%s.xml", *inv101.Head.ImpexpMarkcd, *inv101.Head.EtpsInnerInvtNo)
+		zipFlePath := filepath.Join(
+			srv.customsCfg.ImpPath,
+			srv.DirName(),
+			OutBoxDirName,
+			fmt.Sprintf("INV101_%s_%s.zip", *inv101.Head.ImpexpMarkcd, *inv101.Head.EtpsInnerInvtNo),
+		)
 		var zipFileBytes []byte
 		if zipFileBytes, err = internal.ZipFile(filename, xmlBytes); err != nil {
 			return
@@ -115,14 +129,28 @@ func (srv *SasService) GenOutBoxFile(model any, uploadType string, declareFlag s
 			err = commonmodels.ErrParseInv101
 			return
 		}
+		// validate
+		if sas121.Head.IoTypecd == nil {
+			err = fmt.Errorf("IoTypecd is required")
+			return
+		}
+		if sas121.Head.EtpsPreentNo == nil {
+			err = fmt.Errorf("EtpsPreentNo is required")
+			return
+		}
 		// generate xml bytes
 		var xmlBytes []byte
 		if xmlBytes, err = srv.sasXmlService.GenSas121Xml(sas121, declareFlag); err != nil {
 			return
 		}
 		// write xml bytes to file
-		filename := fmt.Sprintf("SAS121_%s.xml", *sas121.Head.IoTypecd)
-		zipFlePath := filepath.Join(srv.customsCfg.ImpPath, srv.DirName(), OutBoxDirName, fmt.Sprintf("SAS121_%s.zip", *sas121.Head.IoTypecd))
+		filename := fmt.Sprintf("SAS121_%s_%s.xml", *sas121.Head.IoTypecd, *sas121.Head.EtpsPreentNo)
+		zipFlePath := filepath.Join(
+			srv.customsCfg.ImpPath,
+			srv.DirName(),
+			OutBoxDirName,
+			fmt.Sprintf("SAS121_%s_%s.zip", *sas121.Head.IoTypecd, *sas121.Head.EtpsPreentNo),
+		)
 		var zipFileBytes []byte
 		if zipFileBytes, err = internal.ZipFile(filename, xmlBytes); err != nil {
 			return
@@ -242,12 +270,12 @@ func (srv *SasService) tryToHandleInBoxMessageResponseFile(filename string) (err
 	// get id from filename
 	filenamePrefix := internal.GetFilenamePrefix(filename)
 	splitFilenamePrefixStrList := strings.Split(filenamePrefix, "_")
-	// 1. Successed/Failed
-	// 2. INV101/SAS121
-	// 3. impexpMarkcd
-	// 4. id
-	// 5. 海关客户端打上的时间戳
-	if len(splitFilenamePrefixStrList) != 4 {
+	// 1. Successed/Failed(海关)
+	// 2. INV101/SAS121(Sys)
+	// 3. impexpMarkcd(Sys)
+	// 4. 企业内部编号(Sys)
+	// 5. 海关客户端打上的时间戳(海关)
+	if len(splitFilenamePrefixStrList) != 5 {
 		err = fmt.Errorf("filename prefix is invalid: %s", filenamePrefix)
 		return
 	}
