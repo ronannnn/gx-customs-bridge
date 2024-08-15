@@ -220,6 +220,7 @@ func (srv *SasService) HandleInBoxFile(filename string) (err error) {
 		srv.DirName(),
 		HandledFilesDirName,
 		InBoxDirName,
+		time.Now().Format("2006-01-02"),
 		fmt.Sprintf("handled_%s_%s", time.Now().Format("2006-01-02-15-04-05"), filenameWithoutParentDir),
 	)
 	if err = os.Rename(filePath, handledFilesPath); err != nil {
