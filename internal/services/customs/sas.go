@@ -14,6 +14,7 @@ import (
 	"github.com/ronannnn/gx-customs-bridge/pkg/customs/commonmodels"
 	"github.com/ronannnn/gx-customs-bridge/pkg/customs/sasmodels"
 	"github.com/ronannnn/infra"
+	"github.com/ronannnn/infra/utils"
 	"go.uber.org/zap"
 )
 
@@ -215,12 +216,18 @@ func (srv *SasService) HandleInBoxFile(filename string) (err error) {
 	}
 
 	// 把这个文件移动到HandledFilesDirName下
-	handledFilesPath := filepath.Join(
+	handledFilesParentDirPath := filepath.Join(
 		srv.customsCfg.ImpPath,
 		srv.DirName(),
 		HandledFilesDirName,
 		InBoxDirName,
 		time.Now().Format("2006-01-02"),
+	)
+	if err = utils.CreateDirsIfNotExist(handledFilesParentDirPath); err != nil {
+		return
+	}
+	handledFilesPath := filepath.Join(
+		handledFilesParentDirPath,
 		fmt.Sprintf("handled_%s_%s", time.Now().Format("2006-01-02-15-04-05"), filenameWithoutParentDir),
 	)
 	if err = os.Rename(filePath, handledFilesPath); err != nil {
