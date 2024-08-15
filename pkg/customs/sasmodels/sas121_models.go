@@ -56,6 +56,11 @@ type Sas121Head struct {
 	TotalNetWt   *decimal.Decimal `json:"totalNetWt"`   // 货物总净重
 	TotalWt      *decimal.Decimal `json:"totalWt"`      // 总重量(包括车辆自重)
 
+	// 卡口信息
+	PassTime     *string `json:"passTime" xml:"passTime"`       // 过卡时间1
+	SecdPassTime *string `json:"secPassTime" xml:"secPassTime"` // 过卡时间2
+	Stucd        *string `json:"stucd" xml:"stucd"`             // 状态代码(0：已申请，1：已审批，2：已过卡，3：已过一卡，4：已过二卡，5：已删除，6：已作废。其中2单卡模式专用，3/4双卡口模式专用)
+
 	// 申报信息
 	DclErConc *string `json:"dclErConc"` // 申请人及联系方式
 	DclTime   *string `json:"dclTime"`   // 申报日期
