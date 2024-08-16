@@ -113,6 +113,7 @@ type Sas221Xml struct {
 		BusinessData struct {
 			Sas221 struct {
 				HdeApprResult  commonmodels.HdeApprResult
+				CheckInfo      commonmodels.CheckInfo
 				SasPassportBsc Sas221Head
 				SasPassportDt  []Sas221List
 				SasPassportRlt []Sas221Acmp

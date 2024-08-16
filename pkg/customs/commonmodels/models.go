@@ -44,3 +44,9 @@ type ReceiptMessageHeader struct {
 	XMLName     xml.Name `xml:"Package"`
 	EnvelopInfo EnvelopInfo
 }
+
+// 检查信息
+type CheckInfo struct {
+	XMLName xml.Name `xml:"CheckInfo"`
+	Note    string   `json:"note" xml:"note"` // 检查信息
+}
