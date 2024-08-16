@@ -117,6 +117,7 @@ func (s *SasXmlServiceImpl) ParseSas221Xml(xmlBytes []byte) (sas221 sasmodels.Sa
 		return
 	}
 	sas221.HdeApprResult = sas221Xml.DataInfo.BusinessData.Sas221.HdeApprResult
+	sas221.CheckInfo = sas221Xml.DataInfo.BusinessData.Sas221.CheckInfo
 	sas221.Head = sas221Xml.DataInfo.BusinessData.Sas221.SasPassportBsc
 	sas221.List = sas221Xml.DataInfo.BusinessData.Sas221.SasPassportDt
 	sas221.Acmp = sas221Xml.DataInfo.BusinessData.Sas221.SasPassportRlt

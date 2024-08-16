@@ -100,6 +100,7 @@ type Sas221Acmp struct {
 
 type Sas221 struct {
 	HdeApprResult commonmodels.HdeApprResult `json:"hdeApprResult"`
+	CheckInfo     commonmodels.CheckInfo     `json:"checkInfo"`
 	Head          Sas221Head                 `json:"head"`
 	List          []Sas221List               `json:"list"`
 	Acmp          []Sas221Acmp               `json:"acmp"`
