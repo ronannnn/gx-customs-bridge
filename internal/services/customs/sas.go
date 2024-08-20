@@ -67,7 +67,7 @@ func ProvideSasService(
 }
 
 func (srv *SasService) DirName() string {
-	return "sas"
+	return "Sas"
 }
 
 func (srv *SasService) GenOutBoxFile(model any, uploadType string, declareFlag string) (err error) {
