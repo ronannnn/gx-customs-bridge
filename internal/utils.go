@@ -4,19 +4,11 @@ import (
 	"archive/zip"
 	"bytes"
 	"io"
-	"strings"
+	"path/filepath"
 )
 
 func GetFilenamePrefix(filename string) string {
-	return filename[:strings.LastIndex(filename, ".")]
-}
-
-func GetFilenameSuffix(filename string) string {
-	return filename[strings.LastIndex(filename, ".")+1:]
-}
-
-func GetFilenameFromPath(filePath string) string {
-	return filePath[strings.LastIndex(filePath, "/")+1:]
+	return filename[:len(filename)-len(filepath.Ext(filename))]
 }
 
 func ZipFile(filename string, fileBytes []byte) (zipFileBytes []byte, err error) {
