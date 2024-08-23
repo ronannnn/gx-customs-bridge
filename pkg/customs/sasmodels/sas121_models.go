@@ -9,9 +9,9 @@ import (
 
 type Sas121Head struct {
 	// 编号
-	SeqNo        *string `json:"seqNo"`        // 预录入统一编号
-	PassportNo   *string `json:"passportNo"`   // 核放单编号
-	EtpsPreentNo *string `json:"etpsPreentNo"` // 企业内部编号
+	SeqNo        *string `json:"seqNo"`                           // 预录入统一编号
+	PassportNo   *string `json:"passportNo"`                      // 核放单编号
+	EtpsPreentNo *string `json:"etpsPreentNo" gorm:"uniqueIndex"` // 企业内部编号
 
 	// 关联信息
 	RltTbTypecd *string `json:"rltTbTypecd"` // 关联单证类型代码

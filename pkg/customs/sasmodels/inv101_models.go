@@ -13,10 +13,10 @@ type Inv101Head struct {
 	ChgTmsCnt *string `json:"chgTmsCnt"` // 变更次数
 
 	// 编号
-	SeqNo           *string `json:"seqNo"`           // 预录入统一编号
-	EtpsInnerInvtNo *string `json:"etpsInnerInvtNo"` // 企业内部清单编号
-	BondInvtNo      *string `json:"bondInvtNo"`      // 保税清单编号
-	PutrecNo        *string `json:"putrecNo"`        // 备案编号，手(账)册编号
+	SeqNo           *string `json:"seqNo"`                              // 预录入统一编号
+	EtpsInnerInvtNo *string `json:"etpsInnerInvtNo" gorm:"uniqueIndex"` // 企业内部清单编号
+	BondInvtNo      *string `json:"bondInvtNo"`                         // 保税清单编号
+	PutrecNo        *string `json:"putrecNo"`                           // 备案编号，手(账)册编号
 
 	// 清单信息
 	DclTypecd      *string `json:"dclTypecd"`      // 申报类型(1-备案申请 2-变更申请 3-删除申请)
