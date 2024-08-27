@@ -10,7 +10,8 @@ import (
 	"github.com/ronannnn/gx-customs-bridge/internal/services/rmq"
 
 	"github.com/google/wire"
-	"github.com/ronannnn/infra"
+	"github.com/ronannnn/infra/handler"
+	"github.com/ronannnn/infra/i18n"
 	"github.com/ronannnn/infra/services/apirecord"
 	"github.com/ronannnn/infra/services/jwt"
 	"github.com/ronannnn/infra/services/jwt/accesstoken"
@@ -18,25 +19,32 @@ import (
 	"github.com/ronannnn/infra/services/login"
 	"github.com/ronannnn/infra/services/loginrecord"
 	"github.com/ronannnn/infra/services/user"
+	"github.com/ronannnn/infra/validator"
 )
 
 var wireSet = wire.NewSet(
 	// configs
 	internal.ProvideCfg,
+	internal.ProvideUserCfg,
 	internal.ProvideSysCfg,
 	internal.ProvideLogCfg,
 	internal.ProvideDbCfg,
-	internal.ProvideAuthCfg,
-	internal.ProvideUserCfg,
+	internal.ProvideAccessTokenCfg,
+	internal.ProvideRefreshTokenCfg,
+	internal.ProvideRabbitmqCfg,
+	internal.ProvideI18nCfg,
 	internal.ProvideCustomsCfg,
-	internal.ProvideRabbitMqCfg,
 	// infra
-	infra.ProvideCasbinEnforcer,
 	db.ProvideService,
 	internal.ProvideLog,
 	rmq.ProvideService,
+	i18n.New,
+	validator.New,
+	handler.NewHttpHandler,
 	// middleware
-	infra.ProvideMiddleware,
+	handler.ProvideMiddleware,
+	accesstoken.ProvideMiddleware,
+	apirecord.ProvideMiddleware,
 	// services
 	jwt.ProvideService,
 	accesstoken.ProvideService,

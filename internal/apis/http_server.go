@@ -2,8 +2,9 @@ package apis
 
 import (
 	"github.com/ronannnn/gx-customs-bridge/internal/services/customs"
-	"github.com/ronannnn/infra"
 	"github.com/ronannnn/infra/cfg"
+	"github.com/ronannnn/infra/handler"
+	"github.com/ronannnn/infra/services/apirecord"
 	"github.com/ronannnn/infra/services/jwt"
 	"github.com/ronannnn/infra/services/jwt/accesstoken"
 	"github.com/ronannnn/infra/services/login"
@@ -13,8 +14,12 @@ import (
 )
 
 type HttpServer struct {
-	infra.BaseHttpServer
-	infraMiddleware infra.Middleware
+	handler.BaseHttpServer
+	h handler.HttpHandler
+	// middlewares
+	handlerMw     handler.Middleware
+	accessTokenMw accesstoken.Middleware
+	apiRecordMw   apirecord.Middleware
 	// services
 	loginService       login.Service
 	loginRecordService loginrecord.Service
@@ -28,7 +33,11 @@ type HttpServer struct {
 func NewHttpServer(
 	sysCfg *cfg.Sys,
 	log *zap.SugaredLogger,
-	infraMiddleware infra.Middleware,
+	h handler.HttpHandler,
+	// middlewares
+	handlerMw handler.Middleware,
+	accessTokenMw accesstoken.Middleware,
+	apiRecordMw apirecord.Middleware,
 	// services
 	loginService login.Service,
 	loginRecordService loginrecord.Service,
@@ -39,11 +48,15 @@ func NewHttpServer(
 	customsSasService *customs.SasService,
 ) *HttpServer {
 	hs := &HttpServer{
-		BaseHttpServer: infra.BaseHttpServer{
+		BaseHttpServer: handler.BaseHttpServer{
 			Sys: sysCfg,
 			Log: log,
 		},
-		infraMiddleware: infraMiddleware,
+		h: h,
+		// middlewares
+		handlerMw:     handlerMw,
+		accessTokenMw: accessTokenMw,
+		apiRecordMw:   apiRecordMw,
 		// services
 		loginService:       loginService,
 		loginRecordService: loginRecordService,

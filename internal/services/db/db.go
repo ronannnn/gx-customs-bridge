@@ -3,8 +3,8 @@ package db
 import (
 	"time"
 
-	"github.com/ronannnn/infra"
-	"github.com/ronannnn/infra/cfg"
+	infraDb "github.com/ronannnn/infra/db"
+	"github.com/ronannnn/infra/log"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 )
@@ -12,10 +12,10 @@ import (
 var tables = []any{}
 
 func ProvideService(
-	cfg *cfg.Db,
-	log *zap.SugaredLogger,
+	cfg *infraDb.Cfg,
+	logger *zap.SugaredLogger,
 ) (db *gorm.DB, err error) {
 	startTime := time.Now()
-	defer infra.PrintModuleLaunchedDuration(log, "db", startTime)
-	return infra.NewDb(cfg, false, tables)
+	defer log.PrintModuleLaunchedDuration(logger, "db", startTime)
+	return infraDb.New(cfg, false, tables)
 }

@@ -7,6 +7,12 @@ import (
 	"time"
 
 	"github.com/ronannnn/infra/cfg"
+	"github.com/ronannnn/infra/db"
+	"github.com/ronannnn/infra/i18n"
+	"github.com/ronannnn/infra/log"
+	"github.com/ronannnn/infra/mq/rabbitmq"
+	"github.com/ronannnn/infra/services/jwt/accesstoken"
+	"github.com/ronannnn/infra/services/jwt/refreshtoken"
 )
 
 const (
@@ -31,41 +37,53 @@ type CustomsCfg struct {
 }
 
 type Cfg struct {
-	Sys      cfg.Sys      `mapstructure:"sys"`
-	Log      cfg.Log      `mapstructure:"log"`
-	Auth     cfg.Auth     `mapstructure:"auth"`
-	Db       cfg.Db       `mapstructure:"db"`
-	User     cfg.User     `mapstructure:"user"`
-	Customs  CustomsCfg   `mapstructure:"customs"`
-	RabbitMq cfg.Rabbitmq `mapstructure:"rabbitmq"`
-}
+	Sys  cfg.Sys  `mapstructure:"sys"`
+	User cfg.User `mapstructure:"user"`
 
-func ProvideLogCfg(cfg *Cfg) *cfg.Log {
-	return &cfg.Log
+	Log          log.Cfg          `mapstructure:"log"`
+	AccessToken  accesstoken.Cfg  `mapstructure:"access-token"`
+	RefreshToken refreshtoken.Cfg `mapstructure:"refresh-token"`
+	Db           db.Cfg           `mapstructure:"db"`
+	Rabbitmq     rabbitmq.Cfg     `mapstructure:"rabbitmq"`
+	I18n         i18n.Cfg         `mapstructure:"i18n"`
+
+	Customs CustomsCfg `mapstructure:"customs"`
 }
 
 func ProvideSysCfg(cfg *Cfg) *cfg.Sys {
 	return &cfg.Sys
 }
 
-func ProvideDbCfg(cfg *Cfg) *cfg.Db {
-	return &cfg.Db
-}
-
-func ProvideAuthCfg(cfg *Cfg) *cfg.Auth {
-	return &cfg.Auth
-}
-
 func ProvideUserCfg(cfg *Cfg) *cfg.User {
 	return &cfg.User
 }
 
-func ProvideCustomsCfg(cfg *Cfg) *CustomsCfg {
-	return &cfg.Customs
+func ProvideLogCfg(cfg *Cfg) *log.Cfg {
+	return &cfg.Log
 }
 
-func ProvideRabbitMqCfg(cfg *Cfg) *cfg.Rabbitmq {
-	return &cfg.RabbitMq
+func ProvideDbCfg(cfg *Cfg) *db.Cfg {
+	return &cfg.Db
+}
+
+func ProvideAccessTokenCfg(cfg *Cfg) *accesstoken.Cfg {
+	return &cfg.AccessToken
+}
+
+func ProvideRefreshTokenCfg(cfg *Cfg) *refreshtoken.Cfg {
+	return &cfg.RefreshToken
+}
+
+func ProvideRabbitmqCfg(cfg *Cfg) *rabbitmq.Cfg {
+	return &cfg.Rabbitmq
+}
+
+func ProvideI18nCfg(cfg *Cfg) *i18n.Cfg {
+	return &cfg.I18n
+}
+
+func ProvideCustomsCfg(cfg *Cfg) *CustomsCfg {
+	return &cfg.Customs
 }
 
 func ProvideCfg() (*Cfg, error) {

@@ -1,11 +1,10 @@
 package internal
 
 import (
-	"github.com/ronannnn/infra"
-	"github.com/ronannnn/infra/cfg"
+	"github.com/ronannnn/infra/log"
 	"go.uber.org/zap"
 )
 
-func ProvideLog(logCfg *cfg.Log) (*zap.SugaredLogger, error) {
-	return infra.NewLog(logCfg)
+func ProvideLog(logCfg *log.Cfg) (*zap.SugaredLogger, error) {
+	return log.New(logCfg)
 }

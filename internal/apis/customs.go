@@ -3,21 +3,19 @@ package apis
 import (
 	"net/http"
 
-	"github.com/go-chi/render"
+	"github.com/ronannnn/gx-customs-bridge/internal/base/reason"
 	"github.com/ronannnn/gx-customs-bridge/pkg/customs/commonmodels"
-	"github.com/ronannnn/infra/models/response"
+	"github.com/ronannnn/infra/msg"
 )
 
 func (hs *HttpServer) GenSasXml(w http.ResponseWriter, r *http.Request) {
-	var err error
 	var payload commonmodels.MessageRequestPayload
-	if err = render.DefaultDecoder(r, &payload); err != nil {
-		response.FailWithErr(w, r, err)
+	if hs.h.BindAndCheck(w, r, &payload) {
 		return
 	}
-	if err = hs.customsSasService.GenOutBoxFile(payload.Data, payload.UploadType, payload.DeclareFlag); err != nil {
-		response.FailWithErr(w, r, err)
-		return
+	if err := hs.customsSasService.GenOutBoxFile(payload.Data, payload.UploadType, payload.DeclareFlag); err != nil {
+		hs.h.Fail(w, r, err, nil)
+	} else {
+		hs.h.Success(w, r, msg.New(reason.SuccessToGenSasXml), nil)
 	}
-	response.Ok(w, r)
 }

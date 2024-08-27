@@ -1,21 +1,23 @@
 [sys]
 http-addr = "0.0.0.0"
-http-port = "5555"
+http-port = "5666"
 print-routes = true
 
 [log]
 level = "INFO"
 log-store-path = "logs/"
-latest-filename = "gx-fms.log"
+latest-filename = "gx-customs-bridge.log"
 log-in-console = true
 log-in-rotate-file = true
 
-[auth]
+[access-token]
 access-token-minute-duration = 1
-refresh-token-minute-duration = 24
 access-token-secret = "qpwoalskzmxn1029"
-refresh-token-secret = "122f9dfjkdsla"
 enabled = true
+
+[refresh-token]
+refresh-token-minute-duration = 24
+refresh-token-secret = "122f9dfjkdsla"
 
 [db]
 db-type = "mssql"
@@ -40,3 +42,6 @@ oper-cus-reg-code = ''
 [rabbitmq]
 addr = ""
 queue-name = ""
+
+[i18n]
+bundle-dir = ""
