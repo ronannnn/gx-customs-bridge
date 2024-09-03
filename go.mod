@@ -5,7 +5,7 @@ go 1.22.0
 require (
 	github.com/go-chi/chi/v5 v5.0.12
 	github.com/google/wire v0.6.0
-	github.com/ronannnn/infra v1.0.14
+	github.com/ronannnn/infra v1.0.36
 	github.com/stretchr/testify v1.9.0
 	go.uber.org/zap v1.27.0
 	gorm.io/gorm v1.25.7
@@ -58,7 +58,7 @@ require (
 	github.com/sagikazarmark/locafero v0.4.0 // indirect
 	github.com/sagikazarmark/slog-shim v0.1.0 // indirect
 	github.com/segmentio/asm v1.2.0 // indirect
-	github.com/shopspring/decimal v1.4.0
+	github.com/shopspring/decimal v1.4.0 // indirect
 	github.com/sourcegraph/conc v0.3.0 // indirect
 	github.com/spf13/afero v1.11.0 // indirect
 	github.com/spf13/cast v1.6.0 // indirect
