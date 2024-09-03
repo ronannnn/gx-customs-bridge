@@ -13,7 +13,7 @@ type Inv101Head struct {
 	ChgTmsCnt *string `json:"chgTmsCnt"` // 变更次数
 
 	// 编号
-	SeqNo           *string `json:"seqNo" validate:"len=18"`                                          // 预录入统一编号
+	SeqNo           *string `json:"seqNo" validate:"omitempty,len=18"`                                // 预录入统一编号
 	EtpsInnerInvtNo *string `json:"etpsInnerInvtNo" validate:"required,not_blank" gorm:"uniqueIndex"` // 企业内部清单编号
 	// 保税核注清单海关编号为18位，其中
 	// 第1－2位为QD，表示核注清单
@@ -21,7 +21,7 @@ type Inv101Head struct {
 	// 第7-8位为海关接受申报的公历年份
 	// 第9位为进出口标志（“I”为进口，“E”为出口）
 	// 后9位为顺序编号
-	BondInvtNo *string `json:"bondInvtNo" validate:"len=18"`           // 保税清单编号
+	BondInvtNo *string `json:"bondInvtNo" validate:"omitempty,len=18"` // 保税清单编号
 	PutrecNo   *string `json:"putrecNo" validate:"required,not_blank"` // 备案编号，手(账)册编号
 
 	// 清单信息
@@ -56,7 +56,7 @@ type Inv101Head struct {
 	// 日期
 	InputTime        *string `json:"inputTime" validate:"required,len=8"`   // 录入日期(格式：20240101)
 	InvtDclTime      *string `json:"invtDclTime" validate:"required,len=8"` // 清单申报时间(格式：20240101)
-	EntryDclTime     *string `json:"entryDclTime" validate:"len=8"`         // 报关单申报时间(格式：20240101)
+	EntryDclTime     *string `json:"entryDclTime"`                          // 报关单申报时间(格式：20240101)
 	PrevdTime        *string `json:"prevdTime"`                             // 预核扣时间
 	FormalVrfdedTime *string `json:"formalVrfdedTime"`                      // 正式核扣时间
 
@@ -80,26 +80,26 @@ type Inv101Head struct {
 	// 对应报关相关
 	EntryNo *string `json:"entryNo"` // 对应报关单编号
 	// 对应报关单申报单位
-	CorrEntryDclEtpsSccd *string `json:"corrEntryDclEtpsSccd" validate:"len=18"` // 社会信用代码
-	CorrEntryDclEtpsNo   *string `json:"corrEntryDclEtpsNo" validate:"len=10"`   // 编号
-	CorrEntryDclEtpsNm   *string `json:"corrEntryDclEtpsNm" validate:"len=10"`   // 名称
+	CorrEntryDclEtpsSccd *string `json:"corrEntryDclEtpsSccd" validate:"required_if=DclcusTypecd 2,omitempty,len=18"`  // 社会信用代码
+	CorrEntryDclEtpsNo   *string `json:"corrEntryDclEtpsNo" validate:"required_if=DclcusTypecd 2,omitempty,len=10"`    // 编号
+	CorrEntryDclEtpsNm   *string `json:"corrEntryDclEtpsNm" validate:"required_if=DclcusTypecd 2,omitempty,not_blank"` // 名称
 
 	// 关联报关相关
-	RltInvtNo   *string `json:"rltInvtNo" validate:"required_if=DclcusTypecd 2,len=18"`   // 关联清单编号
-	RltPutrecNo *string `json:"rltPutrecNo" validate:"required_if=DclcusTypecd 2,len=10"` // 关联备案编号，关联手(账)册编号
-	RltEntryNo  *string `json:"rltEntryNo" validate:"required_if=DclcusTypecd 2"`         // 关联报关单编号
+	RltInvtNo   *string `json:"rltInvtNo"`   // 关联清单编号
+	RltPutrecNo *string `json:"rltPutrecNo"` // 关联备案编号，关联手(账)册编号
+	RltEntryNo  *string `json:"rltEntryNo"`  // 关联报关单编号
 	// 关联报关单境内收发货人
-	RltEntryBizopEtpsSccd *string `json:"rltEntryBizopEtpsSccd" validate:"required_if=DclcusTypecd 1,len=18"` // 社会信用代码
-	RltEntryBizopEtpsno   *string `json:"rltEntryBizopEtpsno" validate:"required_if=DclcusTypecd 1,len=10"`   // 编号
-	RltEntryBizopEtpsNm   *string `json:"rltEntryBizopEtpsNm" validate:"required_if=DclcusTypecd 1"`          // 名称
+	RltEntryBizopEtpsSccd *string `json:"rltEntryBizopEtpsSccd" validate:"required_if=DclcusTypecd 1,omitempty,len=18"`  // 社会信用代码
+	RltEntryBizopEtpsno   *string `json:"rltEntryBizopEtpsno" validate:"required_if=DclcusTypecd 1,omitempty,len=10"`    // 编号
+	RltEntryBizopEtpsNm   *string `json:"rltEntryBizopEtpsNm" validate:"required_if=DclcusTypecd 1,omitempty,not_blank"` // 名称
 	// 关联报关单生产销售(消费使用)单位
-	RltEntryRvsngdEtpsSccd *string `json:"rltEntryRvsngdEtpsSccd" validate:"required_if=DclcusTypecd 1,len=18"` // 社会信用代码
-	RltEntryRcvgdEtpsno    *string `json:"rltEntryRcvgdEtpsno" validate:"required_if=DclcusTypecd 1,len=10"`    // 编号
-	RltEntryRcvgdEtpsNm    *string `json:"rltEntryRcvgdEtpsNm" validate:"required_if=DclcusTypecd 1"`           // 名称
+	RltEntryRvsngdEtpsSccd *string `json:"rltEntryRvsngdEtpsSccd" validate:"required_if=DclcusTypecd 1,omitempty,len=18"` // 社会信用代码
+	RltEntryRcvgdEtpsno    *string `json:"rltEntryRcvgdEtpsno" validate:"required_if=DclcusTypecd 1,omitempty,len=10"`    // 编号
+	RltEntryRcvgdEtpsNm    *string `json:"rltEntryRcvgdEtpsNm" validate:"required_if=DclcusTypecd 1,omitempty,not_blank"` // 名称
 	// 关联报关单申报单位
-	RltEntryDclEtpsSccd *string `json:"rltEntryDclEtpsSccd" validate:"required_if=DclcusTypecd 1,len=18"` // 社会信用代码
-	RltEntryDclEtpsno   *string `json:"rltEntryDclEtpsno" validate:"required_if=DclcusTypecd 1,len=10"`   // 编号
-	RltEntryDclEtpsNm   *string `json:"rltEntryDclEtpsNm" validate:"required_if=DclcusTypecd 1"`          // 名称
+	RltEntryDclEtpsSccd *string `json:"rltEntryDclEtpsSccd" validate:"required_if=DclcusTypecd 1,omitempty,len=18"`  // 社会信用代码
+	RltEntryDclEtpsno   *string `json:"rltEntryDclEtpsno" validate:"required_if=DclcusTypecd 1,omitempty,len=10"`    // 编号
+	RltEntryDclEtpsNm   *string `json:"rltEntryDclEtpsNm" validate:"required_if=DclcusTypecd 1,omitempty,not_blank"` // 名称
 
 	// others
 	IcCardNo  *string `json:"icCardNo"`  // 申报人IC卡号
@@ -110,20 +110,20 @@ type Inv101Head struct {
 
 // Inv101List 核注清单表体
 type Inv101List struct {
-	SeqNo         *string `json:"seqNo" validate:"len=18"`                   // 中心统一编号
+	SeqNo         *string `json:"seqNo" validate:"omitempty,len=18"`         // 中心统一编号
 	GdsSeqno      *string `json:"gdsSeqno" validate:"required,numeric"`      // 商品序号
 	EntryGdsSeqno *string `json:"entryGdsSeqno" validate:"required,numeric"` // 报关单商品序号
-	PutrecSeqno   *string `json:"putrecSeqno" validate:"numeric"`            // 备案序号(对应底账序号）
+	PutrecSeqno   *string `json:"putrecSeqno" validate:"omitempty,numeric"`  // 备案序号(对应底账序号）
 
 	Gdecd            *string `json:"gdecd" validate:"required,numeric"`    // 商品编码
 	GdsMtno          *string `json:"gdsMtno" validate:"required"`          // 商品料号
 	GdsNm            *string `json:"gdsNm" validate:"required"`            // 商品名称
 	GdsSpcfModelDesc *string `json:"gdsSpcfModelDesc" validate:"required"` // 商品规格型号
 
-	LawfUnitcd     *string             `json:"lawfUnitcd" validate:"required,len=3,numeric"`               // 法定计量单位代码
-	LawfQty        *models.DecimalSafe `json:"lawfQty" validate:"required,d_gt=0"`                         // 法定数量
-	SecdLawfUnitcd *string             `json:"secdLawfUnitcd" validate:"len=3,numeric"`                    // 第二法定计量单位代码
-	SecdLawfQty    *models.DecimalSafe `json:"secdLawfQty" validate:"required_with=SecdLawfUnitcd,d_gt=0"` // 第二法定数量
+	LawfUnitcd     *string             `json:"lawfUnitcd" validate:"required,len=3,numeric"`                         // 法定计量单位代码
+	LawfQty        *models.DecimalSafe `json:"lawfQty" validate:"required,d_gt=0"`                                   // 法定数量
+	SecdLawfUnitcd *string             `json:"secdLawfUnitcd" validate:"len=3,numeric"`                              // 第二法定计量单位代码
+	SecdLawfQty    *models.DecimalSafe `json:"secdLawfQty" validate:"required_with=SecdLawfUnitcd,omitempty,d_gt=0"` // 第二法定数量
 
 	DclUnitcd       *string             `json:"dclUnitcd" validate:"required,len=3,numeric"`                // 申报计量单位代码
 	DclQty          *models.DecimalSafe `json:"dclQty" validate:"required,d_gt=0"`                          // 申报数量
@@ -146,8 +146,8 @@ type Inv101List struct {
 	UseCd        *string             `json:"useCd"`        // 重点商品标识：0-非重点商品、1-目录重点商品、2-连带重点商品、3-过渡期重点商品
 	ApplyTbSeqno *string             `json:"applyTbSeqno"` // 流转申报表序号
 
-	ModfMarkcd *string `json:"modfMarkcd"` // 修改标志
-	Rmk        *string `json:"rmk"`        // 备注
+	ModfMarkcd *string `json:"modfMarkcd" validate:"required,oneof=0 1 2 3"` // 修改标志(0-未修改 1-修改 2-删除 3-增加)
+	Rmk        *string `json:"rmk"`                                          // 备注
 }
 
 type Inv101 struct {

@@ -9,8 +9,8 @@ import (
 
 type Sas121Head struct {
 	// 编号
-	SeqNo        *string `json:"seqNo" validate:"len=18"`                                       // 预录入统一编号
-	PassportNo   *string `json:"passportNo" validate:"len=24"`                                  // 核放单编号
+	SeqNo        *string `json:"seqNo" validate:"omitempty,len=18"`                             // 预录入统一编号
+	PassportNo   *string `json:"passportNo" validate:"omitempty,len=24"`                        // 核放单编号
 	EtpsPreentNo *string `json:"etpsPreentNo" validate:"required,not_blank" gorm:"uniqueIndex"` // 企业内部编号
 
 	// 关联信息
@@ -75,8 +75,8 @@ type Sas121Head struct {
 
 type Sas121List struct {
 	// 编号
-	SeqNo      *string `json:"seqNo" validate:"len=18"`      // 表头的核放单预录入编号
-	PassportNo *string `json:"passportNo" validate:"len=24"` // 表头的核放单编号(备案时为空，变更时填写)
+	SeqNo      *string `json:"seqNo" validate:"omitempty,len=18"`      // 表头的核放单预录入编号
+	PassportNo *string `json:"passportNo" validate:"omitempty,len=24"` // 表头的核放单编号(备案时为空，变更时填写)
 
 	// 序号
 	PassportSeqNo *string `json:"passportSeqNo" validate:"required,numeric"` // 自然序号，从1开始

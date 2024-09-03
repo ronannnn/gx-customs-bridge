@@ -1,0 +1,23 @@
+{
+  "gdsSeqno": "1",
+  "entryGdsSeqno": "1",
+  "gdsMtno": "9405310000",
+  "gdecd": "9405310000",
+  "gdsNm": "圣诞灯",
+  "gdsSpcfModelDesc": "4|1|塑料；发光二极管；电线；铁丝；铜丝等|节日用品| Anko",
+  "dclCurrcd": "502",
+  "lawfUnitcd": "006",
+  "lawfQty": "324",
+  "secdLawfUnitcd": "035",
+  "secdLawfQty": "573.48",
+  "grossWeight": "692.55",
+  "dclUnitcd": "006",
+  "dclQty": "324",
+  "dclUprcAmt": "7.6",
+  "dclTotalAmt": "2462.4",
+  "natcd": "142",
+  "destinationNatcd": "142",
+  "lvyrlfModecd": "3",
+  "clyMarkcd": "0",
+  "modfMarkcd": "3"
+}
