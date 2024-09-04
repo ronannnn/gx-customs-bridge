@@ -122,7 +122,7 @@ type Inv101List struct {
 
 	LawfUnitcd     *string             `json:"lawfUnitcd" validate:"required,len=3,numeric"`                         // 法定计量单位代码
 	LawfQty        *models.DecimalSafe `json:"lawfQty" validate:"required,d_gt=0"`                                   // 法定数量
-	SecdLawfUnitcd *string             `json:"secdLawfUnitcd" validate:"len=3,numeric"`                              // 第二法定计量单位代码
+	SecdLawfUnitcd *string             `json:"secdLawfUnitcd" validate:"omitempty,len=3,numeric"`                    // 第二法定计量单位代码
 	SecdLawfQty    *models.DecimalSafe `json:"secdLawfQty" validate:"required_with=SecdLawfUnitcd,omitempty,d_gt=0"` // 第二法定数量
 
 	DclUnitcd       *string             `json:"dclUnitcd" validate:"required,len=3,numeric"`                // 申报计量单位代码
