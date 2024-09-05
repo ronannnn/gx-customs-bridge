@@ -15,7 +15,7 @@ type Sas121Head struct {
 
 	// 关联信息
 	RltTbTypecd *string `json:"rltTbTypecd" validate:"required,oneof=1 2 3"` // 关联单证类型代码(1-核注清单 2-出入库单 3-提运单)
-	RltNo       *string `json:"rltNo"`                                       // 关联单证编号
+	RltNo       *string `json:"rltNo" validate:"required"`                   // 关联单证编号
 
 	// 代码
 	DclTypecd      *string `json:"dclTypecd" validate:"required,oneof=1 3"`              // 申报类型代码(1-备案 3-作废)
