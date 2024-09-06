@@ -144,6 +144,7 @@ type Inv201List struct {
 
 type Inv201 struct {
 	HdeApprResult commonmodels.HdeApprResult `json:"hdeApprResult"`
+	CheckInfo     commonmodels.CheckInfo     `json:"checkInfo"`
 	Head          Inv201Head                 `json:"head"`
 	List          []Inv201List               `json:"list"`
 }
@@ -157,6 +158,7 @@ type Inv201Xml struct {
 		BusinessData struct {
 			Inv201 struct {
 				HdeApprResult commonmodels.HdeApprResult
+				CheckInfo     commonmodels.CheckInfo
 				BondInvtBsc   Inv201Head
 				BondInvtDtl   []Inv201List
 			} `xml:"INV201"`

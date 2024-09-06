@@ -117,6 +117,7 @@ func (s *SasXmlServiceImpl) ParseInv201Xml(xmlBytes []byte) (inv201 sasmodels.In
 	}
 
 	inv201.HdeApprResult = inv201Xml.DataInfo.BusinessData.Inv201.HdeApprResult
+	inv201.CheckInfo = inv201Xml.DataInfo.BusinessData.Inv201.CheckInfo
 	inv201.Head = inv201Xml.DataInfo.BusinessData.Inv201.BondInvtBsc
 	inv201.List = inv201Xml.DataInfo.BusinessData.Inv201.BondInvtDtl
 	return
