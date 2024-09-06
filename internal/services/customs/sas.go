@@ -23,18 +23,25 @@ type SasUploadType string
 const (
 	SasInv101 SasUploadType = "INV101"
 	SasSas121 SasUploadType = "SAS121"
+	SasIcp101 SasUploadType = "ICP101"
 )
 
 type SasReceiptType string
 
 const (
-	SasInv201 SasReceiptType = "INV201"
-	SasInv202 SasReceiptType = "INV202"
-	SasInv211 SasReceiptType = "INV211"
+	// inv101 related
+	SasInv201 SasReceiptType = "INV201" // 核注清单审批回执
+	SasInv202 SasReceiptType = "INV202" // 核注清单自动生成报关单同一编号报文
+	SasInv211 SasReceiptType = "INV211" // 核注清单记账回执
 
-	SasSas221 SasReceiptType = "SAS221"
-	SasSas223 SasReceiptType = "SAS223"
-	SasSas224 SasReceiptType = "SAS224"
+	// sas121 related
+	SasSas221 SasReceiptType = "SAS221" // 核放单审核回执
+	SasSas223 SasReceiptType = "SAS223" // 核放单过卡回执
+	SasSas224 SasReceiptType = "SAS224" // 核放单查验处置回执
+
+	// icp101 related
+	SasSas251 SasReceiptType = "SAS251" // 两步申报核放单审核回执/回执补发送
+	SasSas253 SasReceiptType = "SAS253" // 两步申报核放单过卡回执
 )
 
 type SasService struct {

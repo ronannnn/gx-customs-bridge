@@ -34,8 +34,8 @@ enable-log = false
 
 [customs]
 imp-path = ''
-inv101-sys-id = ''
-sas121-dcl-er-conc = ''
+sys-id = ''
+dcl-er-conc = ''
 ic-card-no = ''
 oper-cus-reg-code = ''
 

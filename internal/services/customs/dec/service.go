@@ -24,11 +24,11 @@ type DecXmlServiceImpl struct {
 }
 
 func (s *DecXmlServiceImpl) GenDecTmpXml(decTmp decmodels.DecTmp) (xmlBytes []byte, err error) {
-	decTmp.DecHead.InputerName = s.customsCfg.Sas121DclErConc
-	decTmp.DecHead.DeclareName = s.customsCfg.Sas121DclErConc
+	decTmp.DecHead.InputerName = s.customsCfg.DclErConc
+	decTmp.DecHead.DeclareName = s.customsCfg.DclErConc
 	decTmp.DecHead.TypistNo = s.customsCfg.IcCardNo
 	decTmp.DecSign.ICCode = s.customsCfg.IcCardNo
-	decTmp.DecSign.OperName = s.customsCfg.Sas121DclErConc
+	decTmp.DecSign.OperName = s.customsCfg.DclErConc
 	// 生成decTmpXml
 	decTmpXml := decmodels.DecTmpXml{}
 	decTmpXml.Version = "4.8"

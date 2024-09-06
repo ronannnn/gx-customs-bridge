@@ -13,10 +13,10 @@ import (
 
 func TestGenDecTmpXml(t *testing.T) {
 	service := dec.ProvideDecXmlService(&internal.CustomsCfg{
-		Inv101SysId:     "Z7",
-		OperCusRegCode:  "330261A004",
-		IcCardNo:        "JJ3G900420543",
-		Sas121DclErConc: "贺婷婷",
+		SysId:          "Z7",
+		OperCusRegCode: "330261A004",
+		IcCardNo:       "JJ3G900420543",
+		DclErConc:      "贺婷婷",
 	})
 	xmlBytes, err := service.GenDecTmpXml(decmodels.DecTmp{
 		DecHead: decmodels.DecHeadTmp{

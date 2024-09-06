@@ -29,11 +29,11 @@ const (
 )
 
 type CustomsCfg struct {
-	ImpPath         string `mapstructure:"imp-path"`           // 海关文件夹目录
-	Inv101SysId     string `mapstructure:"inv101-sys-id"`      // inv101中的sysId
-	Sas121DclErConc string `mapstructure:"sas121-dcl-er-conc"` // sas121中的申请人，即卡号对应的人
-	IcCardNo        string `mapstructure:"ic-card-no"`         // 操作卡号
-	OperCusRegCode  string `mapstructure:"oper-cus-reg-code"`  // 操作卡的海关十位
+	ImpPath        string `mapstructure:"imp-path"`          // 海关文件夹目录
+	SysId          string `mapstructure:"sys-id"`            // sysId
+	DclErConc      string `mapstructure:"dcl-er-conc"`       // 申请人，即卡号对应的人
+	IcCardNo       string `mapstructure:"ic-card-no"`        // 操作卡号
+	OperCusRegCode string `mapstructure:"oper-cus-reg-code"` // 操作卡的海关十位
 }
 
 type Cfg struct {

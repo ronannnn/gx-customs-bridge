@@ -1,0 +1,22 @@
+{
+  "head": {
+    "etpsPreentNo": "测试报文2",
+    "masterCuscd": "3105",
+    "areainEtpsSccd": "913302017532977856",
+    "areainEtpsNo": "330261A004",
+    "areainEtpsNm": "宁波高新物流有限公司",
+    "dclEtpsSccd": "913302017532977856",
+    "dclEtpsNo": "330261A004",
+    "dclEtpsNm": "宁波高新物流有限公司",
+    "InputCreditCode": "913302017532977856",
+    "InputCode": "330261A004",
+    "InputName": "宁波高新物流有限公司",
+    "dclTypecd": "1",
+    "vehicleNo": "浙B55ZW7"
+  },
+  "rltList": [
+    {
+      "entryId": "311120241119970515"
+    }
+  ]
+}

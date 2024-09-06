@@ -11,13 +11,18 @@ import (
 type SasXmlService interface {
 	GenInv101Xml(inv101 sasmodels.Inv101, declareFlag string) ([]byte, error)
 	GenSas121Xml(sas121 sasmodels.Sas121, declareFlag string) ([]byte, error)
+	GenIcp101Xml(icp101 sasmodels.Icp101, declareFlag string) ([]byte, error)
 
 	ParseInv201Xml([]byte) (sasmodels.Inv201, error)
 	ParseInv202Xml([]byte) (sasmodels.Inv202, error)
 	ParseInv211Xml([]byte) (sasmodels.Inv211, error)
+
 	ParseSas221Xml([]byte) (sasmodels.Sas221, error)
 	ParseSas223Xml([]byte) (sasmodels.Sas223, error)
 	ParseSas224Xml([]byte) (sasmodels.Sas224, error)
+
+	ParseSas251Xml([]byte) (sasmodels.Sas251, error)
+	ParseSas253Xml([]byte) (sasmodels.Sas253, error)
 }
 
 func ProvideSasXmlService(
@@ -44,7 +49,7 @@ func (s *SasXmlServiceImpl) GenInv101Xml(inv101 sasmodels.Inv101, declareFlag st
 	inv101Xml := sasmodels.Inv101Xml{}
 	inv101Xml.Object.Package.EnvelopInfo.MessageType = "INV101"
 	inv101Xml.Object.Package.DataInfo.BusinessData.DeclareFlag = declareFlag
-	inv101Xml.Object.Package.DataInfo.BusinessData.InvtMessage.SysId = s.customsCfg.Inv101SysId
+	inv101Xml.Object.Package.DataInfo.BusinessData.InvtMessage.SysId = s.customsCfg.SysId
 	inv101Xml.Object.Package.DataInfo.BusinessData.InvtMessage.OperCusRegCode = s.customsCfg.OperCusRegCode
 	inv101Xml.Object.Package.DataInfo.BusinessData.InvtMessage.InvtHeadType = inv101.Head
 	inv101Xml.Object.Package.DataInfo.BusinessData.InvtMessage.InvtListType = inv101.List
@@ -63,6 +68,7 @@ func (s *SasXmlServiceImpl) GenSas121Xml(sas121 sasmodels.Sas121, declareFlag st
 		err = fmt.Errorf("申报标志(declareFlag)必须是0或1")
 		return
 	}
+	sas121.Head.DclErConc = &s.customsCfg.DclErConc
 	// 生成sas121Xml
 	sas121Xml := sasmodels.Sas121Xml{}
 	sas121Xml.Object.Package.EnvelopInfo.MessageType = "SAS121"
@@ -74,6 +80,30 @@ func (s *SasXmlServiceImpl) GenSas121Xml(sas121 sasmodels.Sas121, declareFlag st
 	// 保存xml
 	var xmlBodyBytes []byte
 	if xmlBodyBytes, err = xml.Marshal(sas121Xml); err != nil {
+		return
+	}
+	xmlBytes = []byte(xml.Header + string(xmlBodyBytes))
+	return
+}
+
+func (s *SasXmlServiceImpl) GenIcp101Xml(icp101 sasmodels.Icp101, declareFlag string) (xmlBytes []byte, err error) {
+	// 校验
+	if declareFlag != "0" && declareFlag != "1" {
+		err = fmt.Errorf("申报标志(declareFlag)必须是0或1")
+		return
+	}
+	icp101.Head.DclErConc = &s.customsCfg.DclErConc
+	// 生成icp101Xml
+	icp101Xml := sasmodels.Icp101Xml{}
+	icp101Xml.Object.Package.EnvelopInfo.MessageType = "ICP101"
+	icp101Xml.Object.Package.DataInfo.BusinessData.DeclareFlag = declareFlag
+	icp101Xml.Object.Package.DataInfo.BusinessData.Sas2sPassPortMessage.SysId = s.customsCfg.SysId
+	icp101Xml.Object.Package.DataInfo.BusinessData.Sas2sPassPortMessage.OperCusRegCode = s.customsCfg.OperCusRegCode
+	icp101Xml.Object.Package.DataInfo.BusinessData.Sas2sPassPortMessage.Sas2sPassportHead = icp101.Head
+	icp101Xml.Object.Package.DataInfo.BusinessData.Sas2sPassPortMessage.Sas2sPassportRlt = icp101.RltList
+	// 保存xml
+	var xmlBodyBytes []byte
+	if xmlBodyBytes, err = xml.Marshal(icp101Xml); err != nil {
 		return
 	}
 	xmlBytes = []byte(xml.Header + string(xmlBodyBytes))
@@ -141,5 +171,26 @@ func (s *SasXmlServiceImpl) ParseSas224Xml(xmlBytes []byte) (sas224 sasmodels.Sa
 	}
 	sas224.HdeApprResult = sas224Xml.DataInfo.BusinessData.Sas224.HdeApprResult
 	sas224.Head = sas224Xml.DataInfo.BusinessData.Sas224.SasPassportBsc
+	return
+}
+
+func (s *SasXmlServiceImpl) ParseSas251Xml(xmlBytes []byte) (sas251 sasmodels.Sas251, err error) {
+	sas251Xml := sasmodels.Sas251Xml{}
+	if err = xml.Unmarshal(xmlBytes, &sas251Xml); err != nil {
+		return
+	}
+	sas251.HdeApprResult = sas251Xml.DataInfo.BusinessData.Sas251.HdeApprResult
+	sas251.Head = sas251Xml.DataInfo.BusinessData.Sas251.Sas2stepPassportBsc
+	sas251.RltList = sas251Xml.DataInfo.BusinessData.Sas251.Sas2stepPassportRlt
+	return
+}
+
+func (s *SasXmlServiceImpl) ParseSas253Xml(xmlBytes []byte) (sas253 sasmodels.Sas253, err error) {
+	sas253Xml := sasmodels.Sas253Xml{}
+	if err = xml.Unmarshal(xmlBytes, &sas253Xml); err != nil {
+		return
+	}
+	sas253.HdeApprResult = sas253Xml.DataInfo.BusinessData.Sas253.HdeApprResult
+	sas253.Head = sas253Xml.DataInfo.BusinessData.Sas253.Sas2stepPassportBsc
 	return
 }
