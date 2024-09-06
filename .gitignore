@@ -1,3 +1,14 @@
+# Nuxt dev/build outputs
+.output
+.data
+.nuxt
+.nitro
+.cache
+dist
+
+# Node dependencies
+node_modules
+
 # Logs
 log
 logs
@@ -7,6 +18,7 @@ logs
 .DS_Store
 .fleet
 .idea
+
 # Golang
 config.default.toml
 config.test.*
@@ -15,9 +27,12 @@ logs
 *.log
 cmd/wire_gen.go
 wechat-storage.json
+ImpPath
 
 # docs
 *.pdf
 
-# customs
-ImpPath
+# Local env files
+.env
+.env.*
+!.env.example
