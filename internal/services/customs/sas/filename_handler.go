@@ -114,11 +114,6 @@ func ParseSasFilename(filename string) (parts FilenameParts, err error) {
 		return
 	}
 
-	if len(splittedPrefix[5]) != 23 {
-		err = fmt.Errorf("无效文件名: %s, 第六部分必须是23位时间戳", filename)
-		return
-	}
-
 	parts = FilenameParts{
 		SuccessedOrFailed: SuccessedOrFailedType(splittedPrefix[0]),
 		UploadType:        UploadType(splittedPrefix[1]),
