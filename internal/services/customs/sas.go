@@ -154,8 +154,47 @@ func (srv *SasService) GenOutBoxFile(model any, uploadType string, declareFlag s
 		if err = os.WriteFile(zipFlePath, zipFileBytes, 0644); err != nil {
 			return
 		}
+	case SasIcp101:
+		var icp101 sasmodels.Icp101
+		if modelMap, ok := model.(map[string]any); ok {
+			// 先转成json，再转成struct
+			var tmpBytes []byte
+			if tmpBytes, err = json.Marshal(modelMap); err != nil {
+				return
+			}
+			if err = json.Unmarshal(tmpBytes, &icp101); err != nil {
+				return
+			}
+		} else if icp101, ok = model.(sasmodels.Icp101); !ok {
+			err = commonmodels.ErrParseIcp101
+			return
+		}
+		// validate
+		if icp101.Head.EtpsPreentNo == nil {
+			err = fmt.Errorf("EtpsPreentNo is required")
+			return
+		}
+		// generate xml bytes
+		var xmlBytes []byte
+		if xmlBytes, err = srv.sasXmlService.GenIcp101Xml(icp101, declareFlag); err != nil {
+			return
+		}
+		var sasFilenameParts sas.FilenameParts
+		emptyIoType := "N"
+		if sasFilenameParts, err = sas.NewSasFilenameParts(sas.UploadTypeIcp101, &emptyIoType, icp101.Head.EtpsPreentNo); err != nil {
+			return
+		}
+		// write xml bytes to file
+		zipFlePath := srv.filepathHandler.GenOutBoxPath(sasFilenameParts.GenOutBoxFilename("zip"))
+		var zipFileBytes []byte
+		if zipFileBytes, err = internal.ZipFile(sasFilenameParts.GenOutBoxFilename("xml"), xmlBytes); err != nil {
+			return
+		}
+		if err = os.WriteFile(zipFlePath, zipFileBytes, 0644); err != nil {
+			return
+		}
 	default:
-		err = fmt.Errorf("unsupported upload type: %s, only support INV101 and SAS121", uploadType)
+		err = fmt.Errorf("unsupported upload type: %s, only support INV101, SAS121 and ICP101", uploadType)
 	}
 	return
 }
@@ -235,6 +274,10 @@ func (srv *SasService) HandleInBoxFile(filename string) (err error) {
 			data, err = srv.sasXmlService.ParseSas223Xml(xmlBytes)
 		case SasSas224:
 			data, err = srv.sasXmlService.ParseSas224Xml(xmlBytes)
+		case SasSas251:
+			data, err = srv.sasXmlService.ParseSas251Xml(xmlBytes)
+		case SasSas253:
+			data, err = srv.sasXmlService.ParseSas253Xml(xmlBytes)
 		default:
 			err = fmt.Errorf("unsupported receipt type: %s", rmh.EnvelopInfo.MessageType)
 		}

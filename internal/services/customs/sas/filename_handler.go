@@ -21,6 +21,7 @@ type UploadType string
 const (
 	UploadTypeInv101 UploadType = "INV101"
 	UploadTypeSas121 UploadType = "SAS121"
+	UploadTypeIcp101 UploadType = "ICP101"
 )
 
 type ImpexpMarkcd string
@@ -28,6 +29,7 @@ type ImpexpMarkcd string
 const (
 	ImpexpMarkcdI ImpexpMarkcd = "I"
 	ImpexpMarkcdE ImpexpMarkcd = "E"
+	ImpexpMarkcdN ImpexpMarkcd = "N"
 )
 
 // SasFilenamePart 用于创建和解析Sas文件名
@@ -57,12 +59,14 @@ func NewSasFilenameParts(uploadType UploadType, impexpMarkcd *string, etpsInnerI
 		err = fmt.Errorf("etpsInnerInvtNo不能为nil")
 		return
 	}
-	if uploadType != UploadTypeInv101 && uploadType != UploadTypeSas121 {
-		err = fmt.Errorf("无效uploadType: %s, 必须是'INV101'或'SAS121'", uploadType)
+	if uploadType != UploadTypeInv101 && uploadType != UploadTypeSas121 && uploadType != UploadTypeIcp101 {
+		err = fmt.Errorf("无效uploadType: %s, 必须是'INV101'或'SAS121'或'ICP101'", uploadType)
 		return
 	}
-	if *impexpMarkcd != string(ImpexpMarkcdI) && *impexpMarkcd != string(ImpexpMarkcdE) {
-		err = fmt.Errorf("无效impexpMarkcd: %s, 必须是'I'或'E'", *impexpMarkcd)
+	if *impexpMarkcd != string(ImpexpMarkcdI) &&
+		*impexpMarkcd != string(ImpexpMarkcdE) &&
+		*impexpMarkcd != string(ImpexpMarkcdN) {
+		err = fmt.Errorf("无效impexpMarkcd: %s, 必须是'I'或'E'或'N'", *impexpMarkcd)
 		return
 	}
 	parts = FilenameParts{
