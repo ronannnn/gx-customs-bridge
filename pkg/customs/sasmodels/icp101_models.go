@@ -30,8 +30,8 @@ type Icp101Head struct {
 	InputName       *string `json:"inputName" validate:"required,not_blank"`    // 名称
 
 	// 车辆信息
-	VehicleNo   *string `json:"vehicleNo" validate:"required,cn_car"` // 承运车牌号
-	VehicleIcNo *string `json:"vehicleIcNo"`                          // IC卡号(电子车牌)
+	VehicleNo   *string `json:"vehicleNo" validate:"required"` // 承运车牌号
+	VehicleIcNo *string `json:"vehicleIcNo"`                   // IC卡号(电子车牌)
 
 	// 集装箱信息
 	ContainerNo *string `json:"containerNo"` // 集装箱号

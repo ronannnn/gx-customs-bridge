@@ -6,6 +6,8 @@ import (
 	"github.com/ronannnn/gx-customs-bridge/pkg/customs/commonmodels"
 )
 
+// 两步申报核放单审核回执/回执补发送
+
 type Sas251Head struct {
 	SasPassportPreentNo string `json:"sasPassportPreentNo"` // 核放单预录入统一编号
 	PassportNo          string `json:"passportNo"`          // 核放单编号
