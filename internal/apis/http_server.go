@@ -28,6 +28,7 @@ type HttpServer struct {
 	userService        user.Service
 	customsService     customs.CustomsService
 	customsSasService  *customs.SasService
+	customsDecService  *customs.DecService
 }
 
 func NewHttpServer(
@@ -46,6 +47,7 @@ func NewHttpServer(
 	userService user.Service,
 	customsService customs.CustomsService,
 	customsSasService *customs.SasService,
+	customsDecService *customs.DecService,
 ) *HttpServer {
 	hs := &HttpServer{
 		BaseHttpServer: handler.BaseHttpServer{
@@ -65,6 +67,7 @@ func NewHttpServer(
 		userService:        userService,
 		customsService:     customsService,
 		customsSasService:  customsSasService,
+		customsDecService:  customsDecService,
 	}
 	// golang abstract class reference: https://adrianwit.medium.com/abstract-class-reinvented-with-go-4a7326525034
 	hs.BaseHttpServer.HttpServerRunner.HttpServerBaseRunner = hs

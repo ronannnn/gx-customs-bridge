@@ -52,7 +52,7 @@ func (srv *DecService) DirName() string {
 	return "Deccus001"
 }
 
-func (srv *DecService) GenOutBoxFile(model any, uploadType string, declareFlag string) (err error) {
+func (srv *DecService) GenOutBoxFile(model any, uploadType string /* unused */, operType string) (err error) {
 	var decModel decmodels.Dec
 	if modelMap, ok := model.(map[string]any); ok {
 		// 先转成json，再转成struct
@@ -69,7 +69,7 @@ func (srv *DecService) GenOutBoxFile(model any, uploadType string, declareFlag s
 	}
 	// generate xml bytes
 	var xmlBytes []byte
-	if xmlBytes, err = srv.decXmlService.GenDecTmpXml(decModel, declareFlag); err != nil {
+	if xmlBytes, err = srv.decXmlService.GenDecTmpXml(decModel, operType); err != nil {
 		return
 	}
 	// write xml bytes to file

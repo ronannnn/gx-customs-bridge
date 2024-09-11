@@ -17,6 +17,7 @@ func (hs *HttpServer) RegisterRoutes() *chi.Mux {
 		r.Use(hs.accessTokenMw.AuthHandlers()...)
 		r.Use(hs.apiRecordMw.ReqRecorder)
 		r.Post("/customs/sas/xml", hs.GenSasXml)
+		r.Post("/customs/dec/xml", hs.GenDecXml)
 	})
 
 	// mount /api/v1 to root router
