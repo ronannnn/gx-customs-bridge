@@ -1,0 +1,49 @@
+{
+  "decHead": {
+    "iEFlag": "I",
+    "customMaster": "3111",
+    "iEPort": "3104",
+    "type": "ML1000",
+    "agentCode": "330261A004",
+    "agentName": "宁波高新物流有限公司",
+    "copCode": "330261A004",
+    "copName": "宁波高新物流有限公司",
+    "tradeCode": "330261A004",
+    "tradeName": "宁波高新物流有限公司",
+    "trafMode": "2",
+    "trafName": "YM WELLHEAD",
+    "tradeMode": "5034",
+    "grossWet": "49744.23",
+    "declTrnRel": "0",
+    "tradeAreaCode": "CHN",
+    "promiseItmes": "111999",
+    "EntryType": "M"
+  },
+  "decLists": [
+    {
+      "gNo": "1",
+      "codeTs": "390230",
+      "gName": "丙烯共聚物",
+      "gQty": "49.5",
+      "gUnit": "070",
+      "declTotal": "1231",
+      "tradeCurr": "CNY",
+      "originCountry": "CHN",
+      "destinationCountry": "CHN"
+    }
+  ],
+  "decContainers": [
+    {
+      "containerNo": "ZIMU1234567",
+      "containerSize": "22G1",
+      "containerWet": "1"
+    }
+  ],
+  "decFreeTxt": {
+    "VoyNo": "043E"
+  },
+  "decSign": {
+    "operType": "G",
+    "clientSeqNo": "测试报文123"
+  }
+}

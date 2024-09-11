@@ -19,11 +19,13 @@ func ProvideCustomsService(
 	log *zap.SugaredLogger,
 	customsCfg *internal.CustomsCfg,
 	sasService *SasService,
+	decService *DecService,
 ) CustomsService {
 	return &CustomsServiceImpl{
 		log:        log,
 		customsCfg: customsCfg,
 		sasService: sasService,
+		decService: decService,
 	}
 }
 
@@ -31,10 +33,12 @@ type CustomsServiceImpl struct {
 	log        *zap.SugaredLogger
 	customsCfg *internal.CustomsCfg
 	sasService *SasService
+	decService *DecService
 }
 
 func (srv *CustomsServiceImpl) ListenImpPath() {
 	go srv.sasService.HandleBoxes(srv.log, srv.customsCfg.ImpPath)
+	go srv.decService.HandleBoxes(srv.log, srv.customsCfg.ImpPath)
 }
 
 // CustomsMessageFileHandler, 每个海关报文类型都需要实现这个接口
