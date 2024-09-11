@@ -24,6 +24,15 @@ const (
 	UploadTypeIcp101 UploadType = "ICP101"
 )
 
+func CheckIfUploadTypeValid(uploadType string) error {
+	if uploadType != string(UploadTypeInv101) &&
+		uploadType != string(UploadTypeSas121) &&
+		uploadType != string(UploadTypeIcp101) {
+		return fmt.Errorf("无效uploadType: %s, 必须是'INV101'或'SAS121'或'ICP101'", uploadType)
+	}
+	return nil
+}
+
 type ImpexpMarkcd string
 
 const (
@@ -31,6 +40,15 @@ const (
 	ImpexpMarkcdE ImpexpMarkcd = "E"
 	ImpexpMarkcdN ImpexpMarkcd = "N"
 )
+
+func CheckIfImpexpMarkcdValid(impexpMarkcd string) error {
+	if impexpMarkcd != string(ImpexpMarkcdI) &&
+		impexpMarkcd != string(ImpexpMarkcdE) &&
+		impexpMarkcd != string(ImpexpMarkcdN) {
+		return fmt.Errorf("无效impexpMarkcd: %s, 必须是'I'或'E'或'N'", impexpMarkcd)
+	}
+	return nil
+}
 
 // SasFilenamePart 用于创建和解析Sas文件名
 type FilenameParts struct {
@@ -59,14 +77,10 @@ func NewSasFilenameParts(uploadType UploadType, impexpMarkcd *string, etpsInnerI
 		err = fmt.Errorf("etpsInnerInvtNo不能为nil")
 		return
 	}
-	if uploadType != UploadTypeInv101 && uploadType != UploadTypeSas121 && uploadType != UploadTypeIcp101 {
-		err = fmt.Errorf("无效uploadType: %s, 必须是'INV101'或'SAS121'或'ICP101'", uploadType)
+	if err = CheckIfUploadTypeValid(string(uploadType)); err != nil {
 		return
 	}
-	if *impexpMarkcd != string(ImpexpMarkcdI) &&
-		*impexpMarkcd != string(ImpexpMarkcdE) &&
-		*impexpMarkcd != string(ImpexpMarkcdN) {
-		err = fmt.Errorf("无效impexpMarkcd: %s, 必须是'I'或'E'或'N'", *impexpMarkcd)
+	if err = CheckIfImpexpMarkcdValid(*impexpMarkcd); err != nil {
 		return
 	}
 	parts = FilenameParts{
@@ -94,14 +108,10 @@ func ParseSasFilename(filename string) (parts FilenameParts, err error) {
 		err = fmt.Errorf("无效文件名: %s, 第一部分必须是'Successed'或'Failed'", filename)
 		return
 	}
-	if splittedPrefix[1] != string(UploadTypeInv101) &&
-		splittedPrefix[1] != string(UploadTypeSas121) {
-		err = fmt.Errorf("无效文件名: %s, 第二部分必须是'INV101'或'SAS121'", filename)
+	if err = CheckIfUploadTypeValid(string(splittedPrefix[1])); err != nil {
 		return
 	}
-	if splittedPrefix[2] != string(ImpexpMarkcdI) &&
-		splittedPrefix[2] != string(ImpexpMarkcdE) {
-		err = fmt.Errorf("无效文件名: %s, 第三部分必须是'I'或'E'", filename)
+	if err = CheckIfImpexpMarkcdValid(splittedPrefix[2]); err != nil {
 		return
 	}
 	splittedRetryTimes := strings.Split(splittedPrefix[4], "-")
