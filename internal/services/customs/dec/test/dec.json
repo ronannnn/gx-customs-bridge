@@ -34,9 +34,9 @@
   ],
   "decContainers": [
     {
-      "containerNo": "ZIMU1234567",
-      "containerSize": "22G1",
-      "containerWet": "1"
+      "containerId": "ZIMU1234567",
+      "containerMd": "111",
+      "goodsNo": "1"
     }
   ],
   "decFreeTxt": {
