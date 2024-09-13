@@ -31,6 +31,7 @@ type DecHead struct {
 	// 编码
 	SeqNo   *string `json:"seqNo" validate:"omitempty,len=18"`   // 数据中心生成的对报关单的唯一标识
 	EntryId *string `json:"entryId" validate:"omitempty,len=18"` // 报关单号
+	BillNo  *string `json:"billNo" validate:"required"`          // 提运单号
 	// 申报单位
 	AgentCode *string `json:"agentCode" validate:"required,len=10"`    // 编码
 	AgentName *string `json:"agentName" validate:"required,not_blank"` // 名称
@@ -56,9 +57,9 @@ type DecHead struct {
 
 	GrossWet *models.DecimalSafe `json:"grossWet" validate:"required,d_gt=0"` // 毛重
 
-	InputerName *string `json:"inputerName" validate:"required"` // 录入员姓名
-	DeclareName *string `json:"declareName" validate:"required"` // 申报人员姓名
-	TypistNo    *string `json:"typistNo" validate:"required"`    // 录入员IC卡号
+	InputerName *string `json:"inputerName" validate:"required"` // 录入员姓名(配置文件填写)
+	DeclareName *string `json:"declareName" validate:"required"` // 申报人员姓名(配置文件填写)
+	TypistNo    *string `json:"typistNo" validate:"required"`    // 录入员IC卡号(配置文件填写)
 }
 
 type DecList struct {
@@ -86,8 +87,8 @@ type DecFreeTxt struct {
 type DecSign struct {
 	OperType    *DecOperType `json:"operType" validate:"required,oneof=A B C D E G"`     // 操作类型
 	ClientSeqNo *string      `json:"clientSeqNo" validate:"required" gorm:"uniqueIndex"` // 客户端自行编制的编号，唯一识别一票报关单
-	ICCode      *string      `json:"iCCode" validate:"required"`                         // 操作员IC卡号
-	OperName    *string      `json:"operName" validate:"required"`                       // 操作员姓名
+	ICCode      *string      `json:"iCCode" validate:"required"`                         // 操作员IC卡号(配置文件填写)
+	OperName    *string      `json:"operName" validate:"required"`                       // 操作员姓名(配置文件填写)
 }
 
 type Dec struct {
