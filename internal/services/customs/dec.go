@@ -148,7 +148,10 @@ func (srv *DecService) HandleInBoxFile(filename string) (err error) {
 
 		// convert data to json bytes
 		var jsonbytes []byte
-		if jsonbytes, err = json.Marshal(dr); err != nil {
+		if jsonbytes, err = json.Marshal(commonmodels.ReceiptResult{
+			ReceiptType: "DecResult",
+			Data:        dr,
+		}); err != nil {
 			return
 		}
 
@@ -227,7 +230,10 @@ func (srv *DecService) tryToHandleInBoxMessageResponseFile(filename string) (err
 	}
 	// convert data to json bytes
 	var jsonbytes []byte
-	if jsonbytes, err = json.Marshal(mrr); err != nil {
+	if jsonbytes, err = json.Marshal(commonmodels.ReceiptResult{
+		ReceiptType: "DecImportResponse",
+		Data:        mrr,
+	}); err != nil {
 		return
 	}
 
