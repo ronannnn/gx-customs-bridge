@@ -68,7 +68,7 @@ type DecList struct {
 	GName              *string             `json:"gName" validate:"required"`                          // 商品名称
 	GQty               *models.DecimalSafe `json:"gQty" validate:"required,d_gt=0"`                    // 成交数量
 	GUnit              *string             `json:"gUnit" validate:"required,len=3,numeric"`            // 成交计量单位
-	TradeCurr          *string             `json:"tradeCurr" validate:"required,len=3,alpha"`          // 成交币制
+	TradeCurr          *string             `json:"tradeCurr" validate:"required,len=3,numeric"`        // 成交币制
 	DeclTotal          *models.DecimalSafe `json:"declTotal" validate:"required,d_gt=0"`               // 申报总价
 	OriginCountry      *string             `json:"originCountry" validate:"required,len=3,alpha"`      // 原产国
 	DestinationCountry *string             `json:"destinationCountry" validate:"required,len=3,alpha"` // 最终目的国
