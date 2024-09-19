@@ -38,8 +38,8 @@ type CustomsServiceImpl struct {
 
 func (srv *CustomsServiceImpl) ListenImpPath() {
 	for _, card := range srv.customsCfg.IcCards {
-		go srv.sasService.HandleBoxes(srv.log, card.ImpPath)
-		go srv.decService.HandleBoxes(srv.log, card.ImpPath)
+		go srv.sasService.HandleBoxes(srv.log, card.Name)
+		go srv.decService.HandleBoxes(srv.log, card.Name)
 	}
 }
 
