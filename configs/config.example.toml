@@ -33,8 +33,21 @@ conn-max-lifetime = 14400
 enable-log = false
 
 [customs]
-imp-path = ''
 sys-id = ''
+[[customs.ic-cards]]
+name = ''
+imp-path = ''
+dcl-er-conc = ''
+ic-card-no = ''
+oper-cus-reg-code = ''
+[[customs.ic-cards]]
+name = ''
+imp-path = ''
+dcl-er-conc = ''
+ic-card-no = ''
+oper-cus-reg-code = ''
+[[customs.ic-cards]]
+imp-path = ''
 dcl-er-conc = ''
 ic-card-no = ''
 oper-cus-reg-code = ''

@@ -9,9 +9,9 @@ import (
 )
 
 type SasXmlService interface {
-	GenInv101Xml(inv101 sasmodels.Inv101, declareFlag string) ([]byte, error)
-	GenSas121Xml(sas121 sasmodels.Sas121, declareFlag string) ([]byte, error)
-	GenIcp101Xml(icp101 sasmodels.Icp101, declareFlag string) ([]byte, error)
+	GenInv101Xml(inv101 sasmodels.Inv101, declareFlag string, companyType string) ([]byte, error)
+	GenSas121Xml(sas121 sasmodels.Sas121, declareFlag string, companyType string) ([]byte, error)
+	GenIcp101Xml(icp101 sasmodels.Icp101, declareFlag string, companyType string) ([]byte, error)
 
 	ParseInv201Xml([]byte) (sasmodels.Inv201, error)
 	ParseInv202Xml([]byte) (sasmodels.Inv202, error)
@@ -37,20 +37,26 @@ type SasXmlServiceImpl struct {
 	customsCfg *internal.CustomsCfg
 }
 
-func (s *SasXmlServiceImpl) GenInv101Xml(inv101 sasmodels.Inv101, declareFlag string) (xmlBytes []byte, err error) {
+func (s *SasXmlServiceImpl) GenInv101Xml(inv101 sasmodels.Inv101, declareFlag string, companyType string) (xmlBytes []byte, err error) {
 	// 校验
 	if declareFlag != "0" && declareFlag != "1" {
 		err = fmt.Errorf("申报标志(declareFlag)必须是0或1")
 		return
 	}
+
+	icCard, ok := s.customsCfg.IcCardMap[companyType]
+	if !ok {
+		err = fmt.Errorf("公司类型(%s)不存在", companyType)
+		return
+	}
 	// 替换部分数据
-	inv101.Head.IcCardNo = &s.customsCfg.IcCardNo
+	inv101.Head.IcCardNo = &icCard.IcCardNo
 	// 生成inv101Xml
 	inv101Xml := sasmodels.Inv101Xml{}
 	inv101Xml.Object.Package.EnvelopInfo.MessageType = "INV101"
 	inv101Xml.Object.Package.DataInfo.BusinessData.DeclareFlag = declareFlag
 	inv101Xml.Object.Package.DataInfo.BusinessData.InvtMessage.SysId = s.customsCfg.SysId
-	inv101Xml.Object.Package.DataInfo.BusinessData.InvtMessage.OperCusRegCode = s.customsCfg.OperCusRegCode
+	inv101Xml.Object.Package.DataInfo.BusinessData.InvtMessage.OperCusRegCode = icCard.OperCusRegCode
 	inv101Xml.Object.Package.DataInfo.BusinessData.InvtMessage.InvtHeadType = inv101.Head
 	inv101Xml.Object.Package.DataInfo.BusinessData.InvtMessage.InvtListType = inv101.List
 	// 保存xml
@@ -62,18 +68,24 @@ func (s *SasXmlServiceImpl) GenInv101Xml(inv101 sasmodels.Inv101, declareFlag st
 	return
 }
 
-func (s *SasXmlServiceImpl) GenSas121Xml(sas121 sasmodels.Sas121, declareFlag string) (xmlBytes []byte, err error) {
+func (s *SasXmlServiceImpl) GenSas121Xml(sas121 sasmodels.Sas121, declareFlag string, companyType string) (xmlBytes []byte, err error) {
 	// 校验
 	if declareFlag != "0" && declareFlag != "1" {
 		err = fmt.Errorf("申报标志(declareFlag)必须是0或1")
 		return
 	}
-	sas121.Head.DclErConc = &s.customsCfg.DclErConc
+
+	icCard, ok := s.customsCfg.IcCardMap[companyType]
+	if !ok {
+		err = fmt.Errorf("公司类型(%s)不存在", companyType)
+		return
+	}
+	sas121.Head.DclErConc = &icCard.DclErConc
 	// 生成sas121Xml
 	sas121Xml := sasmodels.Sas121Xml{}
 	sas121Xml.Object.Package.EnvelopInfo.MessageType = "SAS121"
 	sas121Xml.Object.Package.DataInfo.BusinessData.DeclareFlag = declareFlag
-	sas121Xml.Object.Package.DataInfo.BusinessData.PassPortMessage.OperCusRegCode = s.customsCfg.OperCusRegCode
+	sas121Xml.Object.Package.DataInfo.BusinessData.PassPortMessage.OperCusRegCode = icCard.OperCusRegCode
 	sas121Xml.Object.Package.DataInfo.BusinessData.PassPortMessage.PassportHead = sas121.Head
 	sas121Xml.Object.Package.DataInfo.BusinessData.PassPortMessage.PassportList = sas121.List
 	sas121Xml.Object.Package.DataInfo.BusinessData.PassPortMessage.PassportAcmp = sas121.Acmp
@@ -86,19 +98,25 @@ func (s *SasXmlServiceImpl) GenSas121Xml(sas121 sasmodels.Sas121, declareFlag st
 	return
 }
 
-func (s *SasXmlServiceImpl) GenIcp101Xml(icp101 sasmodels.Icp101, declareFlag string) (xmlBytes []byte, err error) {
+func (s *SasXmlServiceImpl) GenIcp101Xml(icp101 sasmodels.Icp101, declareFlag string, companyType string) (xmlBytes []byte, err error) {
 	// 校验
 	if declareFlag != "0" && declareFlag != "1" {
 		err = fmt.Errorf("申报标志(declareFlag)必须是0或1")
 		return
 	}
-	icp101.Head.DclErConc = &s.customsCfg.DclErConc
+
+	icCard, ok := s.customsCfg.IcCardMap[companyType]
+	if !ok {
+		err = fmt.Errorf("公司类型(%s)不存在", companyType)
+		return
+	}
+	icp101.Head.DclErConc = &icCard.DclErConc
 	// 生成icp101Xml
 	icp101Xml := sasmodels.Icp101Xml{}
 	icp101Xml.Object.Package.EnvelopInfo.MessageType = "ICP101"
 	icp101Xml.Object.Package.DataInfo.BusinessData.DeclareFlag = declareFlag
 	icp101Xml.Object.Package.DataInfo.BusinessData.Sas2sPassPortMessage.SysId = s.customsCfg.SysId
-	icp101Xml.Object.Package.DataInfo.BusinessData.Sas2sPassPortMessage.OperCusRegCode = s.customsCfg.OperCusRegCode
+	icp101Xml.Object.Package.DataInfo.BusinessData.Sas2sPassPortMessage.OperCusRegCode = icCard.OperCusRegCode
 	icp101Xml.Object.Package.DataInfo.BusinessData.Sas2sPassPortMessage.Sas2sPassportHead = icp101.Head
 	icp101Xml.Object.Package.DataInfo.BusinessData.Sas2sPassPortMessage.Sas2sPassportRlt = icp101.RltList
 	// 保存xml

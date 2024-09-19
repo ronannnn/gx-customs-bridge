@@ -2,6 +2,8 @@ package common
 
 import (
 	"path/filepath"
+
+	"github.com/ronannnn/gx-customs-bridge/internal"
 )
 
 const OutBoxDirName = "OutBox"
@@ -14,79 +16,83 @@ const FilesCannotParseDirName = "FilesCannotParse"
 const FilesCannotUploadDirName = "FilesCannotUpload"
 
 type FilepathHandler struct {
-	ImpPath string
-	BizType string
+	icCardMap map[string]*internal.CustomsIcCard
+	BizType   string
 }
 
-func NewFilepathHandler(impPath, bizType string) *FilepathHandler {
+func NewFilepathHandler(icCardMap map[string]*internal.CustomsIcCard, bizType string) *FilepathHandler {
 	return &FilepathHandler{
-		ImpPath: impPath,
-		BizType: bizType,
+		icCardMap: icCardMap,
+		BizType:   bizType,
 	}
 }
 
-func (fph *FilepathHandler) GenPath(elem ...string) string {
-	var elems = []string{fph.ImpPath, fph.BizType}
+func (fph *FilepathHandler) GenPath(companyType string, elem ...string) string {
+	icCard, ok := fph.icCardMap[companyType]
+	if !ok {
+		return ""
+	}
+	var elems = []string{icCard.ImpPath, fph.BizType}
 	elems = append(elems, elem...)
 	result := filepath.Join(elems...)
 	return result
 }
 
 // 海关本身的文件夹结构
-func (fph *FilepathHandler) GenOutBoxPath(ele ...string) string {
+func (fph *FilepathHandler) GenOutBoxPath(companyType string, ele ...string) string {
 	var elems = []string{OutBoxDirName}
 	elems = append(elems, ele...)
-	return fph.GenPath(elems...)
+	return fph.GenPath(companyType, elems...)
 }
-func (fph *FilepathHandler) GenInBoxPath(ele ...string) string {
+func (fph *FilepathHandler) GenInBoxPath(companyType string, ele ...string) string {
 	var elems = []string{InBoxDirName}
 	elems = append(elems, ele...)
-	return fph.GenPath(elems...)
+	return fph.GenPath(companyType, elems...)
 }
-func (fph *FilepathHandler) GenSentBoxPath(ele ...string) string {
+func (fph *FilepathHandler) GenSentBoxPath(companyType string, ele ...string) string {
 	var elems = []string{SentBoxDirName}
 	elems = append(elems, ele...)
-	return fph.GenPath(elems...)
+	return fph.GenPath(companyType, elems...)
 }
-func (fph *FilepathHandler) GenFailBoxPath(ele ...string) string {
+func (fph *FilepathHandler) GenFailBoxPath(companyType string, ele ...string) string {
 	var elems = []string{FailBoxDirName}
 	elems = append(elems, ele...)
-	return fph.GenPath(elems...)
+	return fph.GenPath(companyType, elems...)
 }
 
 // 文件处理后的移动到的文件夹结构
-func (fph *FilepathHandler) GenHandledPath(elem ...string) string {
+func (fph *FilepathHandler) GenHandledPath(companyType string, elem ...string) string {
 	var elems = []string{HandledFilesDirName}
 	elems = append(elems, elem...)
-	return fph.GenPath(elems...)
+	return fph.GenPath(companyType, elems...)
 }
-func (fph *FilepathHandler) GenHandledInBoxPath(ele ...string) string {
+func (fph *FilepathHandler) GenHandledInBoxPath(companyType string, ele ...string) string {
 	var elems = []string{InBoxDirName}
 	elems = append(elems, ele...)
-	return fph.GenHandledPath(elems...)
+	return fph.GenHandledPath(companyType, elems...)
 }
-func (fph *FilepathHandler) GenHandledOutBoxPath(ele ...string) string {
+func (fph *FilepathHandler) GenHandledOutBoxPath(companyType string, ele ...string) string {
 	var elems = []string{OutBoxDirName}
 	elems = append(elems, ele...)
-	return fph.GenHandledPath(elems...)
+	return fph.GenHandledPath(companyType, elems...)
 }
-func (fph *FilepathHandler) GenHandledSentBoxPath(ele ...string) string {
+func (fph *FilepathHandler) GenHandledSentBoxPath(companyType string, ele ...string) string {
 	var elems = []string{SentBoxDirName}
 	elems = append(elems, ele...)
-	return fph.GenHandledPath(elems...)
+	return fph.GenHandledPath(companyType, elems...)
 }
-func (fph *FilepathHandler) GenHandledFailBoxPath(ele ...string) string {
+func (fph *FilepathHandler) GenHandledFailBoxPath(companyType string, ele ...string) string {
 	var elems = []string{FailBoxDirName}
 	elems = append(elems, ele...)
-	return fph.GenHandledPath(elems...)
+	return fph.GenHandledPath(companyType, elems...)
 }
-func (fph *FilepathHandler) GenHandledCannotParsePath(ele ...string) string {
+func (fph *FilepathHandler) GenHandledCannotParsePath(companyType string, ele ...string) string {
 	var elems = []string{FilesCannotParseDirName}
 	elems = append(elems, ele...)
-	return fph.GenHandledPath(elems...)
+	return fph.GenHandledPath(companyType, elems...)
 }
-func (fph *FilepathHandler) GenHandledCannotUploadPath(ele ...string) string {
+func (fph *FilepathHandler) GenHandledCannotUploadPath(companyType string, ele ...string) string {
 	var elems = []string{FilesCannotUploadDirName}
 	elems = append(elems, ele...)
-	return fph.GenHandledPath(elems...)
+	return fph.GenHandledPath(companyType, elems...)
 }

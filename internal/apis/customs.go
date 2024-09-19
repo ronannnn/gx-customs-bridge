@@ -14,7 +14,7 @@ func (hs *HttpServer) GenSasXml(w http.ResponseWriter, r *http.Request) {
 	if hs.h.BindAndCheck(w, r, &payload) {
 		return
 	}
-	if err := hs.customsSasService.GenOutBoxFile(payload.Data, payload.UploadType, payload.DeclareFlag); err != nil {
+	if err := hs.customsSasService.GenOutBoxFile(payload.Data, payload.UploadType, payload.DeclareFlag, string(payload.CompanyType)); err != nil {
 		hs.h.Fail(w, r, err, nil)
 	} else {
 		hs.h.Success(w, r, msg.New(reason.SuccessToGenSasXml), nil)
@@ -26,7 +26,7 @@ func (hs *HttpServer) GenDecXml(w http.ResponseWriter, r *http.Request) {
 	if hs.h.BindAndCheck(w, r, &payload) {
 		return
 	}
-	if err := hs.customsDecService.GenOutBoxFile(payload.Data, "", payload.OperType); err != nil {
+	if err := hs.customsDecService.GenOutBoxFile(payload.Data, "", string(payload.OperType), string(payload.CompanyType)); err != nil {
 		hs.h.Fail(w, r, err, nil)
 	} else {
 		hs.h.Success(w, r, msg.New(reason.SuccessToGenSasXml), nil)

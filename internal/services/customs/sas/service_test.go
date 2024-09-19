@@ -14,40 +14,55 @@ import (
 
 func TestGenInv101Xml(t *testing.T) {
 	service := sas.ProvideSasXmlService(&internal.CustomsCfg{
-		SysId:          "Z7",
-		OperCusRegCode: "1234567890",
-		IcCardNo:       "11111111111111111111",
-		DclErConc:      "Nobody",
+		SysId: "Z7",
+		IcCards: []internal.CustomsIcCard{
+			{
+				Name:           "gxhg",
+				OperCusRegCode: "1234567890",
+				IcCardNo:       "11111111111111111111",
+				DclErConc:      "Nobody",
+			},
+		},
 	})
 	impexpMarkcd := "I"
 	service.GenInv101Xml(sasmodels.Inv101{
 		Head: sasmodels.Inv101Head{
 			ImpexpMarkcd: &impexpMarkcd,
 		},
-	}, "1")
+	}, "1", "gxhg")
 }
 
 func TestGenSas121Xml(t *testing.T) {
 	service := sas.ProvideSasXmlService(&internal.CustomsCfg{
-		SysId:          "Z7",
-		OperCusRegCode: "1234567890",
-		IcCardNo:       "11111111111111111111",
-		DclErConc:      "Nobody",
+		SysId: "Z7",
+		IcCards: []internal.CustomsIcCard{
+			{
+				Name:           "gxhg",
+				OperCusRegCode: "1234567890",
+				IcCardNo:       "11111111111111111111",
+				DclErConc:      "Nobody",
+			},
+		},
 	})
 	impexpMarkcd := "I"
 	service.GenInv101Xml(sasmodels.Inv101{
 		Head: sasmodels.Inv101Head{
 			ImpexpMarkcd: &impexpMarkcd,
 		},
-	}, "1")
+	}, "1", "gxhg")
 }
 
 func TestGenIcp101Xml(t *testing.T) {
 	service := sas.ProvideSasXmlService(&internal.CustomsCfg{
-		SysId:          "Z7",
-		OperCusRegCode: "330261A004",
-		IcCardNo:       "JJ3G900420543",
-		DclErConc:      "贺婷婷",
+		SysId: "Z7",
+		IcCards: []internal.CustomsIcCard{
+			{
+				Name:           "gxwl",
+				OperCusRegCode: "330261A004",
+				IcCardNo:       "JJ3G900420543",
+				DclErConc:      "贺婷婷",
+			},
+		},
 	})
 
 	var icp101 sasmodels.Icp101
@@ -59,7 +74,7 @@ func TestGenIcp101Xml(t *testing.T) {
 	require.NoError(t, err)
 
 	var xmlBytes []byte
-	xmlBytes, err = service.GenIcp101Xml(icp101, "0")
+	xmlBytes, err = service.GenIcp101Xml(icp101, "0", "gxwl")
 	require.NoError(t, err)
 
 	err = os.WriteFile("test/icp101.xml", xmlBytes, 0644)
@@ -68,10 +83,15 @@ func TestGenIcp101Xml(t *testing.T) {
 
 func TestParseInv201(t *testing.T) {
 	service := sas.ProvideSasXmlService(&internal.CustomsCfg{
-		SysId:          "Z7",
-		OperCusRegCode: "1234567890",
-		IcCardNo:       "11111111111111111111",
-		DclErConc:      "Nobody",
+		SysId: "Z7",
+		IcCards: []internal.CustomsIcCard{
+			{
+				Name:           "gxhg",
+				OperCusRegCode: "1234567890",
+				IcCardNo:       "11111111111111111111",
+				DclErConc:      "Nobody",
+			},
+		},
 	})
 
 	// read file
@@ -96,10 +116,15 @@ func TestParseInv201(t *testing.T) {
 
 func TestParseInv202(t *testing.T) {
 	service := sas.ProvideSasXmlService(&internal.CustomsCfg{
-		SysId:          "Z7",
-		OperCusRegCode: "1234567890",
-		IcCardNo:       "11111111111111111111",
-		DclErConc:      "Nobody",
+		SysId: "Z7",
+		IcCards: []internal.CustomsIcCard{
+			{
+				Name:           "gxhg",
+				OperCusRegCode: "1234567890",
+				IcCardNo:       "11111111111111111111",
+				DclErConc:      "Nobody",
+			},
+		},
 	})
 
 	// read file
@@ -124,10 +149,15 @@ func TestParseInv202(t *testing.T) {
 
 func TestParseInv211(t *testing.T) {
 	service := sas.ProvideSasXmlService(&internal.CustomsCfg{
-		SysId:          "Z7",
-		OperCusRegCode: "1234567890",
-		IcCardNo:       "11111111111111111111",
-		DclErConc:      "Nobody",
+		SysId: "Z7",
+		IcCards: []internal.CustomsIcCard{
+			{
+				Name:           "gxhg",
+				OperCusRegCode: "1234567890",
+				IcCardNo:       "11111111111111111111",
+				DclErConc:      "Nobody",
+			},
+		},
 	})
 
 	// read file
@@ -153,10 +183,15 @@ func TestParseInv211(t *testing.T) {
 
 func TestParseInv221(t *testing.T) {
 	service := sas.ProvideSasXmlService(&internal.CustomsCfg{
-		SysId:          "Z7",
-		OperCusRegCode: "1234567890",
-		IcCardNo:       "11111111111111111111",
-		DclErConc:      "Nobody",
+		SysId: "Z7",
+		IcCards: []internal.CustomsIcCard{
+			{
+				Name:           "gxhg",
+				OperCusRegCode: "1234567890",
+				IcCardNo:       "11111111111111111111",
+				DclErConc:      "Nobody",
+			},
+		},
 	})
 
 	// read file
@@ -183,10 +218,15 @@ func TestParseInv221(t *testing.T) {
 
 func TestParseInv223(t *testing.T) {
 	service := sas.ProvideSasXmlService(&internal.CustomsCfg{
-		SysId:          "Z7",
-		OperCusRegCode: "1234567890",
-		IcCardNo:       "11111111111111111111",
-		DclErConc:      "Nobody",
+		SysId: "Z7",
+		IcCards: []internal.CustomsIcCard{
+			{
+				Name:           "gxhg",
+				OperCusRegCode: "1234567890",
+				IcCardNo:       "11111111111111111111",
+				DclErConc:      "Nobody",
+			},
+		},
 	})
 
 	// read file
@@ -211,10 +251,15 @@ func TestParseInv223(t *testing.T) {
 
 func TestParseInv224(t *testing.T) {
 	service := sas.ProvideSasXmlService(&internal.CustomsCfg{
-		SysId:          "Z7",
-		OperCusRegCode: "1234567890",
-		IcCardNo:       "11111111111111111111",
-		DclErConc:      "Nobody",
+		SysId: "Z7",
+		IcCards: []internal.CustomsIcCard{
+			{
+				Name:           "gxhg",
+				OperCusRegCode: "1234567890",
+				IcCardNo:       "11111111111111111111",
+				DclErConc:      "Nobody",
+			},
+		},
 	})
 
 	// read file

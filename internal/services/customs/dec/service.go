@@ -2,13 +2,14 @@ package dec
 
 import (
 	"encoding/xml"
+	"fmt"
 
 	"github.com/ronannnn/gx-customs-bridge/internal"
 	"github.com/ronannnn/gx-customs-bridge/pkg/customs/decmodels"
 )
 
 type DecXmlService interface {
-	GenDecTmpXml(decTmp decmodels.Dec, operType string) ([]byte, error)
+	GenDecTmpXml(decTmp decmodels.Dec, operType string, companyType string) ([]byte, error)
 }
 
 func ProvideDecXmlService(
@@ -23,16 +24,18 @@ type DecXmlServiceImpl struct {
 	customsCfg *internal.CustomsCfg
 }
 
-func (s *DecXmlServiceImpl) GenDecTmpXml(decModel decmodels.Dec, operType string) (xmlBytes []byte, err error) {
-	// validation
-	if err = decmodels.CheckIfDecOperTypeValid(operType); err != nil {
+func (s *DecXmlServiceImpl) GenDecTmpXml(decModel decmodels.Dec, operType string, companyType string) (xmlBytes []byte, err error) {
+	// 替换部分数据
+	icCard, ok := s.customsCfg.IcCardMap[companyType]
+	if !ok {
+		err = fmt.Errorf("公司类型(%s)不存在", companyType)
 		return
 	}
-	decModel.DecHead.InputerName = &s.customsCfg.DclErConc
-	decModel.DecHead.DeclareName = &s.customsCfg.DclErConc
-	decModel.DecHead.TypistNo = &s.customsCfg.IcCardNo
-	decModel.DecSign.ICCode = &s.customsCfg.IcCardNo
-	decModel.DecSign.OperName = &s.customsCfg.DclErConc
+	decModel.DecHead.InputerName = &icCard.DclErConc
+	decModel.DecHead.DeclareName = &icCard.DclErConc
+	decModel.DecHead.TypistNo = &icCard.IcCardNo
+	decModel.DecSign.ICCode = &icCard.IcCardNo
+	decModel.DecSign.OperName = &icCard.DclErConc
 	convertedOperType := decmodels.DecOperType(operType)
 	decModel.DecSign.OperType = &convertedOperType
 	// 生成decTmpXml

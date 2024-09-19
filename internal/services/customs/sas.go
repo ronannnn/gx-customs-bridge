@@ -46,7 +46,6 @@ const (
 
 type SasService struct {
 	CustomsMessage
-	customsCfg              *internal.CustomsCfg
 	log                     *zap.SugaredLogger
 	filepathHandler         *common.FilepathHandler
 	rmqClient               *rabbitmq.Client
@@ -62,14 +61,16 @@ func ProvideSasService(
 	sasXmlService sas.SasXmlService,
 ) *SasService {
 	srv := &SasService{
-		customsCfg:              customsCfg,
+		CustomsMessage: CustomsMessage{
+			customsCfg: customsCfg,
+		},
 		log:                     log,
 		rmqClient:               rmqClient,
 		customsCommonXmlService: customsCommonXmlService,
 		sasXmlService:           sasXmlService,
 	}
 	srv.CustomsMessage.CustomsMessageHandler = srv
-	srv.filepathHandler = common.NewFilepathHandler(customsCfg.ImpPath, srv.DirName())
+	srv.filepathHandler = common.NewFilepathHandler(customsCfg.IcCardMap, srv.DirName())
 	return srv
 }
 
@@ -77,7 +78,7 @@ func (srv *SasService) DirName() string {
 	return "Sas"
 }
 
-func (srv *SasService) GenOutBoxFile(model any, uploadType string, declareFlag string) (err error) {
+func (srv *SasService) GenOutBoxFile(model any, uploadType string, declareFlag string, companyType string) (err error) {
 	switch SasUploadType(uploadType) {
 	case SasInv101:
 		var inv101 sasmodels.Inv101
@@ -96,7 +97,7 @@ func (srv *SasService) GenOutBoxFile(model any, uploadType string, declareFlag s
 		}
 		// generate xml bytes
 		var xmlBytes []byte
-		if xmlBytes, err = srv.sasXmlService.GenInv101Xml(inv101, declareFlag); err != nil {
+		if xmlBytes, err = srv.sasXmlService.GenInv101Xml(inv101, declareFlag, companyType); err != nil {
 			return
 		}
 		// write xml bytes to file
@@ -104,7 +105,7 @@ func (srv *SasService) GenOutBoxFile(model any, uploadType string, declareFlag s
 		if sasFilenameParts, err = sas.NewSasFilenameParts(sas.UploadTypeInv101, inv101.Head.ImpexpMarkcd, inv101.Head.EtpsInnerInvtNo); err != nil {
 			return
 		}
-		zipFlePath := srv.filepathHandler.GenOutBoxPath(sasFilenameParts.GenOutBoxFilename("zip"))
+		zipFlePath := srv.filepathHandler.GenOutBoxPath(companyType, sasFilenameParts.GenOutBoxFilename("zip"))
 		var zipFileBytes []byte
 		if zipFileBytes, err = internal.ZipFile(sasFilenameParts.GenOutBoxFilename("xml"), xmlBytes); err != nil {
 			return
@@ -138,7 +139,7 @@ func (srv *SasService) GenOutBoxFile(model any, uploadType string, declareFlag s
 		}
 		// generate xml bytes
 		var xmlBytes []byte
-		if xmlBytes, err = srv.sasXmlService.GenSas121Xml(sas121, declareFlag); err != nil {
+		if xmlBytes, err = srv.sasXmlService.GenSas121Xml(sas121, declareFlag, companyType); err != nil {
 			return
 		}
 		var sasFilenameParts sas.FilenameParts
@@ -146,7 +147,7 @@ func (srv *SasService) GenOutBoxFile(model any, uploadType string, declareFlag s
 			return
 		}
 		// write xml bytes to file
-		zipFlePath := srv.filepathHandler.GenOutBoxPath(sasFilenameParts.GenOutBoxFilename("zip"))
+		zipFlePath := srv.filepathHandler.GenOutBoxPath(companyType, sasFilenameParts.GenOutBoxFilename("zip"))
 		var zipFileBytes []byte
 		if zipFileBytes, err = internal.ZipFile(sasFilenameParts.GenOutBoxFilename("xml"), xmlBytes); err != nil {
 			return
@@ -176,7 +177,7 @@ func (srv *SasService) GenOutBoxFile(model any, uploadType string, declareFlag s
 		}
 		// generate xml bytes
 		var xmlBytes []byte
-		if xmlBytes, err = srv.sasXmlService.GenIcp101Xml(icp101, declareFlag); err != nil {
+		if xmlBytes, err = srv.sasXmlService.GenIcp101Xml(icp101, declareFlag, companyType); err != nil {
 			return
 		}
 		var sasFilenameParts sas.FilenameParts
@@ -185,7 +186,7 @@ func (srv *SasService) GenOutBoxFile(model any, uploadType string, declareFlag s
 			return
 		}
 		// write xml bytes to file
-		zipFlePath := srv.filepathHandler.GenOutBoxPath(sasFilenameParts.GenOutBoxFilename("zip"))
+		zipFlePath := srv.filepathHandler.GenOutBoxPath(companyType, sasFilenameParts.GenOutBoxFilename("zip"))
 		var zipFileBytes []byte
 		if zipFileBytes, err = internal.ZipFile(sasFilenameParts.GenOutBoxFilename("xml"), xmlBytes); err != nil {
 			return
@@ -199,12 +200,12 @@ func (srv *SasService) GenOutBoxFile(model any, uploadType string, declareFlag s
 	return
 }
 
-func (srv *SasService) HandleSentBoxFile(filename string) (err error) {
-	srv.log.Infof("SasService HandleSentBoxFile, %s", filename)
+func (srv *SasService) HandleSentBoxFile(filename string, companyType string) (err error) {
+	srv.log.Infof("SasService HandleSentBoxFile, %s, %s", filename, companyType)
 	return
 }
 
-func (srv *SasService) HandleFailBoxFile(filename string) (err error) {
+func (srv *SasService) HandleFailBoxFile(filename string, companyType string) (err error) {
 	srv.log.Infof("SasService HandleFailBoxFile, %s", filename)
 	var sasFilenameParts sas.FilenameParts
 	if sasFilenameParts, err = sas.ParseSasFilename(filename); err != nil {
@@ -213,11 +214,11 @@ func (srv *SasService) HandleFailBoxFile(filename string) (err error) {
 	if sasFilenameParts.RetryTimes >= 3 {
 		srv.log.Errorf("retry times >= 3, move %s to FilesCannotUpload", filename)
 		today := time.Now().Format("2006-01-02")
-		cannotParsePath := srv.filepathHandler.GenHandledCannotParsePath(today)
+		cannotParsePath := srv.filepathHandler.GenHandledCannotParsePath(companyType, today)
 		if err = utils.CreateDirsIfNotExist(cannotParsePath); err != nil {
 			return
 		}
-		cannotParseFilename := srv.filepathHandler.GenHandledCannotParsePath(today, filepath.Base(filename))
+		cannotParseFilename := srv.filepathHandler.GenHandledCannotParsePath(companyType, today, filepath.Base(filename))
 		if err = os.Rename(filename, cannotParseFilename); err != nil {
 			return
 		}
@@ -225,23 +226,23 @@ func (srv *SasService) HandleFailBoxFile(filename string) (err error) {
 	}
 	// move back to OutBox
 	sasFilenameParts.RetryTimes++
-	outBoxPath := srv.filepathHandler.GenOutBoxPath(sasFilenameParts.GenOutBoxFilename("zip"))
+	outBoxPath := srv.filepathHandler.GenOutBoxPath(companyType, sasFilenameParts.GenOutBoxFilename("zip"))
 	if err = os.Rename(filename, outBoxPath); err != nil {
 		return
 	}
 	return
 }
 
-func (srv *SasService) HandleInBoxFile(filename string) (err error) {
+func (srv *SasService) HandleInBoxFile(filename string, companyType string) (err error) {
 	srv.log.Infof("SasService HandleInBoxFile, %s", filename)
 	if strings.HasSuffix(filename, ".tmp") {
 		srv.log.Infof("skip tmp file")
 		return
 	}
 	filenameWithoutParentDir := filepath.Base(filename)
-	filePath := srv.filepathHandler.GenInBoxPath(filenameWithoutParentDir)
+	filePath := srv.filepathHandler.GenInBoxPath(companyType, filenameWithoutParentDir)
 	if strings.HasPrefix(filenameWithoutParentDir, "Successed_") || strings.HasPrefix(filenameWithoutParentDir, "Failed_") {
-		if err = srv.tryToHandleInBoxMessageResponseFile(filenameWithoutParentDir); err != nil {
+		if err = srv.tryToHandleInBoxMessageResponseFile(filenameWithoutParentDir, companyType); err != nil {
 			return
 		}
 	} else {
@@ -302,11 +303,12 @@ func (srv *SasService) HandleInBoxFile(filename string) (err error) {
 
 	// 把这个文件移动到HandledFilesDirName下
 	today := time.Now().Format("2006-01-02")
-	handledFilesParentDirPath := srv.filepathHandler.GenHandledInBoxPath(today)
+	handledFilesParentDirPath := srv.filepathHandler.GenHandledInBoxPath(companyType, today)
 	if err = utils.CreateDirsIfNotExist(handledFilesParentDirPath); err != nil {
 		return
 	}
 	handledFilesPath := srv.filepathHandler.GenHandledInBoxPath(
+		companyType,
 		today,
 		fmt.Sprintf("handled_%s_%s", time.Now().Format("2006-01-02-15-04-05"), filenameWithoutParentDir),
 	)
@@ -318,14 +320,14 @@ func (srv *SasService) HandleInBoxFile(filename string) (err error) {
 }
 
 // 解析InBox里面Successed_或Failed_开头的文件
-func (srv *SasService) tryToHandleInBoxMessageResponseFile(filename string) (err error) {
+func (srv *SasService) tryToHandleInBoxMessageResponseFile(filename string, companyType string) (err error) {
 	var sasFilenameParts sas.FilenameParts
 	if sasFilenameParts, err = sas.ParseSasFilename(filename); err != nil {
 		return
 	}
 
 	// get xml bytes
-	filePath := srv.filepathHandler.GenInBoxPath(filepath.Base(filename))
+	filePath := srv.filepathHandler.GenInBoxPath(companyType, filepath.Base(filename))
 	var xmlBytes []byte
 	if xmlBytes, err = os.ReadFile(filePath); err != nil {
 		return
@@ -337,11 +339,12 @@ func (srv *SasService) tryToHandleInBoxMessageResponseFile(filename string) (err
 		var renameErr error
 		// 如果解析失败，就把文件移动到FailedFilesDirName下
 		today := time.Now().Format("2006-01-02")
-		failedFilesParentDirPath := srv.filepathHandler.GenHandledCannotParsePath(today)
+		failedFilesParentDirPath := srv.filepathHandler.GenHandledCannotParsePath(companyType, today)
 		if renameErr = utils.CreateDirsIfNotExist(failedFilesParentDirPath); renameErr != nil {
 			return renameErr
 		}
 		failedFilesPath := srv.filepathHandler.GenHandledCannotParsePath(
+			companyType,
 			today,
 			fmt.Sprintf("cannot_parse_%s", filename),
 		)

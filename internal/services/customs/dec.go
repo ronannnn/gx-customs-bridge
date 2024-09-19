@@ -21,7 +21,6 @@ import (
 
 type DecService struct {
 	CustomsMessage
-	customsCfg              *internal.CustomsCfg
 	log                     *zap.SugaredLogger
 	filepathHandler         *common.FilepathHandler
 	rmqClient               *rabbitmq.Client
@@ -37,14 +36,16 @@ func ProvideDecService(
 	decXmlService dec.DecXmlService,
 ) *DecService {
 	srv := &DecService{
-		customsCfg:              customsCfg,
+		CustomsMessage: CustomsMessage{
+			customsCfg: customsCfg,
+		},
 		log:                     log,
 		rmqClient:               rmqClient,
 		customsCommonXmlService: customsCommonXmlService,
 		decXmlService:           decXmlService,
 	}
 	srv.CustomsMessage.CustomsMessageHandler = srv
-	srv.filepathHandler = common.NewFilepathHandler(customsCfg.ImpPath, srv.DirName())
+	srv.filepathHandler = common.NewFilepathHandler(customsCfg.IcCardMap, srv.DirName())
 	return srv
 }
 
@@ -52,7 +53,7 @@ func (srv *DecService) DirName() string {
 	return "Deccus001"
 }
 
-func (srv *DecService) GenOutBoxFile(model any, uploadType string /* unused */, operType string) (err error) {
+func (srv *DecService) GenOutBoxFile(model any, uploadType string /* unused */, operType string, companyType string) (err error) {
 	var decModel decmodels.Dec
 	if modelMap, ok := model.(map[string]any); ok {
 		// 先转成json，再转成struct
@@ -69,7 +70,7 @@ func (srv *DecService) GenOutBoxFile(model any, uploadType string /* unused */, 
 	}
 	// generate xml bytes
 	var xmlBytes []byte
-	if xmlBytes, err = srv.decXmlService.GenDecTmpXml(decModel, operType); err != nil {
+	if xmlBytes, err = srv.decXmlService.GenDecTmpXml(decModel, operType, companyType); err != nil {
 		return
 	}
 	// write xml bytes to file
@@ -77,7 +78,7 @@ func (srv *DecService) GenOutBoxFile(model any, uploadType string /* unused */, 
 	if decFilenameParts, err = dec.NewDecFilenameParts(decModel.DecHead.IEFlag, decModel.DecSign.ClientSeqNo); err != nil {
 		return
 	}
-	zipFlePath := srv.filepathHandler.GenOutBoxPath(decFilenameParts.GenOutBoxFilename("zip"))
+	zipFlePath := srv.filepathHandler.GenOutBoxPath(companyType, decFilenameParts.GenOutBoxFilename("zip"))
 	var zipFileBytes []byte
 	if zipFileBytes, err = internal.ZipFile(decFilenameParts.GenOutBoxFilename("xml"), xmlBytes); err != nil {
 		return
@@ -88,12 +89,12 @@ func (srv *DecService) GenOutBoxFile(model any, uploadType string /* unused */, 
 	return
 }
 
-func (srv *DecService) HandleSentBoxFile(filename string) (err error) {
+func (srv *DecService) HandleSentBoxFile(filename string, companyType string) (err error) {
 	srv.log.Infof("DecService HandleSentBoxFile, %s", filename)
 	return
 }
 
-func (srv *DecService) HandleFailBoxFile(filename string) (err error) {
+func (srv *DecService) HandleFailBoxFile(filename string, companyType string) (err error) {
 	srv.log.Infof("DecService HandleFailBoxFile, %s", filename)
 	var decFilenameParts dec.FilenameParts
 	if decFilenameParts, err = dec.ParseDecFilename(filename); err != nil {
@@ -102,11 +103,11 @@ func (srv *DecService) HandleFailBoxFile(filename string) (err error) {
 	if decFilenameParts.RetryTimes >= 3 {
 		srv.log.Errorf("retry times >= 3, move %s to FilesCannotUpload", filename)
 		today := time.Now().Format("2006-01-02")
-		cannotParsePath := srv.filepathHandler.GenHandledCannotParsePath(today)
+		cannotParsePath := srv.filepathHandler.GenHandledCannotParsePath(companyType, today)
 		if err = utils.CreateDirsIfNotExist(cannotParsePath); err != nil {
 			return
 		}
-		cannotParseFilename := srv.filepathHandler.GenHandledCannotParsePath(today, filepath.Base(filename))
+		cannotParseFilename := srv.filepathHandler.GenHandledCannotParsePath(companyType, today, filepath.Base(filename))
 		if err = os.Rename(filename, cannotParseFilename); err != nil {
 			return
 		}
@@ -114,23 +115,23 @@ func (srv *DecService) HandleFailBoxFile(filename string) (err error) {
 	}
 	// move back to OutBox
 	decFilenameParts.RetryTimes++
-	outBoxPath := srv.filepathHandler.GenOutBoxPath(decFilenameParts.GenOutBoxFilename("zip"))
+	outBoxPath := srv.filepathHandler.GenOutBoxPath(companyType, decFilenameParts.GenOutBoxFilename("zip"))
 	if err = os.Rename(filename, outBoxPath); err != nil {
 		return
 	}
 	return
 }
 
-func (srv *DecService) HandleInBoxFile(filename string) (err error) {
+func (srv *DecService) HandleInBoxFile(filename string, companyType string) (err error) {
 	srv.log.Infof("DecService HandleInBoxFile, %s", filename)
 	if strings.HasSuffix(filename, ".tmp") {
 		srv.log.Infof("skip tmp file")
 		return
 	}
 	filenameWithoutParentDir := filepath.Base(filename)
-	filePath := srv.filepathHandler.GenInBoxPath(filenameWithoutParentDir)
+	filePath := srv.filepathHandler.GenInBoxPath(companyType, filenameWithoutParentDir)
 	if strings.HasPrefix(filenameWithoutParentDir, "Successed_") || strings.HasPrefix(filenameWithoutParentDir, "Failed_") {
-		if err = srv.tryToHandleInBoxMessageResponseFile(filenameWithoutParentDir); err != nil {
+		if err = srv.tryToHandleInBoxMessageResponseFile(filenameWithoutParentDir, companyType); err != nil {
 			return
 		}
 	} else {
@@ -163,11 +164,12 @@ func (srv *DecService) HandleInBoxFile(filename string) (err error) {
 
 	// 把这个文件移动到HandledFilesDirName下
 	today := time.Now().Format("2006-01-02")
-	handledFilesParentDirPath := srv.filepathHandler.GenHandledInBoxPath(today)
+	handledFilesParentDirPath := srv.filepathHandler.GenHandledInBoxPath(companyType, today)
 	if err = utils.CreateDirsIfNotExist(handledFilesParentDirPath); err != nil {
 		return
 	}
 	handledFilesPath := srv.filepathHandler.GenHandledInBoxPath(
+		companyType,
 		today,
 		fmt.Sprintf("handled_%s_%s", time.Now().Format("2006-01-02-15-04-05"), filenameWithoutParentDir),
 	)
@@ -189,14 +191,14 @@ func (s *DecService) parseDecResultXml(xmlBytes []byte) (crm decmodels.DecResult
 }
 
 // 解析InBox里面Successed_或Failed_开头的文件
-func (srv *DecService) tryToHandleInBoxMessageResponseFile(filename string) (err error) {
+func (srv *DecService) tryToHandleInBoxMessageResponseFile(filename string, companyType string) (err error) {
 	var decFilenameParts dec.FilenameParts
 	if decFilenameParts, err = dec.ParseDecFilename(filename); err != nil {
 		return
 	}
 
 	// get xml bytes
-	filePath := srv.filepathHandler.GenInBoxPath(filepath.Base(filename))
+	filePath := srv.filepathHandler.GenInBoxPath(companyType, filepath.Base(filename))
 	var xmlBytes []byte
 	if xmlBytes, err = os.ReadFile(filePath); err != nil {
 		return
@@ -208,11 +210,12 @@ func (srv *DecService) tryToHandleInBoxMessageResponseFile(filename string) (err
 		var renameErr error
 		// 如果解析失败，就把文件移动到FailedFilesDirName下
 		today := time.Now().Format("2006-01-02")
-		failedFilesParentDirPath := srv.filepathHandler.GenHandledCannotParsePath(today)
+		failedFilesParentDirPath := srv.filepathHandler.GenHandledCannotParsePath(companyType, today)
 		if renameErr = utils.CreateDirsIfNotExist(failedFilesParentDirPath); renameErr != nil {
 			return renameErr
 		}
 		failedFilesPath := srv.filepathHandler.GenHandledCannotParsePath(
+			companyType,
 			today,
 			fmt.Sprintf("cannot_parse_%s", filename),
 		)

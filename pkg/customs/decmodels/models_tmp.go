@@ -2,30 +2,9 @@ package decmodels
 
 import (
 	"encoding/xml"
-	"fmt"
 
 	"github.com/ronannnn/infra/models"
 )
-
-type DecOperType string
-
-const (
-	DecOprTypeA DecOperType = "A" // 报关单上载
-	DecOprTypeB DecOperType = "B" // 报关单、转关单上载
-	DecOprTypeC DecOperType = "C" // 报关单申报
-	DecOprTypeD DecOperType = "D" // 报关单、转关单申报
-	DecOprTypeE DecOperType = "E" // 电子手册报关单上载
-	DecOprTypeG DecOperType = "G" // 报关单暂存
-)
-
-func CheckIfDecOperTypeValid(operType string) error {
-	switch DecOperType(operType) {
-	case DecOprTypeA, DecOprTypeB, DecOprTypeC, DecOprTypeD, DecOprTypeE, DecOprTypeG:
-		return nil
-	default:
-		return fmt.Errorf("invalid DecOperType: %s, 仅支持ABCDEG", operType)
-	}
-}
 
 type DecHead struct {
 	// 编码

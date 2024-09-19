@@ -28,12 +28,18 @@ const (
 	ConfigReleaseFile = "config.release.toml"
 )
 
-type CustomsCfg struct {
+type CustomsIcCard struct {
+	Name           string `mapstructure:"name"`              // 名称，用于识别
 	ImpPath        string `mapstructure:"imp-path"`          // 海关文件夹目录
-	SysId          string `mapstructure:"sys-id"`            // sysId
 	DclErConc      string `mapstructure:"dcl-er-conc"`       // 申请人，即卡号对应的人
 	IcCardNo       string `mapstructure:"ic-card-no"`        // 操作卡号
 	OperCusRegCode string `mapstructure:"oper-cus-reg-code"` // 操作卡的海关十位
+}
+
+type CustomsCfg struct {
+	SysId     string          `mapstructure:"sys-id"` // sysId
+	IcCards   []CustomsIcCard `mapstructure:"ic-cards"`
+	IcCardMap map[string]*CustomsIcCard
 }
 
 type Cfg struct {
@@ -106,6 +112,13 @@ func NewCfg(configFilePath string) (configs *Cfg, err error) {
 	// reset time zone
 	time.Local = time.FixedZone("utc", 0)
 	configs = &Cfg{}
-	err = cfg.ReadFromFile(configFilePath, configs)
+	if err = cfg.ReadFromFile(configFilePath, configs); err != nil {
+		return
+	}
+	// 额外设置部分字段
+	configs.Customs.IcCardMap = make(map[string]*CustomsIcCard)
+	for _, icCard := range configs.Customs.IcCards {
+		configs.Customs.IcCardMap[icCard.Name] = &icCard
+	}
 	return
 }
