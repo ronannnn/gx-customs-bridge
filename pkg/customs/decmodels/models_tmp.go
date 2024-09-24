@@ -28,11 +28,11 @@ type DecHead struct {
 	TradeMode     *string `json:"tradeMode" validate:"required,len=4,numeric"`    // 监管方式
 	TrafMode      *string `json:"trafMode" validate:"required,len=1,numeric"`     // 运输方式
 	TrafName      *string `json:"trafName" validate:"required"`                   // 运输工具名称
-	TradeAreaCode *string `json:"tradeAreaCode" validate:"required,len=3,alpha"`  // 贸易国别代码
+	TradeAreaCode *string `json:"tradeAreaCode" validate:"omitempty,len=3,alpha"` // 贸易国别代码
 
 	DeclTrnRel   *string `json:"declTrnRel" validate:"required,oneof=0 1"`      // 报关/转关关系标志(0：一般报关单 1：转关提前报关单)
 	EntryType    *string `json:"entryType" validate:"required,oneof=0 L W D M"` // 报关单类型(0普通报关单，L为带报关单清单的报关单，W无纸报关类型，D既是清单又是无纸报关的情况，M：无纸化通关)
-	PromiseItmes *string `json:"promiseItmes" validate:"required"`              // 价格说明
+	PromiseItmes *string `json:"promiseItmes" validate:"omitempty"`             // 价格说明
 
 	GrossWet *models.DecimalSafe `json:"grossWet" validate:"required,d_gt=0"` // 毛重
 
