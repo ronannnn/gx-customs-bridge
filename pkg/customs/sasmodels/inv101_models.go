@@ -78,7 +78,7 @@ type Inv101Head struct {
 	EntryStucd        *string `json:"entryStucd"`                                 // 报关状态(0：未放行，1：已放行) 该类型清单满足两个条件才能核扣：报关单被放行+货物全部过卡
 
 	// 对应报关相关
-	EntryNo *string `json:"entryNo" validate:"required_if=DclcusTypecd 2"` // 对应报关单编号
+	EntryNo *string `json:"entryNo"` // 对应报关单编号
 	// 对应报关单申报单位
 	CorrEntryDclEtpsSccd *string `json:"corrEntryDclEtpsSccd" validate:"required_if=DclcusTypecd 2,omitempty,len=18"`  // 社会信用代码
 	CorrEntryDclEtpsNo   *string `json:"corrEntryDclEtpsNo" validate:"required_if=DclcusTypecd 2,omitempty,len=10"`    // 编号
