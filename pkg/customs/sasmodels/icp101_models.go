@@ -36,6 +36,10 @@ type Icp101Head struct {
 	// 集装箱信息
 	ContainerNo *string `json:"containerNo"` // 集装箱号
 
+	// 卡口信息
+	PassTime     *string `json:"passTime"`     // 过卡时间1(过卡时间，卡口抬杆后系统自动返填。双卡模式，为过一卡时间)
+	SecdPassTime *string `json:"secdPassTime"` // 过卡时间2(过二卡时间，卡口抬杆后系统自动返填。双卡模式专用)
+
 	// 其他
 	DclErConc *string `json:"dclErConc"` // 申请人及联系方式
 	Rmk       *string `json:"rmk"`       // 备注
