@@ -70,12 +70,12 @@ type Inv101Head struct {
 	StshipTrsarvNatcd *string `json:"stshipTrsarvNatcd" validate:"required,len=3,numeric"` // 起运/运抵国(地区)
 
 	// 报关相关
-	DclcusFlag        *string `json:"dclcusFlag" validate:"required,oneof=1 2"`   // 是否报关标志(1-报关 2-非报关)
-	GenDecFlag        *string `json:"genDecFlag" validate:"required,oneof=1 2"`   // 是否生成报关单:1-生成 2-不生成
-	DecType           *string `json:"decType" validate:"required"`                // 报关单类型
-	DclcusTypecd      *string `json:"dclcusTypecd" validate:"required,oneof=1 2"` // 报关类型代码(1-关联报关 2-对应报关)
-	NeedEntryModified *string `json:"needEntryModified"`                          // 报关单同步修改标志
-	EntryStucd        *string `json:"entryStucd"`                                 // 报关状态(0：未放行，1：已放行) 该类型清单满足两个条件才能核扣：报关单被放行+货物全部过卡
+	DclcusFlag        *string `json:"dclcusFlag" validate:"required,oneof=1 2"`                   // 是否报关标志(1-报关 2-非报关)
+	GenDecFlag        *string `json:"genDecFlag" validate:"required,oneof=1 2"`                   // 是否生成报关单:1-生成 2-不生成
+	DecType           *string `json:"decType" validate:"required_if=GenDecFlag 1"`                // 报关单类型
+	DclcusTypecd      *string `json:"dclcusTypecd" validate:"required_if=DclcusFlag 1,oneof=1 2"` // 报关类型代码(1-关联报关 2-对应报关)
+	NeedEntryModified *string `json:"needEntryModified"`                                          // 报关单同步修改标志
+	EntryStucd        *string `json:"entryStucd"`                                                 // 报关状态(0：未放行，1：已放行) 该类型清单满足两个条件才能核扣：报关单被放行+货物全部过卡
 
 	// 对应报关相关
 	EntryNo *string `json:"entryNo"` // 对应报关单编号
