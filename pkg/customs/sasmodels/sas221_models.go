@@ -99,6 +99,7 @@ type Sas221Acmp struct {
 }
 
 type Sas221 struct {
+	commonmodels.MqDataCommonPayload
 	HdeApprResult commonmodels.HdeApprResult `json:"hdeApprResult"`
 	CheckInfo     commonmodels.CheckInfo     `json:"checkInfo"`
 	Head          Sas221Head                 `json:"head"`

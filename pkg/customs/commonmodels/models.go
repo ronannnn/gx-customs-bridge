@@ -50,3 +50,8 @@ type CheckInfo struct {
 	XMLName xml.Name `xml:"CheckInfo"`
 	Note    string   `json:"note" xml:"note"` // 检查信息
 }
+
+// 推送到mq数据的公共头
+type MqDataCommonPayload struct {
+	Tried uint `json:"tried"` // 重试次数
+}

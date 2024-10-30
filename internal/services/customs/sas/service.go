@@ -134,6 +134,7 @@ func (s *SasXmlServiceImpl) ParseInv201Xml(xmlBytes []byte) (inv201 sasmodels.In
 		return
 	}
 
+	inv201.Tried = 1
 	inv201.HdeApprResult = inv201Xml.DataInfo.BusinessData.Inv201.HdeApprResult
 	inv201.CheckInfo = inv201Xml.DataInfo.BusinessData.Inv201.CheckInfo
 	inv201.Head = inv201Xml.DataInfo.BusinessData.Inv201.BondInvtBsc
@@ -146,6 +147,7 @@ func (s *SasXmlServiceImpl) ParseInv202Xml(xmlBytes []byte) (inv202 sasmodels.In
 	if err = xml.Unmarshal(xmlBytes, &inv202Xml); err != nil {
 		return
 	}
+	inv202.Tried = 1
 	inv202.InvApprResult = inv202Xml.DataInfo.BusinessData.Inv202.InvApprResult
 	return
 }
@@ -155,6 +157,7 @@ func (s *SasXmlServiceImpl) ParseInv211Xml(xmlBytes []byte) (inv211 sasmodels.In
 	if err = xml.Unmarshal(xmlBytes, &inv211Xml); err != nil {
 		return
 	}
+	inv211.Tried = 1
 	inv211.Head = inv211Xml.DataInfo.BusinessData.Inv211.BondInvtBsc
 	inv211.List = inv211Xml.DataInfo.BusinessData.Inv211.BwsDt
 	return
@@ -165,6 +168,7 @@ func (s *SasXmlServiceImpl) ParseSas221Xml(xmlBytes []byte) (sas221 sasmodels.Sa
 	if err = xml.Unmarshal(xmlBytes, &sas221Xml); err != nil {
 		return
 	}
+	sas221.Tried = 1
 	sas221.HdeApprResult = sas221Xml.DataInfo.BusinessData.Sas221.HdeApprResult
 	sas221.CheckInfo = sas221Xml.DataInfo.BusinessData.Sas221.CheckInfo
 	sas221.Head = sas221Xml.DataInfo.BusinessData.Sas221.SasPassportBsc
@@ -188,6 +192,7 @@ func (s *SasXmlServiceImpl) ParseSas224Xml(xmlBytes []byte) (sas224 sasmodels.Sa
 	if err = xml.Unmarshal(xmlBytes, &sas224Xml); err != nil {
 		return
 	}
+	sas224.Tried = 1
 	sas224.HdeApprResult = sas224Xml.DataInfo.BusinessData.Sas224.HdeApprResult
 	sas224.Head = sas224Xml.DataInfo.BusinessData.Sas224.SasPassportBsc
 	return
@@ -198,6 +203,7 @@ func (s *SasXmlServiceImpl) ParseSas251Xml(xmlBytes []byte) (sas251 sasmodels.Sa
 	if err = xml.Unmarshal(xmlBytes, &sas251Xml); err != nil {
 		return
 	}
+	sas251.Tried = 1
 	sas251.HdeApprResult = sas251Xml.DataInfo.BusinessData.Sas251.HdeApprResult
 	sas251.Head = sas251Xml.DataInfo.BusinessData.Sas251.Sas2stepPassportBsc
 	sas251.RltList = sas251Xml.DataInfo.BusinessData.Sas251.Sas2stepPassportRlt
@@ -209,6 +215,7 @@ func (s *SasXmlServiceImpl) ParseSas253Xml(xmlBytes []byte) (sas253 sasmodels.Sa
 	if err = xml.Unmarshal(xmlBytes, &sas253Xml); err != nil {
 		return
 	}
+	sas253.Tried = 1
 	sas253.HdeApprResult = sas253Xml.DataInfo.BusinessData.Sas253.HdeApprResult
 	sas253.Head = sas253Xml.DataInfo.BusinessData.Sas253.Sas2stepPassportBsc
 	return

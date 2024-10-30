@@ -16,6 +16,7 @@ type InvApprResult struct {
 }
 
 type Inv202 struct {
+	commonmodels.MqDataCommonPayload
 	InvApprResult InvApprResult `json:"invApprResult"`
 }
 

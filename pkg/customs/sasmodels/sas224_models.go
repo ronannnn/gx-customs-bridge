@@ -7,6 +7,7 @@ import (
 )
 
 type Sas224 struct {
+	commonmodels.MqDataCommonPayload
 	HdeApprResult commonmodels.HdeApprResult `json:"hdeApprResult"`
 	// 和SAS221共用Head
 	Head Sas221Head `json:"head"`

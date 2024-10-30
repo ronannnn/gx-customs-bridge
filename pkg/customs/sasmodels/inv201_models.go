@@ -143,6 +143,7 @@ type Inv201List struct {
 }
 
 type Inv201 struct {
+	commonmodels.MqDataCommonPayload
 	HdeApprResult commonmodels.HdeApprResult `json:"hdeApprResult"`
 	CheckInfo     commonmodels.CheckInfo     `json:"checkInfo"`
 	Head          Inv201Head                 `json:"head"`

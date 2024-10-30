@@ -132,6 +132,7 @@ type Inv211List struct {
 }
 
 type Inv211 struct {
+	commonmodels.MqDataCommonPayload
 	Head Inv211Head   `json:"head"`
 	List []Inv211List `json:"list"`
 }

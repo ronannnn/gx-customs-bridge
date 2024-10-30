@@ -54,6 +54,7 @@ type Sas251RltList struct {
 }
 
 type Sas251 struct {
+	commonmodels.MqDataCommonPayload
 	HdeApprResult commonmodels.HdeApprResult `json:"hdeApprResult"`
 	Head          Sas251Head                 `json:"head"`
 	RltList       []Sas251RltList            `json:"rltList"`
