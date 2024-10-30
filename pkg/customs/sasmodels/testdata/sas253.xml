@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Package>
+  <EnvelopInfo>
+    <version>1.0</version>
+    <message_id>CUS0000E0100002024103015410200925274105</message_id>
+    <file_name>CUS0000E0100002024103015410200925274105.SAS</file_name>
+    <message_type>SAS253</message_type>
+    <sender_id>CUS0000</sender_id>
+    <receiver_id>E010000</receiver_id>
+    <send_time>2024-10-30T15:41:02</send_time>
+  </EnvelopInfo>
+  <DataInfo>
+    <PocketInfo>
+      <pocket_id>Z3105I241030T00000000075-22938b1a73294b20b7093246ae6d27e2</pocket_id>
+      <total_pocket_qty>1</total_pocket_qty>
+      <cur_pocket_no>1</cur_pocket_no>
+      <is_unstructured></is_unstructured>
+    </PocketInfo>
+    <BussinessData>
+      <SAS253>
+        <HdeApprResult>
+          <etpsPreentNo>202400000001115914</etpsPreentNo>
+          <businessId>Z3105I241030T00000000075</businessId>
+          <tmsCnt>0</tmsCnt>
+          <typecd></typecd>
+          <manageResult>1</manageResult>
+          <manageDate>2024-10-30 15:41:01</manageDate>
+          <rmk></rmk>
+        </HdeApprResult>
+        <Sas2stepPassportBsc>
+          <passportNo>Z3105I241030T00000000075</passportNo>
+          <sasPassportPreentNo>202400000001115914</sasPassportPreentNo>
+          <chgTmsCnt>0</chgTmsCnt>
+          <dclTypecd>1</dclTypecd>
+          <masterCuscd>3105</masterCuscd>
+          <areainEtpsno>3302410451</areainEtpsno>
+          <areainEtpsNm>宁波保税区高新货柜有限公司</areainEtpsNm>
+          <areainEtpsSccd>91330201256435120G</areainEtpsSccd>
+          <vehicleNo>浙B2P703</vehicleNo>
+          <vehicleIcNo></vehicleIcNo>
+          <containerNo></containerNo>
+          <dclErConc>叶雨</dclErConc>
+          <dclTime>2024-10-30 15:11:47</dclTime>
+          <logisticsStucd>1</logisticsStucd>
+          <passId>NB</passId>
+          <secdPassId></secdPassId>
+          <passTime>2024-10-30 15:40:55</passTime>
+          <secdPassTime></secdPassTime>
+          <stucd>2</stucd>
+          <emapvMarkcd>1</emapvMarkcd>
+          <rmk></rmk>
+          <ownerSystem>1</ownerSystem>
+          <col1></col1>
+          <col2></col2>
+          <col3></col3>
+          <col4>0</col4>
+        </Sas2stepPassportBsc>
+      </SAS253>
+    </BussinessData>
+  </DataInfo>
+</Package>
