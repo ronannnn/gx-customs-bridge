@@ -51,7 +51,13 @@ type CheckInfo struct {
 	Note    string   `json:"note" xml:"note"` // 检查信息
 }
 
-// 推送到mq数据的公共头
+// 推送到mq数据的公共头和接口
+
+type MqDataCommonInterface interface {
+	TryAgain()
+	CurrentTried() uint
+}
+
 type MqDataCommonPayload struct {
 	Tried uint `json:"tried"` // 重试次数
 }
@@ -60,6 +66,6 @@ func (m *MqDataCommonPayload) TryAgain() {
 	m.Tried++
 }
 
-type MqDataCommonInterface interface {
-	TryAgain()
+func (m *MqDataCommonPayload) CurrentTried() uint {
+	return m.Tried
 }
