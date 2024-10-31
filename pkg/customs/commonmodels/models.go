@@ -55,3 +55,11 @@ type CheckInfo struct {
 type MqDataCommonPayload struct {
 	Tried uint `json:"tried"` // 重试次数
 }
+
+func (m *MqDataCommonPayload) TryAgain() {
+	m.Tried++
+}
+
+type MqDataCommonInterface interface {
+	TryAgain()
+}
