@@ -14,8 +14,9 @@ import (
 	"github.com/ronannnn/gx-customs-bridge/internal/services/customs/dec"
 	"github.com/ronannnn/gx-customs-bridge/pkg/customs/commonmodels"
 	"github.com/ronannnn/gx-customs-bridge/pkg/customs/decmodels"
+	"github.com/ronannnn/gx-customs-bridge/pkg/utils"
 	"github.com/ronannnn/infra/mq/rabbitmq"
-	"github.com/ronannnn/infra/utils"
+	infraUtils "github.com/ronannnn/infra/utils"
 	"go.uber.org/zap"
 )
 
@@ -104,7 +105,7 @@ func (srv *DecService) HandleFailBoxFile(filename string, companyType string) (e
 		srv.log.Errorf("retry times >= 3, move %s to FilesCannotUpload", filename)
 		today := time.Now().Format("2006-01-02")
 		cannotParsePath := srv.filepathHandler.GenHandledCannotParsePath(companyType, today)
-		if err = utils.CreateDirsIfNotExist(cannotParsePath); err != nil {
+		if err = infraUtils.CreateDirsIfNotExist(cannotParsePath); err != nil {
 			return
 		}
 		cannotParseFilename := srv.filepathHandler.GenHandledCannotParsePath(companyType, today, filepath.Base(filename))
@@ -165,7 +166,7 @@ func (srv *DecService) HandleInBoxFile(filename string, companyType string) (err
 	// 把这个文件移动到HandledFilesDirName下
 	today := time.Now().Format("2006-01-02")
 	handledFilesParentDirPath := srv.filepathHandler.GenHandledInBoxPath(companyType, today)
-	if err = utils.CreateDirsIfNotExist(handledFilesParentDirPath); err != nil {
+	if err = infraUtils.CreateDirsIfNotExist(handledFilesParentDirPath); err != nil {
 		return
 	}
 	handledFilesPath := srv.filepathHandler.GenHandledInBoxPath(
@@ -211,7 +212,7 @@ func (srv *DecService) tryToHandleInBoxMessageResponseFile(filename string, comp
 		// 如果解析失败，就把文件移动到FailedFilesDirName下
 		today := time.Now().Format("2006-01-02")
 		failedFilesParentDirPath := srv.filepathHandler.GenHandledCannotParsePath(companyType, today)
-		if renameErr = utils.CreateDirsIfNotExist(failedFilesParentDirPath); renameErr != nil {
+		if renameErr = infraUtils.CreateDirsIfNotExist(failedFilesParentDirPath); renameErr != nil {
 			return renameErr
 		}
 		failedFilesPath := srv.filepathHandler.GenHandledCannotParsePath(
@@ -229,6 +230,7 @@ func (srv *DecService) tryToHandleInBoxMessageResponseFile(filename string, comp
 	// convert data to json bytes
 	mrr := decmodels.MessageResponseResult{
 		ImpexpMarkcd:      string(decFilenameParts.ImpexpMarkcd),
+		BizTime:           utils.ParseClientGeneratedTime(decFilenameParts.Timestamp),
 		DecImportResponse: decImpResp,
 	}
 	// convert data to json bytes

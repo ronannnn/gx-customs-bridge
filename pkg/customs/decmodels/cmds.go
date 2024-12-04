@@ -1,6 +1,10 @@
 package decmodels
 
-import "github.com/ronannnn/gx-customs-bridge/pkg/customs/commonmodels"
+import (
+	"time"
+
+	"github.com/ronannnn/gx-customs-bridge/pkg/customs/commonmodels"
+)
 
 type DecOperType string
 
@@ -21,5 +25,6 @@ type MessageRequestPayload struct {
 
 type MessageResponseResult struct {
 	ImpexpMarkcd      string            `json:"impexpMarkcd"`
+	BizTime           time.Time         `json:"bizTime"`
 	DecImportResponse DecImportResponse `json:"decImportResponse"`
 }
