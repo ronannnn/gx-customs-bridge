@@ -13,8 +13,9 @@ import (
 	"github.com/ronannnn/gx-customs-bridge/internal/services/customs/sas"
 	"github.com/ronannnn/gx-customs-bridge/pkg/customs/commonmodels"
 	"github.com/ronannnn/gx-customs-bridge/pkg/customs/sasmodels"
+	"github.com/ronannnn/gx-customs-bridge/pkg/utils"
 	"github.com/ronannnn/infra/mq/rabbitmq"
-	"github.com/ronannnn/infra/utils"
+	infraUtils "github.com/ronannnn/infra/utils"
 	"go.uber.org/zap"
 )
 
@@ -215,7 +216,7 @@ func (srv *SasService) HandleFailBoxFile(filename string, companyType string) (e
 		srv.log.Errorf("retry times >= 3, move %s to FilesCannotUpload", filename)
 		today := time.Now().Format("2006-01-02")
 		cannotParsePath := srv.filepathHandler.GenHandledCannotParsePath(companyType, today)
-		if err = utils.CreateDirsIfNotExist(cannotParsePath); err != nil {
+		if err = infraUtils.CreateDirsIfNotExist(cannotParsePath); err != nil {
 			return
 		}
 		cannotParseFilename := srv.filepathHandler.GenHandledCannotParsePath(companyType, today, filepath.Base(filename))
@@ -304,7 +305,7 @@ func (srv *SasService) HandleInBoxFile(filename string, companyType string) (err
 	// 把这个文件移动到HandledFilesDirName下
 	today := time.Now().Format("2006-01-02")
 	handledFilesParentDirPath := srv.filepathHandler.GenHandledInBoxPath(companyType, today)
-	if err = utils.CreateDirsIfNotExist(handledFilesParentDirPath); err != nil {
+	if err = infraUtils.CreateDirsIfNotExist(handledFilesParentDirPath); err != nil {
 		return
 	}
 	handledFilesPath := srv.filepathHandler.GenHandledInBoxPath(
@@ -340,7 +341,7 @@ func (srv *SasService) tryToHandleInBoxMessageResponseFile(filename string, comp
 		// 如果解析失败，就把文件移动到FailedFilesDirName下
 		today := time.Now().Format("2006-01-02")
 		failedFilesParentDirPath := srv.filepathHandler.GenHandledCannotParsePath(companyType, today)
-		if renameErr = utils.CreateDirsIfNotExist(failedFilesParentDirPath); renameErr != nil {
+		if renameErr = infraUtils.CreateDirsIfNotExist(failedFilesParentDirPath); renameErr != nil {
 			return renameErr
 		}
 		failedFilesPath := srv.filepathHandler.GenHandledCannotParsePath(
@@ -359,6 +360,7 @@ func (srv *SasService) tryToHandleInBoxMessageResponseFile(filename string, comp
 	mrr := commonmodels.MessageResponseResult{
 		ImpexpMarkcd:         string(sasFilenameParts.ImpexpMarkcd),
 		UploadType:           string(sasFilenameParts.UploadType),
+		BizTime:              utils.ParseClientGeneratedTime(sasFilenameParts.Timestamp),
 		CommonResponeMessage: crm,
 	}
 	// convert data to json bytes

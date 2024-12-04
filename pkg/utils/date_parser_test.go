@@ -8,14 +8,26 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestCorrectParseHdeDate(t *testing.T) {
+func TestCorrectParseHdeTime(t *testing.T) {
 	testDate := "2000-08-01 14:53:02"
-	date := utils.ParseHdeApprResultDate(testDate)
-	require.Equal(t, 2000, date.Year())
+	parsedTime := utils.ParseHdeApprResultTime(testDate)
+	require.Equal(t, 2000, parsedTime.Year())
 }
 
-func TestWrongParseHdeDate(t *testing.T) {
+func TestWrongParseHdeTime(t *testing.T) {
 	testDate := "2000-08-01-14:53:02"
-	date := utils.ParseHdeApprResultDate(testDate)
-	require.Equal(t, time.Now().Year(), date.Year())
+	parsedTime := utils.ParseHdeApprResultTime(testDate)
+	require.Equal(t, time.Now().Year(), parsedTime.Year())
+}
+
+func TestCorrectParseClientGeneratedTime(t *testing.T) {
+	testDate := "2000101908250905786339"
+	parsedTime := utils.ParseClientGeneratedTime(testDate)
+	require.Equal(t, 2000, parsedTime.Year())
+}
+
+func TestWrongParseClientGeneratedTime(t *testing.T) {
+	testDate := "20001019082"
+	parsedTime := utils.ParseClientGeneratedTime(testDate)
+	require.Equal(t, time.Now().Year(), parsedTime.Year())
 }

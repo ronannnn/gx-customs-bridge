@@ -1,5 +1,7 @@
 package commonmodels
 
+import "time"
+
 type CompanyType string
 
 const (
@@ -18,6 +20,7 @@ type MessageRequestPayload struct {
 type MessageResponseResult struct {
 	ImpexpMarkcd         string               `json:"impexpMarkcd"`
 	UploadType           string               `json:"uploadType"`
+	BizTime              time.Time            `json:"bizTime"`
 	CommonResponeMessage CommonResponeMessage `json:"commonResponeMessage"`
 }
 
