@@ -6,8 +6,8 @@ fi
 
 # build server (golang)
 server_image="registry.cn-hangzhou.aliyuncs.com/gx-logistics/gx-customs-bridge:${image_tag}"
-docker build -t "${server_image}" -f Dockerfile.server .
-# docker buildx build --platform linux/arm64 -t "${server_image}" -f Dockerfile-go -o type=docker .
+# docker build -t "${server_image}" -f Dockerfile.server .
+docker buildx build --platform linux/amd64 -t "${server_image}" -f Dockerfile.server -o type=docker .
 
 docker image prune -f
 echo "docker push $server_image"
