@@ -8,30 +8,30 @@ import (
 
 type Icp101Head struct {
 	// 编号
-	SasPassportPreentNo *string `json:"sasPassportPreentNo" validate:"omitempty,len=18"`               // 核放单预录入统一编号
-	PassportNo          *string `json:"passportNo" validate:"omitempty,len=24"`                        // 核放单编号
-	EtpsPreentNo        *string `json:"etpsPreentNo" validate:"required,not_blank" gorm:"uniqueIndex"` // 企业内部编号
+	SasPassportPreentNo *string `json:"sasPassportPreentNo" validate:"omitempty,len=18"`                          // 核放单预录入统一编号
+	PassportNo          *string `json:"passportNo" validate:"omitempty,len=24"`                                   // 核放单编号
+	EtpsPreentNo        *string `json:"etpsPreentNo" validate:"required,not_blank" gorm:"uniqueIndex" mod:"trim"` // 企业内部编号
 
 	// 代码
 	DclTypecd   *string `json:"dclTypecd" validate:"required,oneof=1 2 3"`     // 申报类型(1-备案、2-变更、3-作废。目前核放单只允许备案--1)
 	MasterCuscd *string `json:"masterCuscd" validate:"required,len=4,numeric"` // 主管关区代码
 
 	// 区内企业
-	AreainEtpsSccd *string `json:"areainEtpsSccd" validate:"required,len=18"`  // 社会信用代码
-	AreainEtpsNo   *string `json:"areainEtpsNo" validate:"required,len=10"`    // 编号
-	AreainEtpsNm   *string `json:"areainEtpsNm" validate:"required,not_blank"` // 名称
+	AreainEtpsSccd *string `json:"areainEtpsSccd" validate:"required,len=18"`             // 社会信用代码
+	AreainEtpsNo   *string `json:"areainEtpsNo" validate:"required,len=10"`               // 编号
+	AreainEtpsNm   *string `json:"areainEtpsNm" validate:"required,not_blank" mod:"trim"` // 名称
 	// 申报企业
-	DclEtpsSccd *string `json:"dclEtpsSccd" validate:"required,len=18"`  // 社会信用代码
-	DclEtpsNo   *string `json:"dclEtpsNo" validate:"required,len=10"`    // 编号
-	DclEtpsNm   *string `json:"dclEtpsNm" validate:"required,not_blank"` // 名称
+	DclEtpsSccd *string `json:"dclEtpsSccd" validate:"required,len=18"`             // 社会信用代码
+	DclEtpsNo   *string `json:"dclEtpsNo" validate:"required,len=10"`               // 编号
+	DclEtpsNm   *string `json:"dclEtpsNm" validate:"required,not_blank" mod:"trim"` // 名称
 	// 录入单位
-	InputCreditCode *string `json:"inputCreditCode" validate:"required,len=18"` // 社会信用代码
-	InputCode       *string `json:"inputCode" validate:"required,len=10"`       // 代码
-	InputName       *string `json:"inputName" validate:"required,not_blank"`    // 名称
+	InputCreditCode *string `json:"inputCreditCode" validate:"required,len=18"`         // 社会信用代码
+	InputCode       *string `json:"inputCode" validate:"required,len=10"`               // 代码
+	InputName       *string `json:"inputName" validate:"required,not_blank" mod:"trim"` // 名称
 
 	// 车辆信息
-	VehicleNo   *string `json:"vehicleNo" validate:"required"` // 承运车牌号
-	VehicleIcNo *string `json:"vehicleIcNo"`                   // IC卡号(电子车牌)
+	VehicleNo   *string `json:"vehicleNo" validate:"required" mod:"trim"` // 承运车牌号
+	VehicleIcNo *string `json:"vehicleIcNo"`                              // IC卡号(电子车牌)
 
 	// 集装箱信息
 	ContainerNo *string `json:"containerNo"` // 集装箱号

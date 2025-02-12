@@ -9,13 +9,13 @@ import (
 
 type Sas121Head struct {
 	// 编号
-	SeqNo        *string `json:"seqNo" validate:"omitempty,len=18"`                             // 预录入统一编号
-	PassportNo   *string `json:"passportNo" validate:"omitempty,len=24"`                        // 核放单编号
-	EtpsPreentNo *string `json:"etpsPreentNo" validate:"required,not_blank" gorm:"uniqueIndex"` // 企业内部编号
+	SeqNo        *string `json:"seqNo" validate:"omitempty,len=18"`                                        // 预录入统一编号
+	PassportNo   *string `json:"passportNo" validate:"omitempty,len=24"`                                   // 核放单编号
+	EtpsPreentNo *string `json:"etpsPreentNo" validate:"required,not_blank" gorm:"uniqueIndex" mod:"trim"` // 企业内部编号
 
 	// 关联信息
 	RltTbTypecd *string `json:"rltTbTypecd" validate:"required,oneof=1 2 3"` // 关联单证类型代码(1-核注清单 2-出入库单 3-提运单)
-	RltNo       *string `json:"rltNo" validate:"required"`                   // 关联单证编号
+	RltNo       *string `json:"rltNo" validate:"required" mod:"trim"`        // 关联单证编号
 
 	// 代码
 	DclTypecd      *string `json:"dclTypecd" validate:"required,oneof=1 3"`              // 申报类型代码(1-备案 3-作废)
@@ -25,22 +25,22 @@ type Sas121Head struct {
 	MasterCuscd    *string `json:"masterCuscd" validate:"required,len=4,numeric"`        // 主管关区代码
 
 	// 区内信息
-	AreainOriactNo *string `json:"areainOriactNo"` // 区内账册号
+	AreainOriactNo *string `json:"areainOriactNo" mod:"trim"` // 区内账册号
 	// 区内企业
-	AreainEtpsSccd *string `json:"areainEtpsSccd" validate:"required,len=18"`  // 区内企业社会信用代码
-	AreainEtpsno   *string `json:"areainEtpsno" validate:"required,len=10"`    // 区内企业编号
-	AreainEtpsNm   *string `json:"areainEtpsNm" validate:"required,not_blank"` // 区内企业名称
+	AreainEtpsSccd *string `json:"areainEtpsSccd" validate:"required,len=18"`             // 区内企业社会信用代码
+	AreainEtpsno   *string `json:"areainEtpsno" validate:"required,len=10"`               // 区内企业编号
+	AreainEtpsNm   *string `json:"areainEtpsNm" validate:"required,not_blank" mod:"trim"` // 区内企业名称
 	// 申报企业
-	DclEtpsSccd *string `json:"dclEtpsSccd" validate:"required,len=18"`  // 申报企业社会信用代码
-	DclEtpsno   *string `json:"dclEtpsno" validate:"required,len=10"`    // 申报企业编号
-	DclEtpsNm   *string `json:"dclEtpsNm" validate:"required,not_blank"` // 申报企业名称
+	DclEtpsSccd *string `json:"dclEtpsSccd" validate:"required,len=18"`             // 申报企业社会信用代码
+	DclEtpsno   *string `json:"dclEtpsno" validate:"required,len=10"`               // 申报企业编号
+	DclEtpsNm   *string `json:"dclEtpsNm" validate:"required,not_blank" mod:"trim"` // 申报企业名称
 	// 录入单位
-	InputSccd *string `json:"inputSccd" validate:"required,len=18"`    // 录入单位社会信用代码
-	InputCode *string `json:"inputCode" validate:"required,len=10"`    // 录入单位编号
-	InputName *string `json:"inputName" validate:"required,not_blank"` // 录入单位名称
+	InputSccd *string `json:"inputSccd" validate:"required,len=18"`               // 录入单位社会信用代码
+	InputCode *string `json:"inputCode" validate:"required,len=10"`               // 录入单位编号
+	InputName *string `json:"inputName" validate:"required,not_blank" mod:"trim"` // 录入单位名称
 
 	// 车辆信息
-	VehicleNo      *string             `json:"vehicleNo" validate:"required"`             // 承运车牌号
+	VehicleNo      *string             `json:"vehicleNo" validate:"required" mod:"trim"`  // 承运车牌号
 	VehicleIcNo    *string             `json:"vehicleIcNo"`                               // IC卡号(电子车牌）
 	VehicleWt      *models.DecimalSafe `json:"vehicleWt" validate:"required,d_gt=0"`      // 车自重
 	VehicleFrameWt *models.DecimalSafe `json:"vehicleFrameWt" validate:"required,d_gt=0"` // 车架重
@@ -83,9 +83,9 @@ type Sas121List struct {
 	RltGdsSeqno   *string `json:"rltGdsSeqno" validate:"required,numeric"`   // 关联商品序号
 
 	// 商品信息
-	GdsMtno   *string             `json:"gdsMtno" validate:"required"`                 // 商品料号
+	GdsMtno   *string             `json:"gdsMtno" validate:"required" mod:"trim"`      // 商品料号
 	Gdecd     *string             `json:"gdecd" validate:"required,numeric"`           // 商品编码
-	GdsNm     *string             `json:"gdsNm" validate:"required"`                   // 商品名称
+	GdsNm     *string             `json:"gdsNm" validate:"required" mod:"trim"`        // 商品名称
 	DclUnitcd *string             `json:"dclUnitcd" validate:"required,len=3,numeric"` // 申报计量单位代码
 	DclQty    *models.DecimalSafe `json:"dclQty" validate:"required,d_gt=0"`           // 申报数量
 	GrossWt   *models.DecimalSafe `json:"grossWt" validate:"required,d_gt=0"`          // 毛重
