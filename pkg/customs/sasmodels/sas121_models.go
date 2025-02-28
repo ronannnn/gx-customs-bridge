@@ -40,11 +40,11 @@ type Sas121Head struct {
 	InputName *string `json:"inputName" validate:"required,not_blank" mod:"trim"` // 录入单位名称
 
 	// 车辆信息
-	VehicleNo      *string             `json:"vehicleNo" validate:"required" mod:"trim"`  // 承运车牌号
-	VehicleIcNo    *string             `json:"vehicleIcNo"`                               // IC卡号(电子车牌）
-	VehicleWt      *models.DecimalSafe `json:"vehicleWt" validate:"required,d_gt=0"`      // 车自重
-	VehicleFrameWt *models.DecimalSafe `json:"vehicleFrameWt" validate:"required,d_gt=0"` // 车架重
-	VehicleFrameNo *string             `json:"vehicleFrameNo"`                            // 车架号
+	VehicleNo      *string             `json:"vehicleNo" validate:"required" mod:"trim"` // 承运车牌号
+	VehicleIcNo    *string             `json:"vehicleIcNo"`                              // IC卡号(电子车牌）
+	VehicleWt      *models.DecimalSafe `json:"vehicleWt" validate:"required,d_gt=0"`     // 车自重
+	VehicleFrameWt *models.DecimalSafe `json:"vehicleFrameWt"`                           // 车架重
+	VehicleFrameNo *string             `json:"vehicleFrameNo"`                           // 车架号
 
 	// 集装箱信息
 	ContainerNo   *string `json:"containerNo"`   // 集装箱号
