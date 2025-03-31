@@ -4,6 +4,7 @@ import (
 	"encoding/xml"
 
 	"github.com/ronannnn/gx-customs-bridge/pkg/customs/commonmodels"
+	"github.com/ronannnn/infra/models"
 )
 
 type Icp101Head struct {
@@ -30,11 +31,18 @@ type Icp101Head struct {
 	InputName       *string `json:"inputName" validate:"required,not_blank" mod:"trim"` // 名称
 
 	// 车辆信息
-	VehicleNo   *string `json:"vehicleNo" validate:"required" mod:"trim"` // 承运车牌号
-	VehicleIcNo *string `json:"vehicleIcNo"`                              // IC卡号(电子车牌)
+	VehicleNo      *string             `json:"vehicleNo" validate:"required" mod:"trim"` // 承运车牌号
+	VehicleIcNo    *string             `json:"vehicleIcNo"`                              // IC卡号(电子车牌)
+	VehicleWt      *models.DecimalSafe `json:"vehicleWt" validate:"required,d_gt=0"`     // 车自重(千克)
+	VehicleFrameWt *models.DecimalSafe `json:"vehicleFrameWt"`                           // 车架重(千克)
+	VehicleFrameNo *string             `json:"vehicleFrameNo"`                           // 车架号
 
 	// 集装箱信息
 	ContainerNo *string `json:"containerNo"` // 集装箱号
+
+	// 货物信息
+	TotalGrossWt *models.DecimalSafe `json:"totalGrossWt" validate:"required,d_gt=0"` // 货物总毛重
+	TotalWt      *models.DecimalSafe `json:"totalWt" validate:"required,d_gt=0"`      // 总重量(包括车辆自重)
 
 	// 卡口信息
 	PassTime     *string `json:"passTime"`     // 过卡时间1(过卡时间，卡口抬杆后系统自动返填。双卡模式，为过一卡时间)

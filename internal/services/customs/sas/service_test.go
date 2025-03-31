@@ -53,15 +53,17 @@ func TestGenSas121Xml(t *testing.T) {
 }
 
 func TestGenIcp101Xml(t *testing.T) {
+	icCard := internal.CustomsIcCard{
+		Name:           "gxwl",
+		OperCusRegCode: "330261A004",
+		IcCardNo:       "JJ3G900420543",
+		DclErConc:      "贺婷婷",
+	}
 	service := sas.ProvideSasXmlService(&internal.CustomsCfg{
-		SysId: "Z7",
-		IcCards: []internal.CustomsIcCard{
-			{
-				Name:           "gxwl",
-				OperCusRegCode: "330261A004",
-				IcCardNo:       "JJ3G900420543",
-				DclErConc:      "贺婷婷",
-			},
+		SysId:   "Z7",
+		IcCards: []internal.CustomsIcCard{icCard},
+		IcCardMap: map[string]*internal.CustomsIcCard{
+			"gxwl": &icCard,
 		},
 	})
 

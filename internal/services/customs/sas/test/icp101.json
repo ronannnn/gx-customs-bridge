@@ -12,7 +12,10 @@
     "InputCode": "330261A004",
     "InputName": "宁波高新物流有限公司",
     "dclTypecd": "1",
-    "vehicleNo": "浙B55ZW7"
+    "vehicleNo": "浙B55ZW7",
+    "vehicleWt": "13200",
+    "totalGrossWt": "20000",
+    "totalWt": "33200"
   },
   "rltList": [
     {
