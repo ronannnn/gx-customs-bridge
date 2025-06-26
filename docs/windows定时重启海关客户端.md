@@ -6,6 +6,7 @@
 taskkill /f /im "SW.ClientApp.exe"
 timeout /t 8 /nobreak >nul
 start "" "C:\Users\高新\Desktop\中国国际贸易单一窗口客户端.appref-ms"
+explorer "C:\Users\高新\Desktop\中国国际贸易单一窗口客户端.appref-ms"
 ```
 
 # 设置重启任务
