@@ -149,7 +149,7 @@ type Inv101List struct {
 	ModfMarkcd *string `json:"modfMarkcd" validate:"required,oneof=0 1 2 3"` // 修改标志(0-未修改 1-修改 2-删除 3-增加)
 	Rmk        *string `json:"rmk"`                                          // 备注
 
-	Param1 *string `json:"param1" validate:"oneof=1 2 3 4"` // 来源标识(1-境外重点料件 2-境外普通料件 3-国内采购料件 4-专账成品转入料件)
+	Param1 *string `json:"param1" validate:"omitempty,oneof=1 2 3 4"` // 来源标识(1-境外重点料件 2-境外普通料件 3-国内采购料件 4-专账成品转入料件)
 }
 
 type Inv101 struct {
